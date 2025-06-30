@@ -1,9 +1,17 @@
 <?php
 
+use App\Livewire\Transaction\TransactionCreate;
+use App\Livewire\Transaction\TransactionIndex;
 use App\Models\Invoice;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+use App\Livewire\Account\AccountIndex;
+use App\Livewire\Account\AccountCreate;
+use App\Livewire\Account\AccountEdit;
+use App\Livewire\Account\TransactionsList;
+use App\Livewire\Transaction\TransactionsFilter;
+use App\Livewire\Invoice\InvoiceCalc;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,6 +29,21 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+Route::middleware(['auth'])->group(function () {
+//    Accounts Routes
+    Route::get('/accounts', AccountIndex::class)->name('accounts.index');
+    Route::get('/accounts/create', AccountCreate::class)->name('accounts.create');
+    Route::get('/accounts/{id}/edit', AccountEdit::class)->name('accounts.edit');
+    Route::get('/account/{id}/transactions/', TransactionsList::class)->name('account.transactions.list');
+
+
+//    Transactions Routes
+    Route::get('/transactions', TransactionIndex::class)->name('transactions.index');
+    Route::get('/transactions/filterByDate', TransactionsFilter::class)->name('transactions.filterByDate');
+
+//    Invoice
+    Route::get('/invoiceCalc', InvoiceCalc::class)->name('invoice.calc');
+});
 
 
 Route::middleware(['auth'])->group(function () {

@@ -2,6 +2,7 @@
 <html dir="rtl" data-theme="light" lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="light">
     <head>
         @include('partials.head')
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800">
         <flux:sidebar sticky stashable class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
@@ -14,8 +15,9 @@
             <flux:navlist variant="outline">
                 <flux:navlist.group heading="مدیریت" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>خانه</flux:navlist.item>
-                    <flux:navlist.item icon="package" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>محصولات</flux:navlist.item>
-                    <flux:navlist.item icon="home" :href="route('order')" :current="request()->routeIs('dashboard')" wire:navigate>سفارش گیری</flux:navlist.item>
+                    <flux:navlist.item icon="arrow-down-on-square" :href="route('order')" :current="request()->routeIs('order')" wire:navigate>سفارش گیری</flux:navlist.item>
+                    <flux:navlist.item icon="credit-card" :href="route('accounts.index')" :current="request()->routeIs('accounts.index')" wire:navigate>حساب ها</flux:navlist.item>
+                    <flux:navlist.item icon="arrow-path-rounded-square" :href="route('transactions.index')" :current="request()->routeIs('transactions.index')" wire:navigate>ثبت تراکنش</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 
@@ -130,5 +132,9 @@
         {{ $slot }}
 
         @fluxScripts
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <!-- Toastr JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     </body>
 </html>

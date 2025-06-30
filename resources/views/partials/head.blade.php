@@ -35,5 +35,7 @@
 </style>
 
 
+<link rel="stylesheet" href="https://unpkg.com/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css">
+
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 @fluxAppearance
