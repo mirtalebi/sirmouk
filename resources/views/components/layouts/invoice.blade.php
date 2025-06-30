@@ -78,10 +78,12 @@
                     </div>
                     @php $sumPrice -=  $invoice->discount_price; @endphp
                 @endif
+                @if($invoice->calcTaxPrice() > 0)
                 <div class="flex justify-between py-2">
                     <span>مالیات بر ارزش افزوده</span>
                     <span>{{ number_format($invoice->calcTaxPrice()) }} تومان</span>
                 </div>
+                @endif
                 <div class="flex justify-between py-2">
                     <span>هزینه پیک</span>
                     <span>{{ number_format($invoice->courier_price) }} تومان</span>
