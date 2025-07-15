@@ -68,6 +68,7 @@ class View extends Component
         $invoice->user_id = $user->id;
         $invoice->discount_price = $this->discountPrice ?? 0;
         $invoice->courier_price = $this->courierPrice ?? 0;
+        $invoice->card = $this->tempOrder['card'];
         $invoice->url_secret = bin2hex(random_bytes(4));
         $invoice->save();
         $invoice->setProdcuts($this->tempOrder['card']);

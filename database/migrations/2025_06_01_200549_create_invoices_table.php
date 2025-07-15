@@ -16,6 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->json('card');
             $table->json('data')->nullable();
+            $table->integer('discount_price')->default(0);
+            $table->integer('courier_price')->default(0);
+            $table->text('url_secret');
             $table->timestamps();
             $table->softDeletes();
         });
