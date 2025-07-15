@@ -18,6 +18,7 @@ return new class extends Migration
             $table->json('data')->nullable();
             $table->integer('discount_price')->default(0);
             $table->integer('courier_price')->default(0);
+            $table->integer('total_price')->default(0);
             $table->text('url_secret');
             $table->timestamps();
             $table->softDeletes();

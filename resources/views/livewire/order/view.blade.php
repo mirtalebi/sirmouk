@@ -228,13 +228,16 @@
                             <td class="p-4">{{ $invoice->user->mobile }}</td>
                             <td class="p-4">{{ $invoice->getCreatedAtDate() }}</td>
                             <td class="p-4 font-bold text-black">
-                                {{ number_format($invoice->calcFinalPrice()) }} تومان
+                                {{ number_format($invoice->total_price) }} تومان
                             </td>
                             <td>
-                                <a href="{{ route('invoice.view', ['invoiceId' => $invoice->id, 'secretKey' => $invoice->url_secret]) }}"
-                                    class="text-blue-600 hover:underline mx-2">مشاهده</a>
-                                <button type="button" wire:click="editInvoice({{ $invoice->id }})"
-                                    class="text-yellow-700 hover:underline ml-2 mx-2">ویرایش</button>
+                                <div class="flex items-center">
+                                    <a href="{{ route('invoice.view', ['invoiceId' => $invoice->id, 'secretKey' => $invoice->url_secret]) }}"
+                                       class="text-blue-600 hover:underline mx-2">مشاهده</a>
+                                    <button type="button" wire:click="editInvoice({{ $invoice->id }})"
+                                            class="text-yellow-700 hover:underline ml-2 mx-2">ویرایش</button>
+                                    <livewire:invoice.invoice-payment :invoice="$invoice" />
+                                </div>
                             </td>
                         </tr>
                     @endforeach

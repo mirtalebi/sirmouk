@@ -72,6 +72,9 @@ class View extends Component
         $invoice->url_secret = bin2hex(random_bytes(4));
         $invoice->save();
         $invoice->setProdcuts($this->tempOrder['card']);
+        $invoice->setTotalPrice();
+        $invoice->save();
+
 
         // $this->invoices = Invoice::all();
         $this->reset(['tempOrder', 'customerName', 'customerMobile', 'invoice', 'courierPrice', 'discountPrice']);

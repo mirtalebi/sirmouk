@@ -88,4 +88,10 @@ class Invoice extends Model
             }
         }
     }
+
+    public function setTotalPrice()
+    {
+        $this->total_price = $this->calcFinalPrice();
+    }
+
 }
