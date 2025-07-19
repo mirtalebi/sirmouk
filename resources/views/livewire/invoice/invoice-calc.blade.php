@@ -1,31 +1,47 @@
 <div>
     <form wire:submit="submit" >
         <div class="flex">
-            <div class="my-2 mx-4">
-                <label class="block text-sm mb-2 dark:text-white font-bold" for="datepicker">از تاریخ:</label>
-                <input
-                    type="text"
-                    data-jdp
-                    class=" border-2 rounded p-2"
-                    placeholder="تاریخ شمسی"
-                    wire:model.defer="from_date" />
-                {{--            @error('transaction_date_jalali')--}}
-                {{--            <p class="text-xs text-red-600 mt-2" id="email-error">{{ $message }}</p>--}}
-                {{--            @enderror--}}
+            <div>
+                <div class="my-2 mx-4">
+                    <label class="block text-sm mb-2 dark:text-white font-bold" for="datepicker">از تاریخ:</label>
+                    <input
+                        type="text"
+                        data-jdp
+                        class=" border-2 rounded p-2"
+                        placeholder="تاریخ شمسی"
+                        wire:model.defer="from_date" />
+                    @error('from_date')
+                    <p class="text-xs text-red-600 mt-2" id="email-error">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="my-2 mx-4">
+                    <label class="block text-sm mb-2 dark:text-white font-bold" for="datepicker">تا تاریخ:</label>
+                    <input
+                        type="text"
+                        data-jdp
+                        class=" border-2 rounded p-2"
+                        placeholder="تا تاریخ"
+                        wire:model.defer="to_date" />
+                    @error('to_date')
+                    <p class="text-xs text-red-600 mt-2" id="email-error">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
-            <div class="my-2 mx-4">
-                <label class="block text-sm mb-2 dark:text-white font-bold" for="datepicker">تا تاریخ:</label>
-                <input
-                    type="text"
-                    data-jdp
-                    class=" border-2 rounded p-2"
-                    placeholder="تا تاریخ"
-                    wire:model.defer="to_date" />
-                {{--            @error('transaction_date_jalali')--}}
-                {{--            <p class="text-xs text-red-600 mt-2" id="email-error">{{ $message }}</p>--}}
-                {{--            @enderror--}}
+                    <div class="my-2 mx-4 w-full">
+                        <h3 class="mb-4 font-semibold text-gray-900 dark:text-white">محصولات:</h3>
+                        <div class="items-center w-full grid grid-cols-6 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            @foreach($products as $product)
+                                <div class="w-full border-b border-r col-span-1 border-gray-200 dark:border-gray-600">
+                                    <div class="flex items-center ps-3">
+                                        <input type="checkbox" wire:model="selectedProducts.{{ $product->id }}" value="{{ $product->id }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm">
+                                        <label for="vue-checkbox-list" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $product->name }}</label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
             </div>
-        </div>
         <div class="my-2 mx-4">
             <button type="submit" class="py-2 px-3 rounded bg-green-500">Submit</button>
         </div>
@@ -60,8 +76,6 @@
                         <td>
                             <a href="{{ route('invoice.view', ['invoiceId' => $invoice->id, 'secretKey' => $invoice->url_secret]) }}"
                                class="text-blue-600 hover:underline mx-2">مشاهده</a>
-                            <button type="button" wire:click="editInvoice({{ $invoice->id }})"
-                                    class="text-yellow-700 hover:underline ml-2 mx-2">ویرایش</button>
                         </td>
                     </tr>
                 @endforeach
