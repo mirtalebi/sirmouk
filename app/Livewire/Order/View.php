@@ -2,12 +2,16 @@
 
 namespace App\Livewire\Order;
 
+use App\Livewire\Invoice\InvoicePayment;
+use App\Models\Account;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\Transaction;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Morilog\Jalali\Jalalian;
 
 class View extends Component
 {
@@ -16,13 +20,28 @@ class View extends Component
     public Invoice $invoice;
     // public $invoices = [];
     public $products = [];
-    public $payments = [];
     public array $tempOrder = [
         'card' => [],
     ];
     public $customerName = '';
     public $customerMobile = '';
     public $courierPrice, $discountPrice;
+
+//    ------------------------------------
+    public $showModal = false;
+    public $invoicePayments;
+    public $invoice_price;
+    public $account;
+    public $j_date;
+    public $amount;
+    public $transaction_date;
+    public $paid_amount;
+    public $payments = [];
+    public $transactions = [];
+
+    public $transaction_price = 0;
+
+
 
     public function removeBasket($productId)
     {
@@ -41,11 +60,6 @@ class View extends Component
         } else {
             $this->tempOrder['card'][$productId] = 1;
         }
-    }
-
-    public function addPayment()
-    {
-        $this->payments[] = new Payment();
     }
 
     public function saveInvoice()
@@ -109,6 +123,72 @@ class View extends Component
     {
 
     }
+
+
+//    ----------------------------------------------------
+
+
+    public function showPayment($invoicePayments)
+    {
+        $this->invoicePayments = Invoice::where('id', $invoicePayments['id'])->first();
+        $this->invoice_price = $this->invoicePayments->total_price -= $this->invoicePayments->paid_amount;
+        $this->paid_amount = $this->invoicePayments->paid_amount;
+        $this->transactions = $this->invoicePayments->transactions;
+        $this->showModal = true;
+    }
+
+    public function addPayment()
+    {
+        $this->payments[] = new Payment();
+    }
+
+    public function savePayment()
+    {
+        $this->validate([
+            'account' => 'required|exists:accounts,id',
+            'j_date' => 'required',
+            'amount' => 'required|integer',
+        ],[
+            'account' => 'فیلد حساب اجباری است!',
+            'j_date' => 'فیلد تاریخ اجباری است!',
+            'amount' => 'فیلد مبلغ اجباری است!',
+        ]);
+
+        if ($this->amount > $this->invoice_price) {
+            session()->flash('error', 'مبلغ وارد شده بیشتر از مبلغ مانده است!');
+            return;
+        }
+
+        $this->transaction_date = Jalalian::fromFormat('Y/m/d', $this->j_date)->toCarbon();
+
+        $current_balance = Account::find($this->account)->balance;
+        $current_balance += $this->amount;
+        Account::find($this->account)->update(['balance' => $current_balance]);
+
+        $create = Transaction::create([
+            'amount' => $this->amount,
+            'type' => 'credit',
+            'description' => 'فروش غذا',
+            'category_id' => 1,
+            'account_id' => $this->account,
+            'current_balance' => $current_balance,
+            'transaction_date' => $this->transaction_date,
+            'invoice_id' => $this->invoicePayments->id,
+        ]);
+
+
+
+        if ($create) {
+            $this->paid_amount += $this->amount;
+            Invoice::where('id', $this->invoicePayments->id)->update([
+                'paid_amount' => $this->paid_amount,
+            ]);
+            $this->transactions = $this->invoicePayments->transactions;
+            $this->invoice_price -= $this->amount;
+            $this->reset('payments', 'account', 'j_date', 'amount', 'transaction_date');
+        }
+    }
+
 
     public function mount()
     {
