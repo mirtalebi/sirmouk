@@ -105,6 +105,11 @@ class View extends Component
         $this->reset(['tempOrder', 'customerName', 'customerMobile', 'invoice', 'courierPrice', 'discountPrice']);
     }
 
+    public function showPaymentModal($invoice)
+    {
+
+    }
+
     public function mount()
     {
         $this->products = Product::all();

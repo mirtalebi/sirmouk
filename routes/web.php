@@ -54,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 
     Volt::route('order', 'order.view')->name('order');
+    Volt::route('order/{id}', 'invoice.invoice-payment')->name('order.payment');
 });
 
 Route::get('convert', function () {

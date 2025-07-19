@@ -236,6 +236,8 @@
                                        class="text-blue-600 hover:underline mx-2">مشاهده</a>
                                     <button type="button" wire:click="editInvoice({{ $invoice->id }})"
                                             class="text-yellow-700 hover:underline ml-2 mx-2">ویرایش</button>
+{{--                                    <a href="{{ route('order.paymnt') }}">پرداخت</a>--}}
+{{--                                    <button wire:click="$dispatchTo('InvoicePayment', 'show-payment-modal', { invoice: {{$invoice}} })" type="button">پرداخت</button>--}}
                                     <livewire:invoice.invoice-payment :invoice="$invoice" />
                                 </div>
                             </td>

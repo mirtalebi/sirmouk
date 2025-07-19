@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('transaction_categories')->onDelete('cascade');
             $table->foreignId('account_id')->constrained('accounts')->onDelete('cascade');
             $table->integer('current_balance');
+            $table->foreignId('invoice_id')->nullable()->constrained('invoices')->onDelete('cascade');
             $table->timestamp('transaction_date')->nullable();
             $table->string('tracking_code')->nullable();
             $table->timestamps();

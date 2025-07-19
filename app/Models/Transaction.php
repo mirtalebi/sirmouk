@@ -14,6 +14,7 @@ class Transaction extends Model
         'account_id',
         'current_balance',
         'transaction_date',
+        'invoice_id',
     ];
 
     protected $casts = [

@@ -22,6 +22,14 @@ class Invoice extends Model
         ];
     }
 
+//    protected static function booted()
+//    {
+//        static::created(function (Invoice $invoice) {
+//            $invoice->setTotalPrice();
+//        });
+//
+//    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -30,6 +38,11 @@ class Invoice extends Model
     public function payments()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
     }
 
     public function products()
