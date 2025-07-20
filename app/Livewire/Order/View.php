@@ -153,12 +153,6 @@ class View extends Component
             'j_date' => 'فیلد تاریخ اجباری است!',
             'amount' => 'فیلد مبلغ اجباری است!',
         ]);
-
-        if ($this->amount > $this->invoice_price) {
-            session()->flash('error', 'مبلغ وارد شده بیشتر از مبلغ مانده است!');
-            return;
-        }
-
         $this->transaction_date = Jalalian::fromFormat('Y/m/d', $this->j_date)->toCarbon();
 
         $current_balance = Account::find($this->account)->balance;
