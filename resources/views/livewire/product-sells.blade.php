@@ -1,34 +1,52 @@
 <div class="mt-8">
     <h2 class="font-bold text-2xl mb-4">محصولات فروخته شده:</h2>
     <form wire:submit="submit" >
-        <div class="grid grid-cols-2 sm:flex sm:items-end">
-            <div class="my-2 mx-4">
-                <label class="block text-sm mb-2 dark:text-white font-bold" for="datepicker">از تاریخ:</label>
-                <input
-                    type="text"
-                    data-jdp
-                    class=" border-2 rounded p-2"
-                    placeholder="تاریخ شمسی"
-                    wire:model.defer="from_date" />
-                @error('from_date')
-                <p class="text-xs text-red-600 mt-2" id="email-error">{{ $message }}</p>
-                @enderror
+        <div class="flex">
+            <div>
+                <div class="my-2 mx-4">
+                    <label class="block text-sm mb-2 dark:text-white font-bold" for="datepicker">از تاریخ:</label>
+                    <input
+                        type="text"
+                        data-jdp
+                        class=" border-2 rounded p-2"
+                        placeholder="تاریخ شمسی"
+                        wire:model.defer="from_date" />
+                    @error('from_date')
+                    <p class="text-xs text-red-600 mt-2" id="email-error">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="my-2 mx-4">
+                    <label class="block text-sm mb-2 dark:text-white font-bold" for="datepicker">تا تاریخ:</label>
+                    <input
+                        type="text"
+                        data-jdp
+                        class=" border-2 rounded p-2"
+                        placeholder="تا تاریخ"
+                        wire:model.defer="to_date" />
+                    @error('to_date')
+                    <p class="text-xs text-red-600 mt-2" id="email-error">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
-            <div class="my-2 mx-4">
-                <label class="block text-sm mb-2 dark:text-white font-bold" for="datepicker">تا تاریخ:</label>
-                <input
-                    type="text"
-                    data-jdp
-                    class=" border-2 rounded p-2"
-                    placeholder="تا تاریخ"
-                    wire:model.defer="to_date" />
-                @error('to_date')
-                <p class="text-xs text-red-600 mt-2" id="email-error">{{ $message }}</p>
-                @enderror
+            <div class="my-2 mx-4 w-full">
+                <h3 class="mb-4 font-semibold text-gray-900 dark:text-white">محصولات:</h3>
+                <div class="items-center w-full grid grid-cols-6 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    @forelse($showProducts as $product)
+                        <div class="w-full border-b border-r col-span-1 border-gray-200 dark:border-gray-600">
+                            <div class="flex items-center ps-3">
+                                <input type="checkbox" wire:model="selectedProducts.{{ $product->id }}" value="{{ $product->id }}" class="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded-sm">
+                                <label for="vue-checkbox-list" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $product->name }}</label>
+                            </div>
+                        </div>
+                    @empty
+                        محصولی یافت نشد!
+                    @endforelse
+                </div>
             </div>
-            <div class="my-2 mx-4">
-                <button type="submit" class="py-2 px-3 rounded bg-green-500 hover:bg-green-600 text-white">ادامه</button>
-            </div>
+
+        </div>
+        <div class="my-2 mx-4">
+            <button type="submit" class="py-2 px-3 rounded bg-green-500 hover:bg-green-600 text-white">ادامه</button>
         </div>
     </form>
 
