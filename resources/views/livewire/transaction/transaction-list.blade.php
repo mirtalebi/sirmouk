@@ -1,7 +1,7 @@
 <div class="border-2 rounded-2xl mx-2 py-4 items-center" style="[x-cloak] {display: none !important;}">
 {{--    {{ dd($transactions) }}--}}
     @forelse($transactions as $transaction)
-        <div class="my-3 mx-4 {{ $transaction->type == 'credit' ? 'bg-green-300 hover:bg-green-500' : 'bg-red-300 hover:bg-red-500' }} rounded-xl px-4 cursor-pointer"
+        <div class="my-3 mx-4 {{ $transaction->type == 'credit' ? 'bg-green-300 hover:bg-green-400' : 'bg-red-300 hover:bg-red-400' }} rounded-xl px-4 cursor-pointer transition"
              x-data="{ show: false, iconShow: false}"
              @click="show = !show"
         >

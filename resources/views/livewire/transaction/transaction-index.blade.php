@@ -13,7 +13,7 @@
             </div>
         </div>
     @endif
-    <div class="grid grid-cols-2">
+    <div class="grid lg:grid-cols-2">
 {{--      Add TransActions                   --}}
         <livewire:transaction.transaction-create />
 {{--     TransActions List           --}}
@@ -24,4 +24,5 @@
 {{--        @endforeach--}}
         <livewire:transaction.transaction-list />
     </div>
+
 </div>
