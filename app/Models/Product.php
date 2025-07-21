@@ -6,5 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    //
+    public function invoices()
+    {
+        return $this->BelongsToMany(Invoice::class, 'invoice_product', 'product_id', 'invoice_id')
+            ->withPivot(['quantity', 'unit_price', 'discount_price', 'tax']);
+    }
 }

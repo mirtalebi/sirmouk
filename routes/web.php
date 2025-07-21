@@ -43,6 +43,9 @@ Route::middleware(['auth'])->group(function () {
 
 //    Invoice
     Route::get('/invoiceCalc', InvoiceCalc::class)->name('invoice.calc');
+
+
+    Route::get('/products/sell', \App\Livewire\ProductSells::class)->name('products.sell');
 });
 
 
