@@ -12,16 +12,13 @@
             </a>
         </div>
 
-        <div class="flex-1 border border-neutral-200 dark:border-neutral-700 rounded-xl">
-            <div class="px-4">
+        <div class="flex-1 border border-neutral-200 dark:border-neutral-700 rounded-xl grid grid-cols-6">
+            <div class="px-4 col-span-4">
                 <livewire:invoice.invoices-chart />
             </div>
-        </div>
-
-        <div class="flex-1 border border-neutral-200 dark:border-neutral-700 rounded-xl">
-            <div class="mt-4 p-2">
+            <div class="mt-4 p-2 col-span-2">
                 <h2 class="text-3xl font-bold mt-4 mx-4">حساب ها:</h2>
-                <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-2">
+                <div class="grid gap-2">
                     @forelse(\App\Models\Account::all() as $account)
                         <a href="#">
                             <div class="bg-slate-200 hover:bg-slate-300 transition hover:-translate-1 border h-40 my-4 mx-2 rounded-2xl">
@@ -37,6 +34,10 @@
                     @endforelse
                 </div>
             </div>
+
+        </div>
+
+        <div class="flex-1 border border-neutral-200 dark:border-neutral-700 rounded-xl">
         </div>
     </div>
 
