@@ -43,13 +43,10 @@ class ProductSells extends Component
             return [
                 'name' => $product->name,
                 'quantity' => $product->invoices->sum('pivot.quantity'),
-                'price' => $product->invoices->sum('pivot.unit_price'),
+                'price' => $product->price,
             ];
         });
-
-
         $this->selectedProducts = $saveSelectedProducts;
-
     }
 
     public function render()
