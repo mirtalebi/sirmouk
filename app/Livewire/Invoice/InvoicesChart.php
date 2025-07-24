@@ -20,7 +20,7 @@ class InvoicesChart extends Component
 
         $invoices = Invoice::withoutGlobalScope(DescOrderScope::class)
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->selectRaw('DATE(created_at) as date, COUNT(total_price) as total')
+            ->selectRaw('DATE(created_at) as date, SUM(total_price) as total')
             ->groupBy('date')
             ->orderBy('date')
             ->get();
