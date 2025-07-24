@@ -5,6 +5,7 @@ namespace App\Livewire\Invoice;
 use Livewire\Component;
 use Carbon\Carbon;
 use App\Models\Invoice;
+use App\Models\Scopes\DescOrderScope;
 
 class InvoicesChart extends Component
 {
@@ -17,7 +18,8 @@ class InvoicesChart extends Component
         $startDate = Carbon::now()->subDays(30)->startOfDay();
         $endDate = Carbon::now()->endOfDay();
 
-        $invoices = Invoice::whereBetween('created_at', [$startDate, $endDate])
+        $invoices = Invoice::withoutGlobalScope(DescOrderScope::class)
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->selectRaw('DATE(created_at) as date, COUNT(total_price) as total')
             ->groupBy('date')
             ->orderBy('date')
