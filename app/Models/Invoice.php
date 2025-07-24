@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Common\Jalalian;
 use App\Models\Scopes\DescOrderScope;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 #[ScopedBy([DescOrderScope::class])]
@@ -22,13 +23,13 @@ class Invoice extends Model
         ];
     }
 
-//    protected static function booted()
-//    {
-//        static::created(function (Invoice $invoice) {
-//            $invoice->setTotalPrice();
-//        });
-//
-//    }
+    //    protected static function booted()
+    //    {
+    //        static::created(function (Invoice $invoice) {
+    //            $invoice->setTotalPrice();
+    //        });
+    //
+    //    }
 
     public function user()
     {
@@ -50,6 +51,13 @@ class Invoice extends Model
         return $this->belongsToMany(Product::class, 'invoice_product', 'invoice_id', 'product_id')
             ->withPivot(['quantity', 'unit_price', 'discount_price', 'tax'])
             ->withTimestamps();
+    }
+
+    public function paidAmount(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => Transaction::where('invoice_id', $this->id)->sum('amount')
+        );
     }
 
     public function calcTaxPrice()
@@ -106,5 +114,4 @@ class Invoice extends Model
     {
         $this->total_price = $this->calcFinalPrice();
     }
-
 }

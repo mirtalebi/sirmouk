@@ -14,19 +14,19 @@ class InvoicesChart extends Component
     public function render()
     {
 
-        $startDate = Carbon::now()->subDays(6)->startOfDay();
+        $startDate = Carbon::now()->subDays(30)->startOfDay();
         $endDate = Carbon::now()->endOfDay();
 
         $invoices = Invoice::whereBetween('created_at', [$startDate, $endDate])
-            ->selectRaw('DATE(created_at) as date, COUNT(*) as total')
+            ->selectRaw('DATE(created_at) as date, COUNT(total_price) as total')
             ->groupBy('date')
             ->orderBy('date')
             ->get();
 
         $chartData = [];
 
-        foreach (range(0, 6) as $i) {
-            $day = Carbon::now()->subDays(6 - $i)->toDateString();
+        foreach (range(0, 30) as $i) {
+            $day = Carbon::now()->subDays(30 - $i)->toDateString();
             $chartData['labels'][] = jdate($day)->format('l');
             $chartData['data'][] = $invoices->firstWhere('date', $day)->total ?? 0;
         }

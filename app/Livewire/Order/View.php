@@ -27,7 +27,7 @@ class View extends Component
     public $customerMobile = '';
     public $courierPrice, $discountPrice;
 
-//    ------------------------------------
+    //    ------------------------------------
     public $showModal = false;
     public $invoicePayments;
     public $invoice_price;
@@ -82,7 +82,7 @@ class View extends Component
         $invoice->user_id = $user->id;
         $invoice->discount_price = $this->discountPrice ?? 0;
         $invoice->courier_price = $this->courierPrice ?? 0;
-        $invoice->card = $this->tempOrder['card'];
+        // $invoice->card = $this->tempOrder['card'];
         $invoice->url_secret = bin2hex(random_bytes(4));
         $invoice->save();
         $invoice->setProdcuts($this->tempOrder['card']);
@@ -119,13 +119,10 @@ class View extends Component
         $this->reset(['tempOrder', 'customerName', 'customerMobile', 'invoice', 'courierPrice', 'discountPrice']);
     }
 
-    public function showPaymentModal($invoice)
-    {
-
-    }
+    public function showPaymentModal($invoice) {}
 
 
-//    ----------------------------------------------------
+    //    ----------------------------------------------------
 
 
     public function showPayment($invoicePayments)
@@ -148,7 +145,7 @@ class View extends Component
             'account' => 'required|exists:accounts,id',
             'j_date' => 'required',
             'amount' => 'required|integer',
-        ],[
+        ], [
             'account' => 'فیلد حساب اجباری است!',
             'j_date' => 'فیلد تاریخ اجباری است!',
             'amount' => 'فیلد مبلغ اجباری است!',
@@ -163,7 +160,7 @@ class View extends Component
             'amount' => $this->amount,
             'type' => 'credit',
             'description' => 'فروش غذا',
-            'category_id' => 1,
+            'category_id' => env('INVOICE_PAYMENT_CATEGORY_ID'),
             'account_id' => $this->account,
             'current_balance' => $current_balance,
             'transaction_date' => $this->transaction_date,
@@ -173,10 +170,10 @@ class View extends Component
 
 
         if ($create) {
-            $this->paid_amount += $this->amount;
-            Invoice::where('id', $this->invoicePayments->id)->update([
-                'paid_amount' => $this->paid_amount,
-            ]);
+            // $this->paid_amount += $this->amount;
+            // Invoice::where('id', $this->invoicePayments->id)->update([
+            //     'paid_amount' => $this->paid_amount,
+            // ]);
             $this->transactions = $this->invoicePayments->transactions;
             $this->invoice_price -= $this->amount;
             $this->reset('payments', 'account', 'j_date', 'amount', 'transaction_date');
