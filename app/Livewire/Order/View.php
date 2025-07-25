@@ -157,11 +157,18 @@ class View extends Component
         $current_balance += $this->amount;
         Account::find($this->account)->update(['balance' => $current_balance]);
 
+
+        $inoice_payment_category_id = SiteSetting::getValue('INVOICE_PAYMENT_CATEGORY_ID');
+
+        if ($inoice_payment_category_id == 'null' || $inoice_payment_category_id == null) {
+            return redirect()->back()->with('fail', 'مقدار INVOICE_PAYMENT_CATEGORY_ID در دیتابیس تنظیم نشده است!');
+        }
+
         $create = Transaction::create([
             'amount' => $this->amount,
             'type' => 'credit',
             'description' => 'فروش غذا',
-            'category_id' => SiteSetting::getValue('INVOICE_PAYMENT_CATEGORY_ID'),
+            'category_id' => $inoice_payment_category_id,
             'account_id' => $this->account,
             'current_balance' => $current_balance,
             'transaction_date' => $this->transaction_date,
