@@ -7,6 +7,7 @@ use App\Models\Account;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\SiteSetting;
 use App\Models\Transaction;
 use App\Models\User;
 use Livewire\Component;
@@ -160,7 +161,7 @@ class View extends Component
             'amount' => $this->amount,
             'type' => 'credit',
             'description' => 'فروش غذا',
-            'category_id' => env('INVOICE_PAYMENT_CATEGORY_ID'),
+            'category_id' => SiteSetting::getValue('INVOICE_PAYMENT_CATEGORY_ID'),
             'account_id' => $this->account,
             'current_balance' => $current_balance,
             'transaction_date' => $this->transaction_date,
