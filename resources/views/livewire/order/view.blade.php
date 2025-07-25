@@ -1,4 +1,6 @@
 <div>
+
+    <script src="https://cdn.jsdelivr.net/gh/mahmoud-eskandari/NumToPersian/dist/num2persian.min.js"></script>
     <div class="relative flex-1 overflow-hidden rounded-xl border border-neutral-200 p-3 mt-5">
         <h3 class="text-xl font-bold">
             @if ($invoice)
@@ -273,7 +275,18 @@
     </div>
 
     @if($showModal)
-        <div x-data="{modalIsOpen: @entangle('showModal')}">
+        <div x-data="{
+            modalIsOpen: @entangle('showModal'),
+            formatted: @entangle('amount'),
+            realValue: '',
+            formatNumber(value) {
+                let raw = value.replace(/,/g, '');
+                if (isNaN(raw)) return '';
+                this.realValue = raw;
+                this.formatted = Number(raw).toLocaleString();
+                $wire.amount = raw;
+            }
+        }">
             <div x-cloak x-show="modalIsOpen" x-transition.opacity.duration.200ms x-trap.inert.noscroll="modalIsOpen" x-on:keydown.esc.window="modalIsOpen = false" x-on:click.self="modalIsOpen = false" class="fixed inset-0 z-30 flex items-end justify-center bg-black/20 p-4 pb-8 backdrop-blur-md sm:items-center lg:p-8" role="dialog" aria-modal="true" aria-labelledby="defaultModalTitle">
                 <!-- Modal Dialog -->
                 <div class="bg-slate-100 w-10/12 p-4 rounded-xl">
@@ -303,9 +316,10 @@
                                         <select id="countries"
                                                 wire:model.defer="account"
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                            <option selected></option>
                                             @foreach (\App\Models\Account::all() as $account)
-                                                <option value="{{ $account->id }}">{{ $account->name }}</option>
+                                                <option value="{{ $account->id }}">
+                                                    {{ $account->name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </td>
@@ -315,13 +329,16 @@
                                             data-jdp
                                             class=" border-2 rounded p-2"
                                             placeholder="تاریخ شمسی"
-                                            wire:model.defer="j_date" />
+                                            wire:model="j_date" />
                                     </td>
                                     <td class="p-4">
-                                        <input type="number" id="mobile"
-                                               wire:model.defer="amount"
+                                        <input type="text" id="mobile"
+                                               x-model="formatted"
+                                               @input="formatNumber($event.target.value)"
                                                class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                                               placeholder="مبلغ به تومان" required />
+                                               placeholder="مبلغ به تومان"
+                                        />
+                                        <p x-text="num2persian(formatted) + ' تومان'" class="mt-1"></p>
                                     </td>
                                     <td class="p-4">
                                         <div class="flex gap-4">

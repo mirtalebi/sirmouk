@@ -3,6 +3,9 @@
     <head>
         @include('partials.head')
         <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
+        <style>
+            [x-cloak] { display: none !important; }
+        </style>
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800">
 
@@ -15,6 +18,9 @@
             <div x-cloak x-show="showSidebar" class="fixed inset-0 z-10 bg-surface-dark/10 backdrop-blur-xs md:hidden" aria-hidden="true" x-on:click="showSidebar = false" x-transition.opacity ></div>
 
             <nav x-cloak class="fixed left-0 z-20 flex h-svh w-60 shrink-0 flex-col border-r border-outline bg-surface-alt p-4 transition-transform duration-300 md:w-64 md:translate-x-0 md:relative dark:border-outline-dark dark:bg-surface-dark-alt border-l-1 pt-20" x-bind:class="showSidebar ? 'translate-x-0' : '-translate-x-60'" aria-label="sidebar navigation">
+                <div class="flex items-center justify-center mb-2">
+                    <img src="/assets/logo/main.png" class="size-24">
+                </div>
                 <!-- sidebar links  -->
                 <div class="flex flex-col gap-2 overflow-y-auto pb-6">
 

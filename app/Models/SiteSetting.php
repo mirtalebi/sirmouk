@@ -11,11 +11,13 @@ class SiteSetting extends Model
 
     const APP_NAME = "APP_NAME";
     const INVOICE_PAYMENT_CATEGORY_ID = "INVOICE_PAYMENT_CATEGORY_ID";
+    const INVOICE_PAYMENT_ACCOUNT_ID = "INVOICE_PAYMENT_ACCOUNT_ID";
 
 
     const defualtValues = [
         self::APP_NAME => "قاطی پلو",
-        self::INVOICE_PAYMENT_CATEGORY_ID => null
+        self::INVOICE_PAYMENT_CATEGORY_ID => null,
+        self::INVOICE_PAYMENT_ACCOUNT_ID => null,
     ];
 
     public static function getValue($name)

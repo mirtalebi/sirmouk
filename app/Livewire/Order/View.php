@@ -132,6 +132,14 @@ class View extends Component
         $this->invoice_price = $this->invoicePayments->total_price -= $this->invoicePayments->paid_amount;
         $this->paid_amount = $this->invoicePayments->paid_amount;
         $this->transactions = $this->invoicePayments->transactions;
+        $this->amount = $this->invoice_price;
+
+        if (empty($this->payments)){
+            $this->payments[] = new Payment();
+        }
+        if ($this->invoice_price <= 0){
+            $this->payments = [];
+        }
         $this->showModal = true;
     }
 
@@ -184,7 +192,10 @@ class View extends Component
             // ]);
             $this->transactions = $this->invoicePayments->transactions;
             $this->invoice_price -= $this->amount;
-            $this->reset('payments', 'account', 'j_date', 'amount', 'transaction_date');
+            $this->reset('payments', 'amount', 'transaction_date');
+            $this->j_date = Jalalian::now()->format('Y/m/d');
+            $this->account = SiteSetting::getValue('INVOICE_PAYMENT_ACCOUNT_ID');
+            $this->paid_amount = $this->invoicePayments->paid_amount;
         }
     }
 
@@ -192,6 +203,8 @@ class View extends Component
     public function mount()
     {
         $this->products = Product::all();
+        $this->j_date = Jalalian::now()->format('Y/m/d');
+        $this->account = SiteSetting::getValue('INVOICE_PAYMENT_ACCOUNT_ID');
     }
 
     public function render()
