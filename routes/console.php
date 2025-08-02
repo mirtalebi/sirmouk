@@ -14,9 +14,11 @@ Artisan::command('inspire', function () {
 
 Schedule::call(function () {
     $amount = 0;
+
     $invoices = \App\Models\Invoice::where('is_snap', 1)
         ->whereDate('created_at', \Carbon\Carbon::today())
         ->get();
+
     if (!$invoices->isEmpty()) {
         try {
             \Illuminate\Support\Facades\DB::beginTransaction();
@@ -54,4 +56,4 @@ Schedule::call(function () {
             \Illuminate\Support\Facades\DB::rollBack();
         }
     }
-})->everyMinute();
+})->dailyAt('21:00');
