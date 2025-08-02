@@ -13,12 +13,15 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->json('data')->nullable();
             $table->integer('discount_price')->default(0);
             $table->integer('courier_price')->default(0);
             $table->integer('total_price')->default(0);
             $table->integer('paid_amount')->default(0);
+            $table->boolean('is_snap')->default(false);
+            $table->json('snap_user_credentials')->nullable();
+            $table->boolean('is_paid')->nullable();
             $table->text('url_secret');
             $table->timestamps();
             $table->softDeletes();

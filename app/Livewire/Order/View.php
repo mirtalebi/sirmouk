@@ -41,6 +41,7 @@ class View extends Component
     public $transactions = [];
 
     public $transaction_price = 0;
+    public $snap;
 
 
 
@@ -67,24 +68,28 @@ class View extends Component
     {
         $this->validate([
             'customerName' => 'required|string|max:255',
-            'customerMobile' => 'required|string|max:11|min:11',
+            'customerMobile' => 'string|max:11|min:11',
             'tempOrder.card' => 'required|array|min:1',
         ]);
 
-        $user = User::getUserByMobile($this->customerMobile);
-        $user->name = $this->customerName;
-        $user->save();
+        if (!$this->snap){
+            $user = User::getUserByMobile($this->customerMobile);
+            $user->name = $this->customerName;
+            $user->save();
+        }
 
         if (isset($this->invoice)) {
             $invoice = $this->invoice;
         } else {
             $invoice = new Invoice();
         }
-        $invoice->user_id = $user->id;
+        $invoice->user_id = $user->id ?? null;
         $invoice->discount_price = $this->discountPrice ?? 0;
         $invoice->courier_price = $this->courierPrice ?? 0;
         // $invoice->card = $this->tempOrder['card'];
         $invoice->url_secret = bin2hex(random_bytes(4));
+        $invoice->is_snap = $this->snap ?? false;
+        if ($this->snap){ $invoice->snap_user_credentials = json_encode(['username' => $this->customerName, 'mobile' => $this->customerMobile ?? null]); }
         $invoice->save();
         $invoice->setProdcuts($this->tempOrder['card']);
         $invoice->setTotalPrice();
@@ -129,6 +134,7 @@ class View extends Component
     public function showPayment($invoicePayments)
     {
         $this->invoicePayments = Invoice::where('id', $invoicePayments['id'])->first();
+
         $this->invoice_price = $this->invoicePayments->total_price -= $this->invoicePayments->paid_amount;
         $this->paid_amount = $this->invoicePayments->paid_amount;
         $this->transactions = $this->invoicePayments->transactions;
@@ -150,6 +156,7 @@ class View extends Component
 
     public function savePayment()
     {
+//        dd($this->amount);
         $this->validate([
             'account' => 'required|exists:accounts,id',
             'j_date' => 'required',
@@ -157,7 +164,7 @@ class View extends Component
         ], [
             'account' => 'فیلد حساب اجباری است!',
             'j_date' => 'فیلد تاریخ اجباری است!',
-            'amount' => 'فیلد مبلغ اجباری است!',
+            'required' => 'فیلد مبلغ اجباری است!',
         ]);
         $this->transaction_date = Jalalian::fromFormat('Y/m/d', $this->j_date)->toCarbon();
 
@@ -186,10 +193,6 @@ class View extends Component
 
 
         if ($create) {
-            // $this->paid_amount += $this->amount;
-            // Invoice::where('id', $this->invoicePayments->id)->update([
-            //     'paid_amount' => $this->paid_amount,
-            // ]);
             $this->transactions = $this->invoicePayments->transactions;
             $this->invoice_price -= $this->amount;
             $this->reset('payments', 'amount', 'transaction_date');
