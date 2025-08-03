@@ -24,9 +24,14 @@
         <!-- Customer Info -->
         <div class="mb-6 flex">
             <div class="grow">
-                <h3 class="text-lg font-semibold">مشتری:</h3>
-                <p class="text-sm">{{ $invoice->user->name }}</p>
-                <p class="text-sm">{{ $invoice->user->mobile }}</p>
+                <h3 class="text-lg font-semibold">مشتری: <span class="text-gray-500 font-bold mr-2 text-sm">(اسنپ)</span></h3>
+                @if($invoice->is_snap)
+                    <p class="text-sm">{{ json_decode($invoice->snap_user_credentials, true)['username'] }} </p>
+                    <p class="text-sm">{{ json_decode($invoice->snap_user_credentials, true)['mobile'] }}</p>
+                @else
+                    <p class="text-sm">{{ $invoice->user->name }}</p>
+                    <p class="text-sm">{{ $invoice->user->mobile }}</p>
+                @endif
             </div>
 
             <div class="text-center">

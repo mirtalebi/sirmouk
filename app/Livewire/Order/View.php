@@ -97,7 +97,7 @@ class View extends Component
 
 
         // $this->invoices = Invoice::all();
-        $this->reset(['tempOrder', 'customerName', 'customerMobile', 'invoice', 'courierPrice', 'discountPrice']);
+        $this->reset(['tempOrder', 'customerName', 'customerMobile', 'invoice', 'courierPrice', 'discountPrice', 'snap']);
         session()->flash('message', 'فاکتور با موفقیت ثبت شد.');
         $this->dispatch('invoiceSaved');
     }
@@ -114,15 +114,24 @@ class View extends Component
                 $this->tempOrder['card'][$product->id] = $product->pivot->quantity;
             }
         }
-        $this->customerName = $this->invoice->user->name;
-        $this->customerMobile = $this->invoice->user->mobile;
         $this->courierPrice = $this->invoice->courier_price;
         $this->discountPrice = $this->invoice->discount_price;
+
+        $this->snap = boolval($this->invoice->is_snap);
+//        dd($this->invoice, $this->snap);
+        if ($this->invoice->is_snap) {
+            $snapCred = json_decode($this->invoice->snap_user_credentials, true);
+            $this->customerMobile = $snapCred['mobile'];
+            $this->customerName = $snapCred['username'];
+        } else {
+            $this->customerMobile = $this->invoice->user->mobile;
+            $this->customerName = $this->invoice->user->name;
+        }
     }
 
     public function cancelEditingInvoice()
     {
-        $this->reset(['tempOrder', 'customerName', 'customerMobile', 'invoice', 'courierPrice', 'discountPrice']);
+        $this->reset(['tempOrder', 'customerName', 'customerMobile', 'invoice', 'courierPrice', 'discountPrice', 'snap']);
     }
 
     public function showPaymentModal($invoice) {}

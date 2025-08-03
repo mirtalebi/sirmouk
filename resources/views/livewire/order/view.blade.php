@@ -54,16 +54,6 @@
                                 <td class="p-4">
                                 </td>
                                 <td class="p-1"></td>
-                                <td class="p-1">مالیات</td>
-                                <td class="p-4 font-bold text-black">
-                                    {{ number_format($sumPrice / 10) }}</td>
-                                @php $sumPrice += $sumPrice / 10 @endphp
-                            </tr>
-
-                            <tr>
-                                <td class="p-4">
-                                </td>
-                                <td class="p-1"></td>
                                 <td class="p-1 font-bold">مبلغ کل</td>
                                 <td class="p-4 font-bold text-black text-lg">
                                     {{ number_format($sumPrice) }} <span class="text-xs">تومان</span></td>
