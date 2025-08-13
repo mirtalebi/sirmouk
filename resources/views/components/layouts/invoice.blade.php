@@ -24,8 +24,11 @@
         <!-- Customer Info -->
         <div class="mb-6 flex">
             <div class="grow">
-                <h3 class="text-lg font-semibold">مشتری: <span class="text-gray-500 font-bold mr-2 text-sm">(اسنپ)</span></h3>
-                @if($invoice->is_snap)
+                <h3 class="text-lg font-semibold">مشتری: @if ($invoice->is_snap)
+                        <span class="text-gray-500 font-bold mr-2 text-sm">(اسنپ)</span>
+                    @endif
+                </h3>
+                @if ($invoice->is_snap)
                     <p class="text-sm">{{ json_decode($invoice->snap_user_credentials, true)['username'] }} </p>
                     <p class="text-sm">{{ json_decode($invoice->snap_user_credentials, true)['mobile'] }}</p>
                 @else
@@ -83,11 +86,11 @@
                     </div>
                     @php $sumPrice -=  $invoice->discount_price; @endphp
                 @endif
-                @if($invoice->calcTaxPrice() > 0)
-                <div class="flex justify-between py-2">
-                    <span>مالیات بر ارزش افزوده</span>
-                    <span>{{ number_format($invoice->calcTaxPrice()) }} تومان</span>
-                </div>
+                @if ($invoice->calcTaxPrice() > 0)
+                    <div class="flex justify-between py-2">
+                        <span>مالیات بر ارزش افزوده</span>
+                        <span>{{ number_format($invoice->calcTaxPrice()) }} تومان</span>
+                    </div>
                 @endif
                 <div class="flex justify-between py-2">
                     <span>هزینه پیک</span>
