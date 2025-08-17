@@ -34,6 +34,11 @@ class ProductCreate extends Component
             'tax' => $this->tax,
             'category_id' => $this->category,
         ]);
+        if ($product) {
+            return redirect()->route('products')->with('success', 'محصول مورد نطر با موفقیت ساخته شد!');
+        }else{
+            return redirect()->back()->with('fail', 'اضافه کردن محصول با مشکل مواجه شد! دوباره تلاش کنید');
+        }
     }
 
 
