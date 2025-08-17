@@ -88,4 +88,5 @@
                 </button>
             </form>
         </div>
-    </section></div>
+    </section>
+</div>

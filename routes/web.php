@@ -52,6 +52,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('create', ProductCreate::class)->name('products.create');
     });
 
+    //        Product Categories
+    Route::get('categories', \App\Livewire\Catgories\Categories::class)->name('categories');
+
+
     Route::get('/products/sell', \App\Livewire\ProductSells::class)->name('products.sell');
 });
 
