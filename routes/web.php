@@ -48,6 +48,7 @@ Route::middleware(['auth'])->group(function () {
 //    Product CRUD
     Route::prefix('products/')->group(function () {
         Route::get('', \App\Livewire\Products\Products::class)->name('products');
+        Route::get('/edit/{id}', \App\Livewire\Products\ProductEdit::class)->name('products.edit');
         Route::get('create', ProductCreate::class)->name('products.create');
     });
 
