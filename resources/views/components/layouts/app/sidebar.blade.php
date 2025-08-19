@@ -59,6 +59,12 @@
                         </svg>
                         <span>محصولات</span>
                     </a>
+                    <a href="{{ route('users.list') }}" class="border-b hover:-translate-y-1 transition flex items-center rounded-radius gap-2 p-2 text-sm text-on-surface underline-offset-2 hover:bg-primary/5 hover:text-on-surface-strong focus-visible:underline focus:outline-hidden dark:text-on-surface-dark dark:hover:bg-primary-dark/5 dark:hover:text-on-surface-dark-strong {{ request()->routeIs('users.list') ? 'bg-primary/10 text-on-surface-strong font-bold' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="size-6">
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 20c0-1.742-1.67-3.223-4-3.773M15 20c0-2.21-2.686-4-6-4s-6 1.79-6 4m12-7a4 4 0 0 0 0-8m-6 8a4 4 0 1 1 0-8a4 4 0 0 1 0 8"/>
+                        </svg>
+                        <span>کاربران</span>
+                    </a>
                 </div>
             </nav>
 

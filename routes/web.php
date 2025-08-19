@@ -56,6 +56,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('categories', \App\Livewire\Catgories\Categories::class)->name('categories');
 
 
+//        Users CRUD
+    Route::get('users', \App\Livewire\Users\UsersList::class)->name('users.list');
+
+
     Route::get('/products/sell', \App\Livewire\ProductSells::class)->name('products.sell');
 });
 
