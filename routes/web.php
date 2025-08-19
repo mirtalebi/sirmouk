@@ -57,8 +57,10 @@ Route::middleware(['auth'])->group(function () {
 
 
 //        Users CRUD
-    Route::get('users', \App\Livewire\Users\UsersList::class)->name('users.list');
-
+    Route::prefix('users/')->group(function () {
+        Route::get('', \App\Livewire\Users\UsersList::class)->name('users.list');
+        Route::get('{id}', \App\Livewire\Users\UserShow::class)->name('users.show');
+    });
 
     Route::get('/products/sell', \App\Livewire\ProductSells::class)->name('products.sell');
 });
