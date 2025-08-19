@@ -70,9 +70,13 @@ class View extends Component
             'customerName' => 'required|string|max:255',
             'customerMobile' => 'string|max:11|min:11',
             'tempOrder.card' => 'required|array|min:1',
+        ],[
+            'required' => 'این فیلد اجباری است',
+            'min' => 'این فیلد باید شامل 11 کارکتر باشد',
+            'max' => 'این فیلد باید شامل 11 کارکتر باشد'
         ]);
 
-        if (!$this->snap){
+        if (!empty($this->customerMobile)){
             $user = User::getUserByMobile($this->customerMobile);
             $user->name = $this->customerName;
             $user->save();

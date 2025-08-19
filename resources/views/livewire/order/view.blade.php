@@ -73,6 +73,11 @@
                         <input type="text" id="name" wire:model="customerName"
                             class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                             placeholder="نام و نام خانوادگی ..." required />
+                        @error('customerName')
+                        <div class="text-sm text-red-500">
+                            {{ $message }}
+                        </div>
+                        @enderror
                     </div>
 
                     <div class="mb-5">
@@ -81,6 +86,11 @@
                         <input type="text" id="mobile" wire:model="customerMobile"
                             class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                             placeholder="شماره تلفن با صفر" required />
+                        @error('customerMobile')
+                        <div class="text-sm text-red-500">
+                            {{ $message }}
+                        </div>
+                        @enderror
                     </div>
 
                 </div>
@@ -90,6 +100,11 @@
                         <input type="text" id="name" wire:model="courierPrice"
                             class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                             placeholder="به تومان" required />
+                        @error('courierPrice')
+                        <div class="text-sm text-red-500">
+                            {{ $message }}
+                        </div>
+                        @enderror
                     </div>
 
                     <div class="mb-5">
@@ -97,6 +112,11 @@
                         <input type="text" id="mobile" wire:model="discountPrice"
                             class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                             placeholder="به تومان" required />
+                        @error('discountPrice')
+                        <div class="text-sm text-red-500">
+                            {{ $message }}
+                        </div>
+                        @enderror
                     </div>
                 </div>
 
