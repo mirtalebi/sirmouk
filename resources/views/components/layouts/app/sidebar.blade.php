@@ -53,6 +53,12 @@
                         </svg>
                         <span>تراکنش ها</span>
                     </a>
+                    <a href="{{ route('products') }}" class="border-b hover:-translate-y-1 transition flex items-center rounded-radius gap-2 p-2 text-sm text-on-surface underline-offset-2 hover:bg-primary/5 hover:text-on-surface-strong focus-visible:underline focus:outline-hidden dark:text-on-surface-dark dark:hover:bg-primary-dark/5 dark:hover:text-on-surface-dark-strong {{ request()->routeIs('products') ? 'bg-primary/10 text-on-surface-strong font-bold' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="size-6">
+                            <path fill="currentColor" d="M22 3H2v6h1v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9h1zM4 5h16v2H4zm15 15H5V9h14zm-2-9v6h-2v-2.59l-3.29 3.29l-1.41-1.41L13.59 13H11v-2z"/>
+                        </svg>
+                        <span>محصولات</span>
+                    </a>
                 </div>
             </nav>
 

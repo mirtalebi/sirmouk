@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Products\ProductCreate;
 use App\Livewire\Transaction\TransactionCreate;
 use App\Livewire\Transaction\TransactionIndex;
 use App\Models\Invoice;
@@ -43,6 +44,16 @@ Route::middleware(['auth'])->group(function () {
 
 //    Invoice
     Route::get('/invoiceCalc', InvoiceCalc::class)->name('invoice.calc');
+
+//    Product CRUD
+    Route::prefix('products/')->group(function () {
+        Route::get('', \App\Livewire\Products\Products::class)->name('products');
+        Route::get('/edit/{id}', \App\Livewire\Products\ProductEdit::class)->name('products.edit');
+        Route::get('create', ProductCreate::class)->name('products.create');
+    });
+
+    //        Product Categories
+    Route::get('categories', \App\Livewire\Catgories\Categories::class)->name('categories');
 
 
     Route::get('/products/sell', \App\Livewire\ProductSells::class)->name('products.sell');
