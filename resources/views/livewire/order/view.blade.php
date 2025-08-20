@@ -137,36 +137,50 @@
                 @endif
             </form>
 
-            <form class="grid grid-cols-3 gap-2">
-
-                @foreach ($products as $product)
-                    <div>
-                        <label for="bedrooms-input" class="sr-only">{{ $product->name }}</label>
-                        <div class="relative flex items-center mb-2">
-                            <button type="button" wire:click="removeBasket({{ $product->id }})"
-                                class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
-                                <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M1 1h16" />
-                                </svg>
-                            </button>
-                            <input type="text" id="bedrooms-input"
-                                class="bg-gray-50 border-x-0 border-gray-300 h-11 font-medium text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full"
-                                placeholder="" value="{{ $product->name }}" required />
-
-                            <button type="button" wire:click="addBasket({{ $product->id }})"
-                                class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none">
-                                <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M9 1v16M1 9h16" />
-                                </svg>
-                            </button>
-                        </div>
+            <form class="">
+                <div x-data="{ selectedTab: '{{ $categories->first()->id }}' }" class="w-full">
+                    <div x-on:keydown.right.prevent="$focus.wrap().next()" x-on:keydown.left.prevent="$focus.wrap().previous()" class="flex gap-2 overflow-x-auto border-b border-neutral-300 dark:border-neutral-700" role="tablist" aria-label="tab options">
+                       @forelse($categories as $category)
+                            <button x-on:click="selectedTab = '{{ $category->id }}'" x-bind:aria-selected="selectedTab === '{{ $category->id }}'" x-bind:tabindex="selectedTab === '{{ $category->id }}' ? '0' : '-1'" x-bind:class="selectedTab === '{{ $category->id }}' ? 'font-bold text-black border-b-2 border-black dark:border-white dark:text-white' : 'text-neutral-600 font-medium dark:text-neutral-300 dark:hover:border-b-neutral-300 dark:hover:text-white hover:border-b-2 hover:border-b-neutral-800 hover:text-neutral-900'" class="h-min px-4 py-2 text-sm" type="button" role="tab" aria-controls="tabpanelGroups" >{{ $category->name }}</button>
+                        @empty
+                       @endforelse
                     </div>
-                @endforeach
+                    <div class="px-2 py-4 text-neutral-600 dark:text-neutral-300">
+                        @forelse($categories as $category)
+                        <div x-cloak x-show="selectedTab === '{{ $category->id }}'" class="grid grid-cols-3 gap-2" id="tabpanelGroups" role="tabpanel" aria-label="groups">
+                                @foreach ($category->products as $product)
+                                    <div>
+                                        <label for="bedrooms-input" class="sr-only">{{ $product->name }}</label>
+                                        <div class="relative flex items-center mb-2">
+                                            <button type="button" wire:click="removeBasket({{ $product->id }})"
+                                                    class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                                                <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
+                                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                          stroke-width="2" d="M1 1h16" />
+                                                </svg>
+                                            </button>
+                                            <input type="text" id="bedrooms-input"
+                                                   class="bg-gray-50 border-x-0 border-gray-300 h-11 font-medium text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full"
+                                                   placeholder="" value="{{ $product->name }}" required />
 
+                                            <button type="button" wire:click="addBasket({{ $product->id }})"
+                                                    class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none">
+                                                <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
+                                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                          stroke-width="2" d="M9 1v16M1 9h16" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                            @endforeach
+
+                        </div>
+                        @empty
+                        @endforelse
+                    </div>
+                </div>
 
             </form>
         </div>

@@ -7,6 +7,7 @@ use App\Models\Account;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\SiteSetting;
 use App\Models\Transaction;
 use App\Models\User;
@@ -226,7 +227,8 @@ class View extends Component
     public function render()
     {
         return view('livewire.order.view', [
-            'invoices' => Invoice::simplePaginate(10)
+            'invoices' => Invoice::simplePaginate(10),
+            'categories' => ProductCategory::all()
         ]);
     }
 }
