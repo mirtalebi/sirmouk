@@ -4,6 +4,7 @@ namespace App\Livewire\Order;
 
 use App\Livewire\Invoice\InvoicePayment;
 use App\Models\Account;
+use App\Models\Address;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Product;
@@ -43,8 +44,58 @@ class View extends Component
 
     public $transaction_price = 0;
     public $snap;
+    public $addresses = [];
+    public $address_id;
+    public $add_address = [];
+    public $address_label;
+    public $user;
 
 
+    public function findUser()
+    {
+        $this->reset(['customerName', 'addresses']);
+        if (!empty($this->customerMobile)){
+            $this->user = User::where('mobile', $this->customerMobile)->first();
+        }
+        if ($this->user){
+            $this->customerName = $this->user->name;
+            $this->addresses = $this->user->addresses;
+        } else{
+            $this->customerName = 'مشتری مهمان';
+        }
+    }
+
+    public function addAddressInput()
+    {
+        if (empty($this->add_address)) {
+            $this->add_address[] = null;
+        }
+    }
+    public function saveAddress()
+    {
+        $this->validate([
+            'customerMobile' => 'required|string|max:11|min:11',
+            'address_label' => 'required',
+        ],[
+            'required' => 'این فیلد اجباری است',
+        ]);
+        if (!empty($this->customerMobile)){
+            $this->user = User::getUserByMobile($this->customerMobile);
+        }
+        if (!$this->user){
+            return redirect()->back()->with('fail', 'کاربر مورد نطر پیدا نشد!');
+        }
+        $address = Address::create([
+            'address' => $this->address_label,
+            'user_id' => $this->user->id
+        ]);
+        if ($address){
+            $this->reset(['address_label', 'add_address']);
+            $this->address_id = $address->id;
+            $this->addresses = $this->user->addresses;
+            return redirect()->back()->with('success', 'آدرس مورد نظر اضافه شد!');
+        }
+    }
 
     public function removeBasket($productId)
     {
@@ -95,6 +146,7 @@ class View extends Component
         $invoice->url_secret = bin2hex(random_bytes(4));
         $invoice->is_snap = $this->snap ?? false;
         if ($this->snap){ $invoice->snap_user_credentials = json_encode(['username' => $this->customerName, 'mobile' => $this->customerMobile ?? null]); }
+        $invoice->address_id = $this->address_id ?? null;
         $invoice->save();
         $invoice->setProdcuts($this->tempOrder['card']);
         $invoice->setTotalPrice();
@@ -102,7 +154,7 @@ class View extends Component
 
 
         // $this->invoices = Invoice::all();
-        $this->reset(['tempOrder', 'customerName', 'customerMobile', 'invoice', 'courierPrice', 'discountPrice', 'snap']);
+        $this->reset(['tempOrder', 'customerName', 'customerMobile', 'invoice', 'courierPrice', 'discountPrice', 'snap', 'addresses', 'address_id']);
         session()->flash('message', 'فاکتور با موفقیت ثبت شد.');
         $this->dispatch('invoiceSaved');
     }
@@ -228,7 +280,7 @@ class View extends Component
     {
         return view('livewire.order.view', [
             'invoices' => Invoice::simplePaginate(10),
-            'categories' => ProductCategory::all()
+            'categories' => ProductCategory::all(),
         ]);
     }
 }
