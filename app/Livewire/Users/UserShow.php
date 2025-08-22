@@ -7,25 +7,25 @@ use Livewire\Component;
 
 class UserShow extends Component
 {
-    public $showModal = false;
+    public $editUserModal = false;
     public $id;
     public $name;
     public $mobile;
 
     public function mount($id){}
 
-    public function openModal()
+    public function openUserModal()
     {
-        $this->showModal = true;
+        $this->editUserModal = true;
     }
 
-    public function cancelEdit()
+    public function cancelUserEdit()
     {
         $this->reset(['name', 'mobile']);
-        $this->showModal = false;
+        $this->editUserModal = false;
     }
 
-    public function save()
+    public function saveUserEdit()
     {
         $this->validate([
             'name' => 'required|string|max:255',
@@ -54,6 +54,7 @@ class UserShow extends Component
         $invoices = $user->invoices;
         $this->name = $user->name;
         $this->mobile = $user->mobile;
-        return view('livewire.users.user-show', compact('user', 'invoices'));
+        $addresses = $user->addresses;
+        return view('livewire.users.user-show', compact('user', 'invoices', 'addresses'));
     }
 }

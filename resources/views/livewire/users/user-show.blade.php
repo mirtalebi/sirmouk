@@ -1,44 +1,69 @@
 <div
-    x-data="{ dangerModalIsOpen: @entangle('showModal') }"
-
+    x-data="{ dangerModalIsOpen: @entangle('editUserModal') }"
 >
     <div class="relative overflow-x-auto sm:rounded-lg">
-        <h2 class="">نام کاربر: <span class="font-bold text-2xl">{{ $user->name }}</span> <button type="button" wire:click="openModal()" class="text-sm text-blue-500 mr-2 cursor-pointer">ویرایش</button></h2>
+        <h2 class="">نام کاربر: <span class="font-bold text-2xl">{{ $user->name }}</span> <button type="button" wire:click="openUserModal()" class="text-sm text-blue-500 mr-2 cursor-pointer">ویرایش</button></h2>
         <h2 class="font-semibold text-gray-900">{{ $user->mobile }}</h2>
         <div>
-    <table class="w-full text-right text-sm text-neutral-600 mt-4">
-        <thead class="border-b border-neutral-300 bg-neutral-50 text-sm text-neutral-900 ">
-        <tr>
-            <th scope="col" class="p-4">شماره فاکتور</th>
-            <th scope="col" class="p-4">تاریخ ثبت</th>
-            <th scope="col" class="p-4">مبلغ کل</th>
-            <th scope="col" class="p-4">عملیات</th>
-        </tr>
-        </thead>
-        <tbody class="divide-y divide-neutral-300 dark:divide-neutral-700">
-        @forelse ($invoices as $invoice)
-            <tr>
-                <td class="p-4">{{ $invoice->id }}</td>
-                <td class="p-4">{{ $invoice->getCreatedAtDate() }}</td>
-                <td class="p-4 font-bold text-black">
-                    {{ number_format($invoice->total_price) }} تومان
-                </td>
-                <td>
-                    <div class="flex items-center gap-4">
-                        <a href="{{ route('invoice.view', ['invoiceId' => $invoice->id, 'secretKey' => $invoice->url_secret]) }}"
-                           class="text-blue-600 hover:underline mx-2">مشاهده</a>
-                    </div>
-                </td>
-            </tr>
-        @empty
-            <tr>
-                <td class="p-4 font-bold text-red-500">                فاکتوری ثبت نشده!
+            <div class="grid gap-2 mt-4">
+                <h2><span class="font-bold text-2xl">آدرس ها:</span></h2>
+                <table class="w-full text-right text-sm text-neutral-600 mt-2">
+                    <thead class="border-b border-neutral-300 bg-neutral-50 text-sm text-neutral-900 ">
+                    <tr>
+                        <th scope="col" class="p-4">شماره آدرس</th>
+                        <th scope="col" class="p-4">آدرس</th>
+                    </tr>
+                    </thead>
+                    <tbody class="divide-y divide-neutral-300 dark:divide-neutral-700">
+                    @forelse ($addresses as $address)
+                        <tr>
+                            <td class="p-4">{{ $address->id }}</td>
+                            <td class="p-4 font-bold text-black">{{ $address->address }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td class="p-4 font-bold text-red-500">                آدرسی ثبت نشده!
 
-                </td>
-            </tr>
-        @endforelse
-        </tbody>
-    </table>
+                            </td>
+                        </tr>
+                    @endforelse
+                    </tbody>
+                </table>
+                <h2><span class="font-bold text-2xl">فاکتور ها:</span></h2>
+                <table class="w-full text-right text-sm text-neutral-600 mt-2">
+                    <thead class="border-b border-neutral-300 bg-neutral-50 text-sm text-neutral-900 ">
+                    <tr>
+                        <th scope="col" class="p-4">شماره فاکتور</th>
+                        <th scope="col" class="p-4">تاریخ ثبت</th>
+                        <th scope="col" class="p-4">مبلغ کل</th>
+                        <th scope="col" class="p-4">عملیات</th>
+                    </tr>
+                    </thead>
+                    <tbody class="divide-y divide-neutral-300 dark:divide-neutral-700">
+                    @forelse ($invoices as $invoice)
+                        <tr>
+                            <td class="p-4">{{ $invoice->id }}</td>
+                            <td class="p-4">{{ $invoice->getCreatedAtDate() }}</td>
+                            <td class="p-4 font-bold text-black">
+                                {{ number_format($invoice->total_price) }} تومان
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-4">
+                                    <a href="{{ route('invoice.view', ['invoiceId' => $invoice->id, 'secretKey' => $invoice->url_secret]) }}"
+                                       class="text-blue-600 hover:underline mx-2">مشاهده</a>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td class="p-4 font-bold text-red-500">                فاکتوری ثبت نشده!
+
+                            </td>
+                        </tr>
+                    @endforelse
+                    </tbody>
+                </table>
+            </div>
 </div>
     </div>
     <div x-cloak x-show="dangerModalIsOpen" x-transition.opacity.duration.200ms x-trap.inert.noscroll="dangerModalIsOpen" x-on:keydown.esc.window="dangerModalIsOpen = false" x-on:click.self="dangerModalIsOpen = false" class="fixed inset-0 z-30 flex items-end justify-center bg-black/20 p-4 pb-8 backdrop-blur-md sm:items-center lg:p-8 sm:min-w-xl" role="dialog" aria-modal="true" aria-labelledby="dangerModalTitle">
@@ -59,7 +84,7 @@
             </div>
             <!-- Dialog Body -->
             <div class="px-4 text-center">
-                <form wire:submit="save">
+                <form wire:submit="saveUserEdit">
                     <div class="grid gap-6">
                         <div>
                             <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">نام کاربر</label>
@@ -83,7 +108,7 @@
                     <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800">
                         ثبت ویرایش
                     </button>
-                    <button type="button" wire:click="cancelEdit()" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800">
+                    <button type="button" wire:click="cancelUserEdit()" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800">
                         لفو ویرایش
                     </button>
                 </form>
