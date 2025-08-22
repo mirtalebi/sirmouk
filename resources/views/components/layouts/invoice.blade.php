@@ -73,36 +73,42 @@
         </div>
 
         <!-- Summary -->
-        <div class="flex justify-end">
-            <div class="w-full max-w-xs">
-                <div class="flex justify-between py-2">
-                    <span>مجموع</span>
-                    <span>{{ number_format($sumPrice) }} تومان</span>
-                </div>
-                @if ($invoice->discount_price > 0)
-                    <div class="flex justify-between py-2 text-green-800 font-bold">
-                        <span>تخفیف</span>
-                        <span class="">{{ number_format(-$invoice->discount_price) }} تومان</span>
-                    </div>
-                    @php $sumPrice -=  $invoice->discount_price; @endphp
+        <div class="grid w-full">
+            <div class="text-sm">
+                @if(!empty($invoice->address_id))
+                    آدرس: <span class="font-bold">{{ $invoice->address->address }}</span>
                 @endif
-                @if ($invoice->calcTaxPrice() > 0)
+            </div>
+            <div class="flex justify-end">
+                <div class="w-full max-w-xs">
                     <div class="flex justify-between py-2">
-                        <span>مالیات بر ارزش افزوده</span>
-                        <span>{{ number_format($invoice->calcTaxPrice()) }} تومان</span>
+                        <span>مجموع</span>
+                        <span>{{ number_format($sumPrice) }} تومان</span>
                     </div>
-                @endif
-                <div class="flex justify-between py-2">
-                    <span>هزینه پیک</span>
-                    <span>{{ number_format($invoice->courier_price) }} تومان</span>
-                </div>
-                <div class="flex justify-between py-2 font-bold text-lg border-t mt-2">
-                    <span>مبلغ قابل پرداخت</span>
-                    <span>{{ number_format($invoice->calcFinalPrice()) }} تومان</span>
+                    @if ($invoice->discount_price > 0)
+                        <div class="flex justify-between py-2 text-green-800 font-bold">
+                            <span>تخفیف</span>
+                            <span class="">{{ number_format(-$invoice->discount_price) }} تومان</span>
+                        </div>
+                        @php $sumPrice -=  $invoice->discount_price; @endphp
+                    @endif
+                    @if ($invoice->calcTaxPrice() > 0)
+                        <div class="flex justify-between py-2">
+                            <span>مالیات بر ارزش افزوده</span>
+                            <span>{{ number_format($invoice->calcTaxPrice()) }} تومان</span>
+                        </div>
+                    @endif
+                    <div class="flex justify-between py-2">
+                        <span>هزینه پیک</span>
+                        <span>{{ number_format($invoice->courier_price) }} تومان</span>
+                    </div>
+                    <div class="flex justify-between py-2 font-bold text-lg border-t mt-2">
+                        <span>مبلغ قابل پرداخت</span>
+                        <span>{{ number_format($invoice->calcFinalPrice()) }} تومان</span>
+                    </div>
                 </div>
             </div>
         </div>
-
         <!-- Footer -->
         <div class="mt-8 text-center text-sm text-gray-500">
             <p>قاطی پلو، جادوی برنج و عشق</p>
