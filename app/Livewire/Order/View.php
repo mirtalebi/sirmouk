@@ -60,8 +60,6 @@ class View extends Component
         if ($this->user){
             $this->customerName = $this->user->name;
             $this->addresses = $this->user->addresses;
-        } else{
-            $this->customerName = 'مشتری مهمان';
         }
     }
 
