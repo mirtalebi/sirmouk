@@ -45,7 +45,8 @@ class ProductSells extends Component
                 'quantity' => $product->invoices->sum('pivot.quantity'),
                 'price' => $product->price,
             ];
-        });
+        })
+        ->sortByDesc('quantity');
         $this->selectedProducts = $saveSelectedProducts;
     }
 
