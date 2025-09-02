@@ -1,15 +1,32 @@
-<div class="border-2 mx-2 rounded-2xl">
+<div class="border-2 mx-2 rounded-2xl"
+     x-data="{
+            formatted: '',
+            realValue: '',
+            formatNumber(value) {
+                let raw = value.replace(/,/g, '');
+                if (isNaN(raw)) raw = '0';
+                this.formatted = Number(raw).toLocaleString();
+                this.realValue = raw;
+                $wire.amount = raw;
+            }
+        }"
+>
+    <script src="https://cdn.jsdelivr.net/gh/mahmoud-eskandari/NumToPersian/dist/num2persian.min.js"></script>
     <form wire:submit="createTransaction">
         <div class="p-4">
             <div class="grid grid-cols-2">
                 <div class="my-2 mx-4">
                     <label for="amount" class="block text-sm mb-2 dark:text-white font-bold">مبلغ</label>
-                    <div class="relative">
-                        <input wire:model="amount" type="number" class="py-2.5 sm:py-3 px-4 block w-full rounded-lg sm:text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600 border-2 border-slate-700" required>
+                    <div class="mt-2">
+                        <input
+                            x-model="formatted"
+                            @input="formatNumber($event.target.value)"
+                            type="text" name="city" id="city" autocomplete="address-level2" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-main sm:text-sm/6" placeholder="به تومان وارد کنید" />
                     </div>
-                            @error('amount')
-                            <p class="text-xs text-red-600 mt-2" id="email-error">{{ $message }}</p>
-                            @enderror
+                    <p x-text="num2persian(formatted) + ' تومان'" class="mt-1 text-green-800 font-bold text-sm"></p>
+                    @error('amount')
+                    <spxan class="text-red-500 text-sm font-bold mt-2">{{ $message }}</spxan>
+                    @enderror
                 </div>
                 <div class="my-2 mx-4">
                     <label for="type" class="block text-sm mb-2 dark:text-white font-bold">نوع</label>

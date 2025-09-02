@@ -5,6 +5,7 @@ namespace App\Livewire\Transaction;
 use App\Models\Account;
 use App\Models\Transaction;
 use App\Models\TransactionCategory;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Morilog\Jalali\Jalalian;
 
@@ -26,8 +27,6 @@ class TransactionCreate extends Component
 
     public function createTransaction()
     {
-
-
         $this->validate([
             'amount' => 'required|integer',
             'type' => 'required|string|in:debit,credit',
@@ -50,23 +49,32 @@ class TransactionCreate extends Component
             }
         }
 
-        $current_balance = Account::find($this->account_id)->balance;
-        $current_balance += $this->amount;
-        Account::find($this->account_id)->update(['balance' => $current_balance]);
+        try {
+            DB::beginTransaction();
+
+            $current_balance = Account::find($this->account_id)->balance;
+            $current_balance += $this->amount;
+            Account::find($this->account_id)->update(['balance' => $current_balance]);
+
+            $create = Transaction::create([
+                'amount' => $this->amount,
+                'type' => $this->type,
+                'description' => $this->description,
+                'category_id' => $this->category_id,
+                'account_id' => $this->account_id,
+                'current_balance' => $current_balance,
+                'transaction_date' => $this->transaction_date,
+            ]);
+            DB::commit();
+            return redirect()->route('transactions.index')->with('success', 'تراکنش با موفقیت ثبت شد!');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->route('transactions.index')->with('fail', 'ثبت تراکنش با مشکل مواجه شد! دوباره تلاش کنید');
+
+        }
 
 
 
-        $create = Transaction::create([
-            'amount' => $this->amount,
-            'type' => $this->type,
-            'description' => $this->description,
-            'category_id' => $this->category_id,
-            'account_id' => $this->account_id,
-            'current_balance' => $current_balance,
-            'transaction_date' => $this->transaction_date,
-        ]);
-
-        return redirect()->route('transactions.index')->with('success', 'تراکنش با موفقیت ثبت شد!');
 
     }
 
