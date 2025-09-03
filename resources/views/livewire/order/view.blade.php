@@ -103,19 +103,31 @@
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
-                    <div class="mb-3"
-                         x-data="{
-                            formatted: '',
-                            realValue: '',
-                            formatNumber(value) {
-                                let raw = value.replace(/,/g, '');
-                                if (isNaN(raw)) raw = '0';
-                                this.formatted = Number(raw).toLocaleString();
-                                this.realValue = raw;
-                                $wire.courierPrice = raw;
-                            }
-                        }"
-                    >
+                    <div class="mb-3" x-data="{
+                        realValue: @entangle('courierPrice'),
+                        formatted: '',
+                        init() {
+                            this.formatted = this.realValue;
+
+                                this.$watch('realValue', value => {
+                                    this.formatted = value;
+                                });
+                        },
+                        formatNumber(value) {
+                            let raw = value.replace(/,/g, '');
+                            if (isNaN(raw)) return '';
+
+                            this.formatted = this.realValue;
+
+                            this.$watch('realValue', value => {
+                                this.formatted = Number(value).toLocaleString();
+                            });
+
+                            this.realValue = raw;
+                            this.formatted = Number(raw).toLocaleString();
+                            $wire.courierPrice = raw;
+                        }
+                    }">
                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900">هزینه پیک</label>
                         <input type="text" id="name"
                                x-model="formatted"
@@ -129,19 +141,30 @@
                         @enderror
                     </div>
 
-                    <div class="mb-3"
-                         x-data="{
-                            formatted: '',
-                            realValue: '',
-                            formatNumber(value) {
-                                let raw = value.replace(/,/g, '');
-                                if (isNaN(raw)) raw = '0';
-                                this.formatted = Number(raw).toLocaleString();
-                                this.realValue = raw;
-                                $wire.discountPrice = raw;
-                            }
-                        }"
-                    >
+                    <div class="mb-3" x-data="{
+                        realValue: @entangle('discountPrice'),
+                        formatted: '',
+                        init() {
+                        this.formatted = this.realValue;
+                            this.$watch('realValue', value => {
+                                this.formatted = value;
+                            });
+                        },
+                        formatNumber(value) {
+                            let raw = value.replace(/,/g, '');
+                            if (isNaN(raw)) return '';
+
+                            this.formatted = this.realValue;
+
+                            this.$watch('realValue', value => {
+                                this.formatted = Number(value).toLocaleString();
+                            });
+
+                            this.realValue = raw;
+                            this.formatted = Number(raw).toLocaleString();
+                            $wire.discountPrice = raw;
+                        }
+                    }">
                         <label for="mobile" class="block mb-2 text-sm font-medium text-gray-900">تخفیف</label>
                         <input type="text" id="mobile"
                                x-model="formatted"

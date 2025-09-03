@@ -29,7 +29,7 @@ class View extends Component
     ];
     public $customerName = '';
     public $customerMobile = '';
-    public $courierPrice, $discountPrice;
+    public $courierPrice,$discountPrice;
 
     //    ------------------------------------
     public $showModal = false;
