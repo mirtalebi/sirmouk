@@ -157,41 +157,44 @@
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div class="flex items-end gap-2">
-                        <div class="relative flex w-full max-w-xs flex-col gap-1 text-neutral-600 dark:text-neutral-300">
-                            <label for="os" class="w-fit pl-0.5 text-sm">آدرس</label>
-                            <select wire:model="address_id" id="os" name="os" class="w-full appearance-none rounded-sm border border-neutral-300 bg-neutral-50 px-4 py-2 text-sm">
-                                <option selected></option>
-                                @forelse($addresses as $address)
-                                    <option {{ $address->id == $address_id ? 'selected' : '' }} value="{{ $address->id }}">{{ $address->address }}</option>
-                                @empty
-                                @endforelse
-                            </select>
-                        </div>
-                        <button wire:click="addAddressInput()" type="button" class="whitespace-nowrap rounded-sm p-1 text-sm font-medium tracking-wide transition hover:opacity-75 text-center flex items-center h-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="size-6 text-gray-900">
-                                <g fill="none" fill-rule="evenodd">
-                                    <path d="m12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z"/><path fill="currentColor" d="M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4v4a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-4H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h4z"/>
-                                </g></svg>
-                        </button>
-                    </div>
+                        @if(empty($add_address))
+                            <div class="relative flex w-full max-w-xs flex-col gap-1 text-neutral-600 dark:text-neutral-300">
+                                <label for="os" class="w-fit pl-0.5 text-sm">آدرس</label>
+                                <select wire:model="address_id" id="os" name="os" class="w-full appearance-none rounded-sm border border-neutral-300 bg-neutral-50 px-4 py-2 text-sm">
+                                    <option selected></option>
+                                    @forelse($addresses as $address)
+                                        <option {{ $address->id == $address_id ? 'selected' : '' }} value="{{ $address->id }}">{{ $address->address }}</option>
+                                    @empty
+                                    @endforelse
+                                </select>
+                            </div>
+                            <button wire:click="addAddressInput()" type="button" class="whitespace-nowrap rounded-sm p-1 text-sm font-medium tracking-wide transition hover:opacity-75 text-center flex items-center h-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="size-6 text-gray-900">
+                                    <g fill="none" fill-rule="evenodd">
+                                        <path d="m12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z"/><path fill="currentColor" d="M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4v4a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-4H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h4z"/>
+                                    </g></svg>
+                            </button>
+                        @endif
+                            @forelse($add_address as $address)
+                                <div class="relative flex w-full max-w-xs flex-col gap-1 text-neutral-600 dark:text-neutral-300 mt-2">
+                                    <button type="button" wire:click="saveAddress">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="absolute left-2.5 top-1/2 size-5 -translate-y-1/2 text-green-600">
+                                            <g fill="none" fill-rule="evenodd">
+                                                <path d="m12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z"/><path fill="currentColor" d="M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4v4a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-4H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h4z"/>
+                                            </g></svg>
+                                    </button>
+                                    <input type="text" wire:model="address_label" class="w-full rounded-sm border border-neutral-300 bg-neutral-50 py-2 pl-10 pr-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:cursor-not-allowed disabled:opacity-75 dark:border-neutral-700 dark:bg-neutral-900/50 dark:focus-visible:outline-white" name="search" placeholder="آدرس جدید را وارد کنید!" aria-label="search"/>
+                                </div>
+                            @empty
+                            @endforelse
+                       </div>
                     <div class="flex items-center ps-4 rounded-sm dark:border-gray-700 border">
                         <input wire:model="snap" type="checkbox" value="" name="bordered-checkbox" class="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded-sm">
                         <label class="w-full py-4 ms-2 font-bold text-gray-900 dark:text-gray-300">اسنپ</label>
                     </div>
                 </div>
                 <div>
-                    @forelse($add_address as $address)
-                        <div class="relative flex w-full max-w-xs flex-col gap-1 text-neutral-600 dark:text-neutral-300 mt-2">
-                            <button type="button" wire:click="saveAddress">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="absolute left-2.5 top-1/2 size-5 -translate-y-1/2 text-green-600">
-                                    <g fill="none" fill-rule="evenodd">
-                                        <path d="m12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z"/><path fill="currentColor" d="M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4v4a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-4H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h4z"/>
-                                    </g></svg>
-                            </button>
-                            <input type="text" wire:model="address_label" class="w-full rounded-sm border border-neutral-300 bg-neutral-50 py-2 pl-10 pr-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:cursor-not-allowed disabled:opacity-75 dark:border-neutral-700 dark:bg-neutral-900/50 dark:focus-visible:outline-white" name="search" placeholder="آدرس جدید را وارد کنید!" aria-label="search"/>
-                        </div>
-                    @empty
-                    @endforelse
+
                 </div>
 
                 <div class="flex gap-2 items-center">

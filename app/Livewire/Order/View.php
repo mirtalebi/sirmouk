@@ -12,6 +12,7 @@ use App\Models\ProductCategory;
 use App\Models\SiteSetting;
 use App\Models\Transaction;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Morilog\Jalali\Jalalian;
@@ -53,13 +54,18 @@ class View extends Component
 
     public function findUser()
     {
-        $this->reset(['customerName', 'addresses']);
+        $this->reset(['customerName', 'addresses', 'add_address']);
         if (!empty($this->customerMobile)){
             $this->user = User::where('mobile', $this->customerMobile)->first();
         }
         if ($this->user){
             $this->customerName = $this->user->name;
             $this->addresses = $this->user->addresses;
+            if (!$this->user->addresses->count() > 0){
+                $this->addAddressInput();
+            }
+        }else{
+            $this->addAddressInput();
         }
     }
 
@@ -132,26 +138,33 @@ class View extends Component
             $user->save();
         }
 
-        if (isset($this->invoice)) {
-            $invoice = $this->invoice;
-        } else {
-            $invoice = new Invoice();
+        try {
+            DB::beginTransaction();
+            if (!empty($this->address_label)){
+                $this->saveAddress();
+            }
+            if (isset($this->invoice)) {
+                $invoice = $this->invoice;
+            } else {
+                $invoice = new Invoice();
+            }
+            $invoice->user_id = $user->id ?? null;
+            $invoice->discount_price = $this->discountPrice ?? 0;
+            $invoice->courier_price = $this->courierPrice ?? 0;
+            // $invoice->card = $this->tempOrder['card'];
+            $invoice->url_secret = bin2hex(random_bytes(4));
+            $invoice->is_snap = $this->snap ?? false;
+            if ($this->snap){ $invoice->snap_user_credentials = json_encode(['username' => $this->customerName, 'mobile' => $this->customerMobile ?? null]); }
+            $invoice->address_id = $this->address_id ?? null;
+            $invoice->save();
+            $invoice->setProdcuts($this->tempOrder['card']);
+            $invoice->setTotalPrice();
+            $invoice->save();
+            DB::commit();
+        }catch (\Exception $exception){
+            DB::rollBack();
         }
-        $invoice->user_id = $user->id ?? null;
-        $invoice->discount_price = $this->discountPrice ?? 0;
-        $invoice->courier_price = $this->courierPrice ?? 0;
-        // $invoice->card = $this->tempOrder['card'];
-        $invoice->url_secret = bin2hex(random_bytes(4));
-        $invoice->is_snap = $this->snap ?? false;
-        if ($this->snap){ $invoice->snap_user_credentials = json_encode(['username' => $this->customerName, 'mobile' => $this->customerMobile ?? null]); }
-        $invoice->address_id = $this->address_id ?? null;
-        $invoice->save();
-        $invoice->setProdcuts($this->tempOrder['card']);
-        $invoice->setTotalPrice();
-        $invoice->save();
 
-
-        // $this->invoices = Invoice::all();
         $this->reset(['tempOrder', 'customerName', 'customerMobile', 'invoice', 'courierPrice', 'discountPrice', 'snap', 'addresses', 'address_id']);
         session()->flash('message', 'فاکتور با موفقیت ثبت شد.');
         $this->dispatch('invoiceSaved');
