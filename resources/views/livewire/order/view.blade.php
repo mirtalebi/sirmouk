@@ -103,9 +103,23 @@
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
-                    <div class="mb-3">
+                    <div class="mb-3"
+                         x-data="{
+                            formatted: '',
+                            realValue: '',
+                            formatNumber(value) {
+                                let raw = value.replace(/,/g, '');
+                                if (isNaN(raw)) raw = '0';
+                                this.formatted = Number(raw).toLocaleString();
+                                this.realValue = raw;
+                                $wire.courierPrice = raw;
+                            }
+                        }"
+                    >
                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900">هزینه پیک</label>
-                        <input type="text" id="name" wire:model="courierPrice"
+                        <input type="text" id="name"
+                               x-model="formatted"
+                               @input="formatNumber($event.target.value)"
                             class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                             placeholder="به تومان" required />
                         @error('courierPrice')
@@ -115,9 +129,23 @@
                         @enderror
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-3"
+                         x-data="{
+                            formatted: '',
+                            realValue: '',
+                            formatNumber(value) {
+                                let raw = value.replace(/,/g, '');
+                                if (isNaN(raw)) raw = '0';
+                                this.formatted = Number(raw).toLocaleString();
+                                this.realValue = raw;
+                                $wire.discountPrice = raw;
+                            }
+                        }"
+                    >
                         <label for="mobile" class="block mb-2 text-sm font-medium text-gray-900">تخفیف</label>
-                        <input type="text" id="mobile" wire:model="discountPrice"
+                        <input type="text" id="mobile"
+                               x-model="formatted"
+                               @input="formatNumber($event.target.value)"
                             class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                             placeholder="به تومان" required />
                         @error('discountPrice')
