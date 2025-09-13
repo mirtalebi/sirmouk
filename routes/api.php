@@ -16,12 +16,12 @@ Route::get('/reporter/invoice-data', function () {
     $result = [];
     foreach ($invoices as $invoice) {
         $r = $invoice->toArray();
-        $r['user_name'] = $invoice->user->name;
-        $r['user_email'] = $invoice->user->email;
+        $r['user_name'] = $invoice->user->name ?? json_decode($invoice->snap_user_credentials, true)['username'] ?? '';
+        $r['user_mobile'] = $invoice->user->mobile ?? json_decode($invoice->snap_user_credentials, true)['mobile'] ?? '';
+        // $r['user_email'] = $invoice->user->email;
         $r['items_count'] = $invoice->products->count();
         $r['paid_amount'] = $invoice->transactions()->sum('amount');
         $result[] = $r;
     }
     return response()->json($result);
-
 });
