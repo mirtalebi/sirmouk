@@ -19,7 +19,7 @@ Route::get('/reporter/invoice-data', function () {
         $r['user_name'] = $invoice->user->name;
         $r['user_email'] = $invoice->user->email;
         $r['items_count'] = $invoice->products->count();
-        $r['paid_amount'] = $invoice->transactions()->sum('ABS(amount)');
+        $r['paid_amount'] = $invoice->transactions()->sum('amount');
         $result[] = $r;
     }
     return response()->json($result);
