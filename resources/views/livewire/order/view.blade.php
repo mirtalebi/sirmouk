@@ -179,64 +179,73 @@
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
-                    <div class="flex items-end gap-2">
+                    <div wire:loading.remove wire:target="findUser" class="flex items-end col-span-2 gap-2 w-full justify-center">
                         @if(empty($add_address))
-                            <div class="relative flex w-full max-w-xs flex-col gap-1 text-neutral-600 dark:text-neutral-300">
+                            <div class="relative flex w-full flex-col gap-1 text-neutral-600 dark:text-neutral-300">
                                 <label for="os" class="w-fit pl-0.5 text-sm">آدرس</label>
-                                <select wire:model="address_id" id="os" name="os" class="w-full appearance-none rounded-sm border border-neutral-300 bg-neutral-50 px-4 py-2 text-sm">
-                                    <option selected></option>
-                                    @forelse($addresses as $address)
-                                        <option {{ $address->id == $address_id ? 'selected' : '' }} value="{{ $address->id }}">{{ $address->address }}</option>
-                                    @empty
-                                    @endforelse
-                                </select>
+                                <div class="flex items-center gap-2">
+                                        <button wire:show="address_id" x-transition.duration.100ms wire:transition.scale.origin.right wire:click="address_id = null" type="button">
+                                            <svg wire:loading.remove wire:target="deleteAddress" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="size-6 text-red-500">
+                                                <path fill="currentColor" fill-rule="evenodd" d="M7 1L1 7l5 5l-5 5l6 6l5-5l5 5l6-6l-5-5l5-5l-6-6l-5 5z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </button>
+                                    <select wire:model="address_id" id="os" name="os" class="w-full appearance-none rounded-sm border border-neutral-300 bg-neutral-50 px-4 py-2 text-sm">
+                                        <option value="" selected></option>
+                                        @forelse($addresses as $address)
+                                            <option {{ $address->id == $address_id ? 'selected' : '' }} value="{{ $address->id }}">{{ $address->address }}</option>
+                                        @empty
+                                        @endforelse
+                                    </select>
+                                    <button wire:click="addAddressInput()" type="button" class="whitespace-nowrap rounded-full bg-green-600 border border-green-600 px-4 py-2 text-xs tracking-wide text-white transition hover:opacity-75 text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 active:opacity-100 active:outline-offset-0 disabled:opacity-75 disabled:cursor-not-allowed">
+                                        آدرس جدید
+                                    </button>
+                                </div>
                             </div>
-                            <button wire:click="addAddressInput()" type="button" class="whitespace-nowrap rounded-sm p-1 text-sm font-medium tracking-wide transition hover:opacity-75 text-center flex items-center h-full">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="size-6 text-gray-900">
-                                    <g fill="none" fill-rule="evenodd">
-                                        <path d="m12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z"/><path fill="currentColor" d="M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4v4a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-4H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h4z"/>
-                                    </g></svg>
-                            </button>
                         @endif
                             @forelse($add_address as $address)
-                                <div class="relative flex w-full max-w-xs flex-col gap-1 text-neutral-600 dark:text-neutral-300 mt-2">
-                                    <button type="button" wire:click="saveAddress">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="absolute left-2.5 top-1/2 size-5 -translate-y-1/2 text-green-600">
-                                            <g fill="none" fill-rule="evenodd">
-                                                <path d="m12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z"/><path fill="currentColor" d="M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4v4a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-4H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h4z"/>
-                                            </g></svg>
-                                    </button>
+                                <div class="relative flex w-full gap-2 text-neutral-600 dark:text-neutral-300">
                                     <input type="text" wire:model="address_label" class="w-full rounded-sm border border-neutral-300 bg-neutral-50 py-2 pl-10 pr-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:cursor-not-allowed disabled:opacity-75 dark:border-neutral-700 dark:bg-neutral-900/50 dark:focus-visible:outline-white" name="search" placeholder="آدرس جدید را وارد کنید!" aria-label="search"/>
                                 </div>
                             @empty
                             @endforelse
                        </div>
-                    <div class="flex items-center ps-4 rounded-sm dark:border-gray-700 border">
-                        <input wire:model="snap" type="checkbox" value="" name="bordered-checkbox" class="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded-sm">
-                        <label class="w-full py-4 ms-2 font-bold text-gray-900 dark:text-gray-300">اسنپ</label>
+                    <!-- Primary spinner -->
+                    <div wire:loading wire:target="findUser" class="flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" class="size-5 fill-primary motion-safe:animate-spin dark:fill-primary-dark">
+                            <path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25" />
+                            <path d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z" />
+                        </svg>
                     </div>
                 </div>
                 <div>
 
                 </div>
 
-                <div class="flex gap-2 items-center">
-                    <button type="button" wire:click="saveInvoice"
-                            class="text-white mt-4 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                <div class="flex gap-2 items-end justify-center">
                         @if ($invoice)
-                            ویرایش فاکتور #{{ $invoice->id }}
-                        @else
-                            ثبت فاکتور جدید
+                            <button type="button" wire:click="cancelEditingInvoice"
+                                    class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-2">
+                                لغو ویرایش فاکتور
+                            </button>
                         @endif
-                    </button>
-
-                </div>
-                @if ($invoice)
-                    <button type="button" wire:click="cancelEditingInvoice"
-                        class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-2">
-                        لغو ویرایش فاکتور
-                    </button>
-                @endif
+                        <button type="button" wire:click="saveInvoice"
+                                class="text-white mt-4 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                            @if ($invoice)
+                                ویرایش فاکتور #{{ $invoice->id }}
+                            @else
+                                ثبت فاکتور جدید
+                            @endif
+                        </button>
+                        <div class="flex gap-2 items-center rounded-sm dark:border-gray-700 border p-2 text-green-700">
+                            <input wire:model="snap" id="snap" type="checkbox" value="" name="bordered-checkbox" class="w-6 h-6 text-green-700 bg-green-700 border-gray-300 rounded-sm">
+                            <label for="snap" class="font-bold">اسنپ</label>
+                            <label for="snap">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="size-8 text-green-700">
+                                    <path fill="currentColor" fill-rule="evenodd" d="M1 3a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v5h4a5 5 0 0 1 5 5v4a3 3 0 0 1-2.129 2.872a3 3 0 0 1-5.7.128H8.83a3 3 0 0 1-5.7-.128A3 3 0 0 1 1 17v-4h6a1 1 0 1 0 0-2H1V9h4a1 1 0 0 0 0-2H1zm13 15h1.171a3 3 0 0 1 5.536-.293A1 1 0 0 0 21 17v-4a3 3 0 0 0-3-3h-4zm-7 1a1 1 0 1 0-2 0a1 1 0 0 0 2 0m10.293-.707A1 1 0 0 0 17 19a1 1 0 1 0 .293-.707" clip-rule="evenodd"/>
+                                </svg>
+                            </label>
+                        </div>
+                    </div>
             </form>
 
             <form class="">

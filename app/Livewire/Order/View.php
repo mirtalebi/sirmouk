@@ -63,6 +63,8 @@ class View extends Component
             $this->addresses = $this->user->addresses;
             if (!$this->user->addresses->count() > 0){
                 $this->addAddressInput();
+            } elseif(!isset($this->invoice)){
+                $this->address_id = $this->user->addresses->first()->id;
             }
         }else{
             $this->addAddressInput();
@@ -155,7 +157,7 @@ class View extends Component
             $invoice->url_secret = bin2hex(random_bytes(4));
             $invoice->is_snap = $this->snap ?? false;
             if ($this->snap){ $invoice->snap_user_credentials = json_encode(['username' => $this->customerName, 'mobile' => $this->customerMobile ?? null]); }
-            $invoice->address_id = $this->address_id ?? null;
+            $invoice->address_id = empty($this->address_id) ? null : $this->address_id;
             $invoice->save();
             $invoice->setProdcuts($this->tempOrder['card']);
             $invoice->setTotalPrice();
@@ -163,6 +165,7 @@ class View extends Component
             DB::commit();
         }catch (\Exception $exception){
             DB::rollBack();
+            dd($exception->getMessage());
         }
 
         $this->reset(['tempOrder', 'customerName', 'customerMobile', 'invoice', 'courierPrice', 'discountPrice', 'snap', 'addresses', 'address_id']);
@@ -184,6 +187,7 @@ class View extends Component
         }
         $this->courierPrice = $this->invoice->courier_price;
         $this->discountPrice = $this->invoice->discount_price;
+        $this->address_id = $this->invoice->address_id;
 
         $this->snap = boolval($this->invoice->is_snap);
 //        dd($this->invoice, $this->snap);
@@ -195,11 +199,12 @@ class View extends Component
             $this->customerMobile = $this->invoice->user->mobile;
             $this->customerName = $this->invoice->user->name;
         }
+        $this->findUser();
     }
 
     public function cancelEditingInvoice()
     {
-        $this->reset(['tempOrder', 'customerName', 'customerMobile', 'invoice', 'courierPrice', 'discountPrice', 'snap']);
+        $this->reset(['tempOrder', 'customerName', 'customerMobile', 'invoice', 'courierPrice', 'discountPrice', 'snap', 'addresses', 'address_id']);
     }
 
     public function showPaymentModal($invoice) {}
