@@ -10,9 +10,17 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::get('/reporter/invoice-data', function () {
+Route::get('/reporter/invoice-data', function (Request $request) {
 
-    $invoices = Invoice::where('created_at', '>=', Carbon::now()->subDays($request->days ?? 30))->get();
+    $days = $request->days ?? 30;
+    $skipDays = $request->skip_days ?? 0;
+
+    $startDate = Carbon::now()
+        ->subDays($skipDays + $days); // go back 'days + skipDays'
+    $endDate = Carbon::now()
+        ->subDays($skipDays);         // stop at skipDays ago
+
+    $invoices = Invoice::whereBetween('created_at', [$startDate, $endDate])->get();
     $result = [];
     foreach ($invoices as $invoice) {
         $r = $invoice->toArray();
