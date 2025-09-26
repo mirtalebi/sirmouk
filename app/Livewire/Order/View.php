@@ -51,6 +51,15 @@ class View extends Component
     public $address_label;
     public $user;
 
+//    -----------
+    public $userModal = false;
+
+
+    public function updateUserModal()
+    {
+        $this->userModal = true;
+    }
+
 
     public function findUser()
     {

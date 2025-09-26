@@ -11,8 +11,10 @@ class UserShow extends Component
     public $id;
     public $name;
     public $mobile;
+    public $totalPrice = 0;
+    public $limit = null;
 
-    public function mount($id){}
+    public function mount($id, $limit = null){}
 
     public function openUserModal()
     {
@@ -52,9 +54,13 @@ class UserShow extends Component
     {
         $user = User::findOrFail($this->id);
         $invoices = $user->invoices;
+        $displayInvoices = isset($this->limit) ? $invoices->take($this->limit) : $invoices;
         $this->name = $user->name;
         $this->mobile = $user->mobile;
         $addresses = $user->addresses;
-        return view('livewire.users.user-show', compact('user', 'invoices', 'addresses'));
+        foreach ($invoices as $invoice) {
+            $this->totalPrice += $invoice->total_price;
+        }
+        return view('livewire.users.user-show', compact('user', 'addresses'), ['invoices' => $displayInvoices]);
     }
 }

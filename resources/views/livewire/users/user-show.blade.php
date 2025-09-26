@@ -30,6 +30,7 @@
                     </tbody>
                 </table>
                 <h2><span class="font-bold text-2xl">فاکتور ها:</span></h2>
+                <h2 class="">جمع فاکتور ها: <span class="font-bold">{{ number_format($totalPrice) }} <span class="text-sm font-medium">تومان</span></span></h2>
                 <table class="w-full text-right text-sm text-neutral-600 mt-2">
                     <thead class="border-b border-neutral-300 bg-neutral-50 text-sm text-neutral-900 ">
                     <tr>

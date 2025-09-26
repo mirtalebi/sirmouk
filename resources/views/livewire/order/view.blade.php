@@ -91,7 +91,12 @@
                         </svg>
                     </div>
                     <div class="mb-3" wire:loading.remove wire:target="findUser">
-                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900">نام مشتری</label>
+                        <div class="flex justify-between">
+                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900">نام مشتری </label>
+                            @if(isset($user))
+                                <button type="button" wire:click="updateUserModal" class="text-blue-400 text-sm cursor-pointer">مشاهده</button>
+                            @endif
+                        </div>
                         <input  type="text" id="name" wire:model="customerName"
                             class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                             placeholder="نام و نام خانوادگی ..." required />
@@ -554,5 +559,35 @@
             </div>
         </div>
     @endif
+    @if($userModal)
+        <div x-data="{modalIsOpen: @entangle('userModal') }">
+            <div x-cloak x-show="modalIsOpen" x-transition.opacity.duration.200ms x-trap.inert.noscroll="modalIsOpen" x-on:keydown.esc.window="modalIsOpen = false" x-on:click.self="modalIsOpen = false" class="fixed inset-0 z-30 flex items-end justify-center bg-black/20 p-4 pb-8 backdrop-blur-md sm:items-center lg:p-8 rounded-lg" role="dialog" aria-modal="true" aria-labelledby="defaultModalTitle">
+                <!-- Modal Dialog -->
+                <div x-show="modalIsOpen" x-transition:enter="transition ease-out duration-200 delay-100 motion-reduce:transition-opacity" x-transition:enter-start="opacity-0 scale-50" x-transition:enter-end="opacity-100 scale-100" class="flex w-5xl flex-col gap-4 overflow-hidden rounded-2xl border border-neutral-300 bg-white text-neutral-600">
+                    <!-- Dialog Body -->
+                    <div class="px-4 py-8 max-h-[80vh] overflow-y-auto">
+                        <livewire:users.user-show :id="$user->id" :limit="5" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 
+
+{{--   page loading when opens user's profile   --}}
+    <div  wire:loading wire:target="updateUserModal">
+        <div x-transition.opacity.duration.200ms x-trap.inert.noscroll="modalIsOpen" x-on:keydown.esc.window="modalIsOpen = false" x-on:click.self="modalIsOpen = false" class="fixed inset-0 z-30 flex items-end justify-center bg-black/20 p-4 pb-8 backdrop-blur-md sm:items-center lg:p-8 rounded-lg" role="dialog" aria-modal="true" aria-labelledby="defaultModalTitle">
+            <!-- Modal Dialog -->
+            <div x-show="modalIsOpen" x-transition:enter="transition ease-out duration-200 delay-100 motion-reduce:transition-opacity" x-transition:enter-start="opacity-0 scale-50" x-transition:enter-end="opacity-100 scale-100" class="flex justify-center items-center w-5xl flex-col gap-4 overflow-hidden rounded-2xl border text-neutral-600">
+                <!-- Dialog Body -->
+                <div class="px-4 py-8 overflow-y-auto">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" class="size-16 fill-on-surface motion-safe:animate-spin dark:fill-on-surface-dark">
+                        <path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25" />
+                        <path d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
