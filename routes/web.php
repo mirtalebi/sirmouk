@@ -14,9 +14,7 @@ use App\Livewire\Account\TransactionsList;
 use App\Livewire\Transaction\TransactionsFilter;
 use App\Livewire\Invoice\InvoiceCalc;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/invoice/{invoiceId}/{secretKey?}', function ($invoiceId, $secretKey) {
     $invoice = Invoice::findOrFail($invoiceId);
