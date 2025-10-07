@@ -15,6 +15,7 @@ class Transaction extends Model
         'current_balance',
         'transaction_date',
         'invoice_id',
+        'tracking_code',
     ];
 
     protected $casts = [

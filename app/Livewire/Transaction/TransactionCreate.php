@@ -19,6 +19,7 @@ class TransactionCreate extends Component
     public $account;
     public $transaction_date_jalali;
     public $transaction_date;
+    public $tracking_code = '';
 
     public function mount()
     {
@@ -34,6 +35,7 @@ class TransactionCreate extends Component
             'category_id' => 'required|integer|exists:transaction_categories,id',
             'account_id' => 'required|integer|exists:accounts,id',
             'transaction_date_jalali' => 'required',
+            'tracking_code' => 'string',
         ]);
 
         $this->transaction_date = Jalalian::fromFormat('Y/m/d', $this->transaction_date_jalali)->toCarbon();
@@ -64,6 +66,7 @@ class TransactionCreate extends Component
                 'account_id' => $this->account_id,
                 'current_balance' => $current_balance,
                 'transaction_date' => $this->transaction_date,
+                'tracking_code' => $this->tracking_code,
             ]);
             DB::commit();
             return redirect()->route('transactions.index')->with('success', 'تراکنش با موفقیت ثبت شد!');
