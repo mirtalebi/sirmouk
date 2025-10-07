@@ -62,7 +62,7 @@ class TransactionList extends Component
                 fn($query) => $query->whereIn('id', $this->transaction_id)
             )
             ->latest()
-            ->paginate(10);
+            ->paginate(15);
 
 
         return view('livewire.transaction.transaction-list', compact('transactions'));
