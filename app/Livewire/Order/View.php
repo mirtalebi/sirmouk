@@ -112,31 +112,11 @@ class View extends Component
         }
     }
 
-    public function removeBasket($productId)
-    {
-        if (isset($this->tempOrder['card'][$productId])) {
-            $this->tempOrder['card'][$productId] = $this->tempOrder['card'][$productId] - 1;
-            if ($this->tempOrder['card'][$productId] < 1) {
-                unset($this->tempOrder['card'][$productId]);
-            }
-        }
-    }
-
-    public function addBasket($productId)
-    {
-        if (isset($this->tempOrder['card'][$productId])) {
-            $this->tempOrder['card'][$productId] = $this->tempOrder['card'][$productId] + 1;
-        } else {
-            $this->tempOrder['card'][$productId] = 1;
-        }
-    }
-
-    public function saveInvoice()
+    public function saveInvoice($tempBasket)
     {
         $this->validate([
             'customerName' => 'required|string|max:255',
             'customerMobile' => 'string|max:11|min:11',
-            'tempOrder.card' => 'required|array|min:1',
         ],[
             'required' => 'این فیلد اجباری است',
             'min' => 'این فیلد باید شامل 11 کارکتر باشد',
@@ -162,13 +142,12 @@ class View extends Component
             $invoice->user_id = $user->id ?? null;
             $invoice->discount_price = $this->discountPrice ?? 0;
             $invoice->courier_price = $this->courierPrice ?? 0;
-            // $invoice->card = $this->tempOrder['card'];
             $invoice->url_secret = bin2hex(random_bytes(4));
             $invoice->is_snap = $this->snap ?? false;
             if ($this->snap){ $invoice->snap_user_credentials = json_encode(['username' => $this->customerName, 'mobile' => $this->customerMobile ?? null]); }
             $invoice->address_id = empty($this->address_id) ? null : $this->address_id;
             $invoice->save();
-            $invoice->setProdcuts($this->tempOrder['card']);
+            $invoice->setProdcuts($tempBasket);
             $invoice->setTotalPrice();
             $invoice->save();
             DB::commit();
@@ -177,8 +156,9 @@ class View extends Component
             dd($exception->getMessage());
         }
 
-        $this->reset(['tempOrder', 'customerName', 'customerMobile', 'invoice', 'courierPrice', 'discountPrice', 'snap', 'addresses', 'address_id']);
+        $this->reset(['customerName', 'customerMobile', 'invoice', 'courierPrice', 'discountPrice', 'snap', 'addresses', 'address_id']);
         session()->flash('message', 'فاکتور با موفقیت ثبت شد.');
+        $this->dispatch('basket-updated', basket: []);
         $this->dispatch('invoiceSaved');
     }
 
@@ -186,14 +166,16 @@ class View extends Component
     {
         $this->reset(['tempOrder', 'customerName', 'customerMobile']);
         $this->invoice = Invoice::findOrFail($invoiceId);
-        $this->tempOrder['card'] = [];
+        $basket = [];
         foreach ($this->invoice->products as $product) {
-            if (isset($this->tempOrder['card'][$product->id])) {
-                $this->tempOrder['card'][$product->id] += $product->pivot->quantity;
+            if (isset($basket[$product->id])) {
+                $basket[$product->id] += $product->pivot->quantity;
             } else {
-                $this->tempOrder['card'][$product->id] = $product->pivot->quantity;
+                $basket[$product->id] = $product->pivot->quantity;
             }
         }
+        $this->dispatch('basket-updated', basket: $basket);
+
         $this->courierPrice = $this->invoice->courier_price;
         $this->discountPrice = $this->invoice->discount_price;
         $this->address_id = $this->invoice->address_id;
@@ -204,7 +186,7 @@ class View extends Component
             $snapCred = json_decode($this->invoice->snap_user_credentials, true);
             $this->customerMobile = $snapCred['mobile'];
             $this->customerName = $snapCred['username'];
-        } else {
+        } else if ($this->invoice->user) {
             $this->customerMobile = $this->invoice->user->mobile;
             $this->customerName = $this->invoice->user->name;
         }

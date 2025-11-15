@@ -32,8 +32,8 @@
                     <p class="text-sm">{{ json_decode($invoice->snap_user_credentials, true)['username'] }} </p>
                     <p class="text-sm">{{ json_decode($invoice->snap_user_credentials, true)['mobile'] }}</p>
                 @else
-                    <p class="text-sm">{{ $invoice->user->name }}</p>
-                    <p class="text-sm">{{ $invoice->user->mobile }}</p>
+                    <p class="text-sm">{{ $invoice->user?->name }}</p>
+                    <p class="text-sm">{{ $invoice->user?->mobile }}</p>
                 @endif
             </div>
 
