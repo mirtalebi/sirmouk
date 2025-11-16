@@ -13,8 +13,60 @@
             sum += count * this.getProduct(key).price
         }
         return sum;
-    } }'
-    @basket-updated.window="tempBasket = $event.detail.basket">
+    },
+    printUsingIframe(customer, basket) {
+
+        
+    }
+    }'
+    @basket-updated.window="tempBasket = Object.fromEntries($event.detail.basket)"
+    @print-invoice-client.window="
+        let customer = $event.detail.customer;
+        let basket = $event.detail.basket;
+        
+        document.getElementById('customer-name').textContent = customer.name;
+        document.getElementById('customer-mobile').textContent = customer.mobile;
+        document.getElementById('customer-address').textContent = customer.address;
+        document.getElementById('discount-price').textContent = '-' + customer.discount_price.toLocaleString();
+        document.getElementById('delivery-price').textContent = customer.courier_price.toLocaleString();
+        document.getElementById('print-order-id').textContent = '#' + customer.id;
+
+        document.getElementById('discount-box').style.display = customer.discount_price ? 'flex' : 'none';
+        document.getElementById('delivery-box').style.display = customer.courier_price ? 'flex' : 'none';
+
+        // Fill items
+        const itemsBody = document.getElementById('items-table');
+        itemsBody.innerHTML = ''; // clear previous rows
+
+        let total = customer.courier_price - customer.discount_price;
+        basket.forEach(item => {
+            const row = `
+                <tr>
+                    <td>${item.name}</td>
+                    <td>${item.pivot.quantity}</td>
+                    <td>${(item.pivot.quantity * item.pivot.unit_price).toLocaleString()}</td>
+                </tr>
+            `;
+            itemsBody.innerHTML += row;
+
+            total += item.pivot.quantity * item.pivot.unit_price;
+        });
+
+        // Fill total
+        document.getElementById('final-total').textContent = total.toLocaleString();
+
+        const content = document.getElementById('to-print').innerHTML;
+        const iframe = document.getElementById('print-iframe');
+
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write(`<html dir='rtl'><body style='font-family: Peyda; padding: 5px;'>${content}`);
+        doc.close();
+
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+    
+    ">
 
     <script src="https://cdn.jsdelivr.net/gh/mahmoud-eskandari/NumToPersian/dist/num2persian.min.js"></script>
     <div class="relative flex-1 overflow-hidden rounded-xl border border-neutral-200 p-3 mt-5">
@@ -364,29 +416,14 @@
                 </thead>
                 <tbody class="divide-y divide-neutral-300 dark:divide-neutral-700">
                     @foreach ($invoices as $invoice)
-                        <tr>
+                        <tr wire:key="{{ $invoice->id }}">
                             <td class="p-4">{{ $invoice->id }}</td>
                             <td class="p-4">
                                 {{ $invoice->user->name ?? (json_decode($invoice->snap_user_credentials, true)['username'] ?? '') }}
                             </td>
-                            @if ($invoice->is_snap)
-                                @if (empty(json_decode($invoice->snap_user_credentials, true)['mobile']))
-                                    <td class="py-4 text-red-400 flex items-center justify-center font-bold">
-                                        شماره ای ثبت نشده
-                                    </td>
-                                @else
-                                    <td class="p-4">
-                                        {{ json_decode($invoice->snap_user_credentials, true)['mobile'] }}</td>
-                                @endif
-                            @else
-                                @if (empty($invoice->user->mobile))
-                                    <td class="py-4 text-red-400 flex items-center justify-center font-bold">
-                                        شماره ای ثبت نشده
-                                    </td>
-                                @else
-                                    <td class="p-4">{{ $invoice->user->mobile }}</td>
-                                @endif
-                            @endif
+                            <td class="p-4 text-start">
+                                {{ $invoice->user->mobile ?? (json_decode($invoice->snap_user_credentials, true)['mobile'] ?? '') }}
+                            </td>
                             <td class="p-4">{{ $invoice->getCreatedAtDate() }}</td>
                             <td class="p-4 font-bold text-black">
                                 {{ number_format($invoice->total_price) }} تومان
@@ -395,6 +432,11 @@
                                 <div class="flex items-center gap-4">
                                     <a href="{{ route('invoice.view', ['invoiceId' => $invoice->id, 'secretKey' => $invoice->url_secret]) }}"
                                         class="text-blue-600 hover:underline mx-2">مشاهده</a>
+                                    <button class="text-blue-600 hover:underline mx-2"
+                                        wire:click="printInvoice({{ $invoice->id }})">
+
+                                        پرینت
+                                        فیش</button>
                                     @if ($invoice->created_at->isToday())
                                         <button type="button" wire:click="editInvoice({{ $invoice->id }})"
                                             class="text-yellow-700 hover:underline ml-2 mx-2">ویرایش</button>
@@ -637,7 +679,7 @@
 
 
     {{--   page loading when opens user's profile   --}}
-    <div wire:loading wire:target="updateUserModal">
+    <div wire:loading wire:target="updateUserModal" x-data="{ modalIsOpen: @entangle('userModal') }">
         <div x-transition.opacity.duration.200ms x-trap.inert.noscroll="modalIsOpen"
             x-on:keydown.esc.window="modalIsOpen = false" x-on:click.self="modalIsOpen = false"
             class="fixed inset-0 z-30 flex items-end justify-center bg-black/20 p-4 pb-8 backdrop-blur-md sm:items-center lg:p-8 rounded-lg"
@@ -660,4 +702,158 @@
             </div>
         </div>
     </div>
+
+    <iframe id="print-iframe" style="display: none;"></iframe>
+
+    <div id="to-print" style="display: none;">
+
+        <style>
+            #to-print {
+                width: 260px;
+                /* Perfect for 58mm printer */
+                font-family: sans-serif;
+                direction: rtl;
+                padding: 12px;
+                background: #fff;
+            }
+
+            /* Header layout */
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 12px;
+            }
+
+            .header-left {
+                font-size: 12px;
+                line-height: 1.5;
+                text-align: center;
+            }
+
+            .header-right img {
+                width: 70px;
+            }
+
+            .section-title {
+                font-weight: bold;
+                margin: 14px 0 6px 0;
+                border-bottom: 1px dashed #000;
+                padding-bottom: 4px;
+                font-size: 14px;
+            }
+
+            .info {
+                font-size: 13px;
+                line-height: 1.7;
+            }
+
+            .print-table table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 6px;
+                font-size: 13px;
+            }
+
+            .print-table table th {
+                text-align: right;
+                border-bottom: 1px dashed #aaa;
+                padding: 6px 0;
+            }
+
+            .print-table table td {
+                padding: 6px 0;
+            }
+
+            .print-table table td:nth-child(3) {
+                text-align: left;
+                font-weight: bold;
+            }
+
+            .print-table table td:last-child {
+                text-align: left;
+                font-weight: bold;
+            }
+
+            .total-box {
+                margin-top: 12px;
+                padding-top: 10px;
+                border-top: 2px dashed #000;
+                display: flex;
+                justify-content: space-between;
+                font-size: 15px;
+                font-weight: bold;
+            }
+
+            .footer {
+                text-align: center;
+                margin-top: 16px;
+                font-size: 12px;
+                color: #555;
+            }
+        </style>
+
+        <!-- HEADER -->
+        <div class="header">
+
+            <!-- LEFT: Date + Order ID -->
+            <div class="header-left">
+                <div>شماره سفارش<br><strong id="print-order-id"></strong></div>
+            </div>
+
+            <!-- RIGHT: LOGO -->
+            <div class="header-right">
+                <img src="{{ url('/assets/logo/main.png') }}">
+            </div>
+
+        </div>
+
+        <!-- ORDER DETAILS -->
+        <div class="section-title">مشخصات مشتری</div>
+        <div class="info">
+            نام مشتری: <strong id="customer-name"></strong><br>
+            موبایل: <strong id="customer-mobile"></strong><br>
+            <small id="customer-address"></small>
+        </div>
+
+        <!-- ITEMS -->
+        <div class="section-title">اقلام خرید</div>
+        <div class="print-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>نام کالا</th>
+                        <th>تعداد</th>
+                        <th style="text-align: left;">قیمت (تومان)</th>
+                    </tr>
+                </thead>
+                <tbody id="items-table">
+                </tbody>
+            </table>
+        </div>
+
+        <!-- DISCOUNT -->
+        <div id="discount-box" class="total-box">
+            <span>تخفیف:</span>
+            <span id="discount-price">0</span>
+        </div>
+
+        <!-- DELIVERY -->
+        <div id="delivery-box" class="total-box">
+            <span>هزینه ارسال:</span>
+            <span id="delivery-price">0</span>
+        </div>
+
+        <!-- FINAL TOTAL -->
+        <div class="total-box" style="border-top: 2px solid #000; margin-top: 6px;">
+            <span>جمع نهایی:</span>
+            <span id="final-total">0</span>
+        </div>
+
+        <div class="footer">سپاس از خرید شما</div>
+
+    </div>
+
+
+
 </div>

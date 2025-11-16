@@ -290,4 +290,17 @@ class View extends Component
             'categories' => ProductCategory::all(),
         ]);
     }
+    
+    public function printInvoice($id) {
+        $invoice = Invoice::findOrFail($id);
+        $this->dispatch('print-invoice-client', customer: [
+            'id' => $invoice->id,
+            'name' => $invoice->user?->name ?? json_decode($invoice->snap_user_credentials, true)['username'],
+            'mobile' => $invoice->user?->mobile ?? json_decode($invoice->snap_user_credentials, true)['mobile'],
+            'address' => $invoice->address?->address,
+            'discount_price' => $invoice->discount_price,
+            'courier_price' => $invoice->courier_price,
+        ] ,basket: $invoice->products);
+
+    }
 }

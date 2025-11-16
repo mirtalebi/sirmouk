@@ -119,4 +119,10 @@ class Invoice extends Model
     {
         $this->total_price = $this->calcFinalPrice();
     }
+
+    // public function getCustomerNameMobile() {
+    //     return [
+    //         'mobile' => $invoice->is_snap ? 
+    //     ];
+    // }
 }
