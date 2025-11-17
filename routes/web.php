@@ -13,8 +13,12 @@ use App\Livewire\Account\AccountEdit;
 use App\Livewire\Account\TransactionsList;
 use App\Livewire\Transaction\TransactionsFilter;
 use App\Livewire\Invoice\InvoiceCalc;
+use Illuminate\Support\Facades\Artisan;
 
-Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', function () {
+    return redirect('/dashboard');
+})->name('home');
+// Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/invoice/{invoiceId}/{secretKey?}', function ($invoiceId, $secretKey) {
     $invoice = Invoice::findOrFail($invoiceId);
@@ -91,6 +95,16 @@ Route::get('convert', function () {
         }
     }
     return 'DONE';
+});
+
+Route::get('/clear-cache', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('view:clear');
+    Artisan::call('route:clear');
+    sleep(3);
+
+    return "All caches cleared successfully!";
 });
 
 require __DIR__ . '/auth.php';
