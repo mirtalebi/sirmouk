@@ -85,6 +85,10 @@
                         <span>مجموع</span>
                         <span>{{ number_format($sumPrice) }} تومان</span>
                     </div>
+                    <div class="flex justify-between py-2">
+                        <span>هزینه بسته بندی</span>
+                        <span>{{ number_format($invoice->packaging_price) }} تومان</span>
+                    </div>
                     @if ($invoice->discount_price > 0)
                         <div class="flex justify-between py-2 text-green-800 font-bold">
                             <span>تخفیف</span>
@@ -104,7 +108,7 @@
                     </div>
                     <div class="flex justify-between py-2 font-bold text-lg border-t mt-2">
                         <span>مبلغ قابل پرداخت</span>
-                        <span>{{ number_format($invoice->calcFinalPrice()) }} تومان</span>
+                        <span>{{ number_format($invoice->total_price) }} تومان</span>
                     </div>
                 </div>
             </div>
