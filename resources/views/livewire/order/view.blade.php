@@ -19,7 +19,7 @@
         
     }
     }'
-    @basket-updated.window="tempBasket = typeof $event.detail.basket == 'object' ? $event.detail.basket : Object.fromEntries($event.detail.basket)"
+    @basket-updated.window="tempBasket = (Array.isArray($event.detail.basket) ? Object.fromEntries($event.detail.basket) : $event.detail.basket);"
     @print-invoice-client.window="
         let customer = $event.detail.customer;
         let basket = $event.detail.basket;
