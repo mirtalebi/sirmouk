@@ -11,7 +11,8 @@ class Product extends Model
         'description',
         'price',
         'category_id',
-        'tax'
+        'tax',
+        'packaging_amount'
     ];
     public function invoices()
     {

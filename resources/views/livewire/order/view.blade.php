@@ -1,29 +1,40 @@
-<div x-data='{ tempBasket: {}, 
-    products: @json(\App\Models\Product::all()), 
+<div x-data='{ tempBasket: {},
+    products: @json(\App\Models\Product::all()),
     getProduct(id) { return this.products.find((item) => item.id == id) },
     addToBasket(id) { this.tempBasket[id] = this.tempBasket[id] ? this.tempBasket[id] + 1 : 1; },
-    removeFromBasket(id) { 
+    removeFromBasket(id) {
         if (!this.tempBasket[id]) return;
         this.tempBasket[id] -= 1;
         if (this.tempBasket[id] == 0) delete this.tempBasket[id];
     },
-    getSumTempBasket() { 
+
+    getSumPackaging() {
         sum = 0;
         for(const [key, count] of Object.entries(this.tempBasket)) {
-            sum += count * this.getProduct(key).price
+            sum += count * this.getProduct(key).packaging_amount
         }
+        $wire.packaging_price = sum;
+        return sum;
+    },
+
+    getSumTempBasket() {
+        sum = 0;
+        for(const [key, count] of Object.entries(this.tempBasket)) {
+            sum += (count * this.getProduct(key).price) + this.getSumPackaging();
+        }
+        $wire.total_price = sum;
         return sum;
     },
     printUsingIframe(customer, basket) {
 
-        
+
     }
     }'
     @basket-updated.window="tempBasket = (Array.isArray($event.detail.basket) ? Object.fromEntries($event.detail.basket) : $event.detail.basket);"
     @print-invoice-client.window="
         let customer = $event.detail.customer;
         let basket = $event.detail.basket;
-        
+
         document.getElementById('customer-name').textContent = customer.name;
         document.getElementById('customer-mobile').textContent = customer.mobile;
         document.getElementById('customer-address').textContent = customer.address;
@@ -65,7 +76,7 @@
 
         iframe.contentWindow.focus();
         iframe.contentWindow.print();
-    
+
     ">
 
     <script src="https://cdn.jsdelivr.net/gh/mahmoud-eskandari/NumToPersian/dist/num2persian.min.js"></script>
@@ -113,6 +124,16 @@
                                 </tr>
                             </template>
                             @php $sumPrice = 0 @endphp
+
+                            <tr>
+                                <td class="p-4">
+                                </td>
+                                <td class="p-1"></td>
+                                <td class="p-1 font-bold">مبلغ بسته بندی</td>
+                                <td class="p-4 font-bold text-black text-lg">
+                                    <span x-text="getSumPackaging()"></span> <span class="text-xs">تومان</span>
+                                </td>
+                            </tr>
 
                             <tr>
                                 <td class="p-4">
@@ -181,7 +202,7 @@
                         formatted: '',
                         init() {
                             this.formatted = this.realValue;
-                    
+
                             this.$watch('realValue', value => {
                                 this.formatted = value;
                             });
@@ -189,13 +210,13 @@
                         formatNumber(value) {
                             let raw = value.replace(/,/g, '');
                             if (isNaN(raw)) return '';
-                    
+
                             this.formatted = this.realValue;
-                    
+
                             this.$watch('realValue', value => {
                                 this.formatted = Number(value).toLocaleString();
                             });
-                    
+
                             this.realValue = raw;
                             this.formatted = Number(raw).toLocaleString();
                             $wire.courierPrice = raw;
@@ -225,13 +246,13 @@
                         formatNumber(value) {
                             let raw = value.replace(/,/g, '');
                             if (isNaN(raw)) return '';
-                    
+
                             this.formatted = this.realValue;
-                    
+
                             this.$watch('realValue', value => {
                                 this.formatted = Number(value).toLocaleString();
                             });
-                    
+
                             this.realValue = raw;
                             this.formatted = Number(raw).toLocaleString();
                             $wire.discountPrice = raw;
@@ -243,6 +264,43 @@
                             class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                             placeholder="به تومان" required />
                         @error('discountPrice')
+                            <div class="text-sm text-red-500">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="mb-3" x-data="{
+                        realValue: @entangle('addedPackagingPrice'),
+                        formatted: '',
+                        init() {
+                            this.formatted = this.realValue;
+                            this.$watch('realValue', value => {
+                                this.formatted = value;
+                            });
+                        },
+                        formatNumber(value) {
+                            let raw = value.replace(/,/g, '');
+                            if (isNaN(raw)) return '';
+
+                            this.formatted = this.realValue;
+
+                            this.$watch('realValue', value => {
+                                this.formatted = Number(value).toLocaleString();
+                            });
+
+                            this.realValue = raw;
+                            this.formatted = Number(raw).toLocaleString();
+                            $wire.addedPackagingPrice = raw;
+                        }
+                    }">
+                        <label for="mobile" class="block mb-2 text-sm font-medium text-gray-900">مبلغ بسته بندی مازاد</label>
+                        <input type="text" id="mobile" x-model="formatted"
+                            @input="formatNumber($event.target.value)"
+                            class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                            placeholder="به تومان" required />
+                        @error('addedPackagingPrice')
                             <div class="text-sm text-red-500">
                                 {{ $message }}
                             </div>
@@ -502,25 +560,25 @@
             modalIsOpen: @entangle('showModal'),
             realValue: @entangle('amount'),
             formatted: '',
-        
+
             init() {
                 this.formatted = this.realValue;
-        
+
                 this.$watch('realValue', value => {
                     this.formatted = value;
                 });
             },
-        
+
             formatNumber(value) {
                 let raw = value.replace(/,/g, '');
                 if (isNaN(raw)) return '';
-        
+
                 this.formatted = this.realValue;
-        
+
                 this.$watch('realValue', value => {
                     this.formatted = Number(value).toLocaleString();
                 });
-        
+
                 this.realValue = raw;
                 this.formatted = Number(raw).toLocaleString();
                 $wire.amount = raw;

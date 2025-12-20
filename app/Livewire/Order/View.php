@@ -51,6 +51,10 @@ class View extends Component
     public $address_label;
     public $user;
 
+    public $addedPackagingPrice;
+    public $total_price = 0;
+    public $packaging_price = 0;
+
 //    -----------
     public $userModal = false;
 
@@ -114,6 +118,8 @@ class View extends Component
 
     public function saveInvoice($tempBasket)
     {
+        $this->total_price += (int) $this->addedPackagingPrice;
+        $this->packaging_price += (int) $this->addedPackagingPrice;
         $this->validate([
             'customerName' => 'required|string|max:255',
             'customerMobile' => 'string|max:11|min:11',
@@ -122,7 +128,6 @@ class View extends Component
             'min' => 'این فیلد باید شامل 11 کارکتر باشد',
             'max' => 'این فیلد باید شامل 11 کارکتر باشد'
         ]);
-
         if (!empty($this->customerMobile)){
             $user = User::getUserByMobile($this->customerMobile);
             $user->name = $this->customerName;
@@ -148,7 +153,8 @@ class View extends Component
             $invoice->address_id = empty($this->address_id) ? null : $this->address_id;
             $invoice->save();
             $invoice->setProdcuts($tempBasket);
-            $invoice->setTotalPrice();
+            $invoice->packaging_price = $this->packaging_price ?? 0;
+            $invoice->total_price = $this->total_price;
             $invoice->save();
             DB::commit();
         }catch (\Exception $exception){
@@ -156,7 +162,7 @@ class View extends Component
             dd($exception->getMessage());
         }
 
-        $this->reset(['customerName', 'customerMobile', 'invoice', 'courierPrice', 'discountPrice', 'snap', 'addresses', 'address_id']);
+        $this->reset(['customerName', 'customerMobile', 'invoice', 'courierPrice', 'discountPrice', 'snap', 'addresses', 'address_id', 'addedPackagingPrice', 'total_price']);
         session()->flash('message', 'فاکتور با موفقیت ثبت شد.');
         $this->dispatch('basket-updated', basket: []);
         $this->dispatch('invoiceSaved');
@@ -290,7 +296,7 @@ class View extends Component
             'categories' => ProductCategory::all(),
         ]);
     }
-    
+
     public function printInvoice($id) {
         $invoice = Invoice::findOrFail($id);
         $this->dispatch('print-invoice-client', customer: [

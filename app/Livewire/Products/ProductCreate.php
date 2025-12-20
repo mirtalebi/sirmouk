@@ -13,10 +13,10 @@ class ProductCreate extends Component
     public $price;
     public $tax;
     public $category;
+    public $packaging_amount;
 
     public function save()
     {
-//        dd($this->name, $this->description, $this->price, $this->tax, $this->category);
         $this->validate([
             'name' => 'required',
             'description' => 'required',
@@ -33,6 +33,7 @@ class ProductCreate extends Component
             'price' => $this->price,
             'tax' => $this->tax,
             'category_id' => $this->category,
+            'packaging_amount' => $this->packaging_amount,
         ]);
         if ($product) {
             return redirect()->route('products')->with('success', 'محصول مورد نطر با موفقیت ساخته شد!');

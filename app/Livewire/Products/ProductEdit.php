@@ -15,6 +15,8 @@ class ProductEdit extends Component
     public $category;
     public $tax;
     public $product;
+    public $packaging_amount;
+
     public function mount($id)
     {
         $this->product = Product::findOrFail($id);
@@ -23,7 +25,7 @@ class ProductEdit extends Component
         $this->price = $this->product->price;
         $this->category = $this->product->category_id;
         $this->tax = $this->product->tax;
-//        dd($this->category);
+        $this->packaging_amount = $this->product->packaging_amount;
     }
 
     public function cancel()
@@ -47,6 +49,7 @@ class ProductEdit extends Component
             'price' => $this->price,
             'tax' => $this->tax,
             'category_id' => $this->category,
+            'packaging_amount' => $this->packaging_amount ? $this->packaging_amount : null,
         ]);
 
         if ($update) {
