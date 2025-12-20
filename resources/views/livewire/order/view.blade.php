@@ -8,11 +8,15 @@
         if (this.tempBasket[id] == 0) delete this.tempBasket[id];
     },
 
+{{--    courierPrice: 0,--}}
+{{--    discountPrice: 0,--}}
+{{--    addedPackagingPrice: 0,--}}
     getSumPackaging() {
         sum = 0;
         for(const [key, count] of Object.entries(this.tempBasket)) {
             sum += count * this.getProduct(key).packaging_amount
         }
+{{--        sum -= -(this.addedPackagingPrice);--}}
         $wire.packaging_price = sum;
         return sum;
     },
@@ -20,8 +24,11 @@
     getSumTempBasket() {
         sum = 0;
         for(const [key, count] of Object.entries(this.tempBasket)) {
-            sum += (count * this.getProduct(key).price) + this.getSumPackaging();
+            sum += (count * this.getProduct(key).price);
         }
+        sum += this.getSumPackaging();
+{{--        sum -= -(this.courierPrice);--}}
+{{--        sum -= this.discountPrice;--}}
         $wire.total_price = sum;
         return sum;
     },
@@ -30,10 +37,13 @@
 
     }
     }'
-    @basket-updated.window="tempBasket = Object.fromEntries($event.detail.basket)"
+    @basket-updated.window="
+    tempBasket = Object.fromEntries($event.detail.basket)
+    "
     @print-invoice-client.window="
         let customer = $event.detail.customer;
         let basket = $event.detail.basket;
+
 
         document.getElementById('customer-name').textContent = customer.name;
         document.getElementById('customer-mobile').textContent = customer.mobile;
@@ -76,7 +86,6 @@
 
         iframe.contentWindow.focus();
         iframe.contentWindow.print();
-
     ">
 
     <script src="https://cdn.jsdelivr.net/gh/mahmoud-eskandari/NumToPersian/dist/num2persian.min.js"></script>
@@ -218,6 +227,7 @@
                             });
 
                             this.realValue = raw;
+{{--                            courierPrice = raw;--}}
                             this.formatted = Number(raw).toLocaleString();
                             $wire.courierPrice = raw;
                         }
@@ -254,6 +264,7 @@
                             });
 
                             this.realValue = raw;
+{{--                            discountPrice = raw;--}}
                             this.formatted = Number(raw).toLocaleString();
                             $wire.discountPrice = raw;
                         }
@@ -291,6 +302,7 @@
                             });
 
                             this.realValue = raw;
+{{--                            addedPackagingPrice = this.realValue;--}}
                             this.formatted = Number(raw).toLocaleString();
                             $wire.addedPackagingPrice = raw;
                         }
