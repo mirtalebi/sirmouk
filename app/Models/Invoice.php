@@ -89,6 +89,7 @@ class Invoice extends Model
         $total -= $this->discount_price;
         $total += $this->calcTaxPrice();
         $total += $this->courier_price;
+        $total += $this->packaging_price;
         return $total;
     }
 
@@ -122,7 +123,7 @@ class Invoice extends Model
 
     // public function getCustomerNameMobile() {
     //     return [
-    //         'mobile' => $invoice->is_snap ? 
+    //         'mobile' => $invoice->is_snap ?
     //     ];
     // }
 }

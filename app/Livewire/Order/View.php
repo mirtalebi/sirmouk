@@ -145,16 +145,17 @@ class View extends Component
                 $invoice = new Invoice();
             }
             $invoice->user_id = $user->id ?? null;
-            $invoice->discount_price = $this->discountPrice ?? 0;
-            $invoice->courier_price = $this->courierPrice ?? 0;
+            $invoice->discount_price = (int)$this->discountPrice ?? 0;
+            $invoice->courier_price = (int)$this->courierPrice ?? 0;
+            $invoice->packaging_price = (int)$this->packaging_price ?? 0;
             $invoice->url_secret = bin2hex(random_bytes(4));
             $invoice->is_snap = $this->snap ?? false;
             if ($this->snap){ $invoice->snap_user_credentials = json_encode(['username' => $this->customerName, 'mobile' => $this->customerMobile ?? null]); }
             $invoice->address_id = empty($this->address_id) ? null : $this->address_id;
             $invoice->save();
             $invoice->setProdcuts($tempBasket);
-            $invoice->packaging_price = $this->packaging_price ?? 0;
-            $invoice->total_price = $this->total_price;
+            $invoice->setTotalPrice();
+//            dd('courier_price:' . $invoice->courier_price, 'discount_price:' . $invoice->discount_price, 'packaging_price:' . $invoice->packaging_price, 'total_price:' . $invoice->total_price);
             $invoice->save();
             DB::commit();
         }catch (\Exception $exception){
