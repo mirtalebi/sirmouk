@@ -37,9 +37,13 @@
 
     }
     }'
+<<<<<<< HEAD
     @basket-updated.window="
     tempBasket = Object.fromEntries($event.detail.basket)
     "
+=======
+    @basket-updated.window="tempBasket = (Array.isArray($event.detail.basket) ? Object.fromEntries($event.detail.basket) : $event.detail.basket);"
+>>>>>>> 8801ba08afda4b65f07f4c3109db6a1086a51db1
     @print-invoice-client.window="
         let customer = $event.detail.customer;
         let basket = $event.detail.basket;
