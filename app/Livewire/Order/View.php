@@ -205,9 +205,6 @@ class View extends Component
         $this->reset(['tempOrder', 'customerName', 'customerMobile', 'invoice', 'courierPrice', 'discountPrice', 'snap', 'addresses', 'address_id']);
     }
 
-    public function showPaymentModal($invoice) {}
-
-
     //    ----------------------------------------------------
 
 
@@ -229,14 +226,8 @@ class View extends Component
         $this->showModal = true;
     }
 
-    public function addPayment()
-    {
-        $this->payments[] = new Payment();
-    }
-
     public function savePayment()
     {
-//        dd($this->amount);
         $this->validate([
             'account' => 'required|exists:accounts,id',
             'j_date' => 'required',
@@ -248,30 +239,13 @@ class View extends Component
         ]);
         $this->transaction_date = Jalalian::fromFormat('Y/m/d', $this->j_date)->toCarbon();
 
-        $current_balance = Account::find($this->account)->balance;
-        $current_balance += $this->amount;
-        Account::find($this->account)->update(['balance' => $current_balance]);
+        $invoice_payment_category_id = SiteSetting::getValue('INVOICE_PAYMENT_CATEGORY_ID');
 
-
-        $inoice_payment_category_id = SiteSetting::getValue('INVOICE_PAYMENT_CATEGORY_ID');
-
-        if ($inoice_payment_category_id == 'null' || $inoice_payment_category_id == null) {
+        if ($invoice_payment_category_id == 'null' || $invoice_payment_category_id == null) {
             return redirect()->back()->with('fail', 'مقدار INVOICE_PAYMENT_CATEGORY_ID در دیتابیس تنظیم نشده است!');
         }
 
-        $create = Transaction::create([
-            'amount' => $this->amount,
-            'type' => 'credit',
-            'description' => 'فروش غذا',
-            'category_id' => $inoice_payment_category_id,
-            'account_id' => $this->account,
-            'current_balance' => $current_balance,
-            'transaction_date' => $this->transaction_date,
-            'invoice_id' => $this->invoicePayments->id,
-        ]);
-
-
-
+        $create = Transaction::makeTransaction($this->amount, 'credit', 'فروش غذا', $invoice_payment_category_id, $this->account, $this->transaction_date, $this->invoicePayments->id);
         if ($create) {
             $this->transactions = $this->invoicePayments->transactions;
             $this->invoice_price -= $this->amount;
