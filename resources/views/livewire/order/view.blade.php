@@ -38,8 +38,8 @@
     }
     }'
      @basket-updated.window="
-    tempBasket = Object.fromEntries($event.detail.basket)
-    "
+    tempBasket = $event.detail.basket;
+"
      @print-invoice-client.window="
         let customer = $event.detail.customer;
         let basket = $event.detail.basket;
