@@ -10,6 +10,9 @@
                 $wire.amount = raw;
             }
         }"
+     @transaction-created.window="
+        formatted = ''
+    "
 >
     <script src="https://cdn.jsdelivr.net/gh/mahmoud-eskandari/NumToPersian/dist/num2persian.min.js"></script>
     <form wire:submit="createTransaction">
@@ -53,8 +56,8 @@
                     <label for="category_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">دسته بندی</label>
                     <select id="category_id" wire:model="category_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                     <option selected></option>
-                        @foreach($categories as $categorie)
-                            <option value="{{ $categorie->id }}">{{ $categorie->name }}</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
                     </select>
                     @error('category_id')
@@ -89,7 +92,7 @@
                 </div>
                 <div class="my-2 mx-4">
                     <label for="tracking_code" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">کد رهگیری</label>
-                    <input type="text" wire:model="tracking_code" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="کد رهگیری را وارد کنید" required="">
+                    <input type="text" wire:model="tracking_code" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="کد رهگیری را وارد کنید">
                     @error('tracking_code')
                     <div class="text-sm text-red-500">
                         {{ $message }}

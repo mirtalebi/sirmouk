@@ -6,6 +6,7 @@ use App\Models\Account;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Livewire\Attributes\On;
 
 class TransactionList extends Component
 {
@@ -54,6 +55,15 @@ class TransactionList extends Component
         $this->selectedTransaction = [];
     }
 
+
+//    #[On('transaction-created')]
+//    public function refreshList()
+//    {
+//        $this->resetPage();
+//    }
+
+    #[On('transaction-created')]
+
     public function render()
     {
         $transactions = Transaction::query()
@@ -63,8 +73,6 @@ class TransactionList extends Component
             )
             ->latest()
             ->paginate(15);
-
-
         return view('livewire.transaction.transaction-list', compact('transactions'));
     }
 }

@@ -4,6 +4,7 @@
     selectedTransaction: { id: null, amount: null, type: null, account: '' }
 }"
     class="border-2 rounded-2xl mx-2 py-4 items-center" style="[x-cloak] {display: none !important;}">
+
     @forelse($transactions as $transaction)
         <div
             class="flex items-center">

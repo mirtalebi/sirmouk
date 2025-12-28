@@ -8,6 +8,7 @@ use App\Models\TransactionCategory;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Morilog\Jalali\Jalalian;
+use Livewire\Attributes\On;
 
 class TransactionCreate extends Component
 {
@@ -52,28 +53,19 @@ class TransactionCreate extends Component
         }
 
         try {
-            DB::beginTransaction();
-
-            $current_balance = Account::find($this->account_id)->balance;
-            $current_balance += $this->amount;
-            Account::find($this->account_id)->update(['balance' => $current_balance]);
-
-            $create = Transaction::create([
-                'amount' => $this->amount,
-                'type' => $this->type,
-                'description' => $this->description,
-                'category_id' => $this->category_id,
-                'account_id' => $this->account_id,
-                'current_balance' => $current_balance,
-                'transaction_date' => $this->transaction_date,
-                'tracking_code' => $this->tracking_code,
-            ]);
-            DB::commit();
-            return redirect()->route('transactions.index')->with('success', 'تراکنش با موفقیت ثبت شد!');
+            $create = Transaction::makeTransaction(
+                $this->amount,
+                $this->type,
+                $this->description,
+                $this->category_id,
+                $this->account_id,
+                $this->transaction_date,
+                null,
+                $this->tracking_code);
+            $this->dispatch('transaction-created');
+            $this->reset();
         } catch (\Throwable $th) {
-            DB::rollBack();
             return redirect()->route('transactions.index')->with('fail', 'ثبت تراکنش با مشکل مواجه شد! دوباره تلاش کنید');
-
         }
 
 
@@ -84,9 +76,8 @@ class TransactionCreate extends Component
 
     public function render()
     {
-        return view('livewire.transaction.transaction-create',[
-            'categories' => TransactionCategory::all(),
-            'accounts' => Account::all(),
-        ]);
+        $categories = TransactionCategory::all();
+        $accounts = Account::all();
+        return view('livewire.transaction.transaction-create', compact('categories', 'accounts'));
     }
 }

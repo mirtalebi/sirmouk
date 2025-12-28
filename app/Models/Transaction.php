@@ -25,12 +25,12 @@ class Transaction extends Model
 
 
 //    Create transaction
-    public static function makeTransaction(int $amount, $type, $description, $category_id, $account_id, $date, $invoice_id = null)
+    public static function makeTransaction(int $amount, $type, $description, $category_id, $account_id, $date, $invoice_id = null, $tracking_code = null)
     {
         try {
             DB::beginTransaction();
 //            Save new balance
-            $account = Account::findOrFail($account_id);
+            $account = Account::findOrFail($account_id)->lockForUpdate()->first();
             $current_balance = $account->balance + $amount;
             $account->balance = $current_balance;
             $account->save();
@@ -45,6 +45,7 @@ class Transaction extends Model
                 'current_balance' => (int) $current_balance,
                 'transaction_date' => $date,
                 'invoice_id' => $invoice_id,
+                'tracking_code' => $tracking_code,
             ]);
             DB::commit();
             return $transaction;
