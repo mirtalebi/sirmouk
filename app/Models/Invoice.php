@@ -116,6 +116,14 @@ class Invoice extends Model
         }
     }
 
+    public function getSumPackagingPrice() {
+        $result = 0;
+        foreach($this->products as $product) {
+            $result += $product->pivot->quantity * $product->packaging_amount;
+        }
+        return $result;
+    }
+
     public function setTotalPrice()
     {
         $this->total_price = $this->calcFinalPrice();

@@ -8,15 +8,15 @@
         if (this.tempBasket[id] == 0) delete this.tempBasket[id];
     },
 
-{{--    courierPrice: 0,--}}
-{{--    discountPrice: 0,--}}
-{{--    addedPackagingPrice: 0,--}}
+{{--    courierPrice: 0, --}}
+{{--    discountPrice: 0, --}}
+{{--    addedPackagingPrice: 0, --}}
     getSumPackaging() {
         sum = 0;
         for(const [key, count] of Object.entries(this.tempBasket)) {
             sum += count * this.getProduct(key).packaging_amount
         }
-{{--        sum -= -(this.addedPackagingPrice);--}}
+{{--        sum -= -(this.addedPackagingPrice); --}}
         $wire.packaging_price = sum;
         return sum;
     },
@@ -27,8 +27,8 @@
             sum += (count * this.getProduct(key).price);
         }
         sum += this.getSumPackaging();
-{{--        sum -= -(this.courierPrice);--}}
-{{--        sum -= this.discountPrice;--}}
+{{--        sum -= -(this.courierPrice); --}}
+{{--        sum -= this.discountPrice; --}}
         $wire.total_price = sum;
         return sum;
     },
@@ -37,7 +37,7 @@
 
     }
     }'
-    @basket-updated.window="tempBasket = (Array.isArray($event.detail.basket) ? Object.fromEntries($event.detail.basket) : $event.detail.basket);"
+    @basket-updated.window="console.log($event.detail.basket); tempBasket = (Array.isArray($event.detail.basket) ? Object.fromEntries($event.detail.basket) : $event.detail.basket);"
     @print-invoice-client.window="
         let customer = $event.detail.customer;
         let basket = $event.detail.basket;
@@ -47,17 +47,19 @@
         document.getElementById('customer-mobile').textContent = customer.mobile;
         document.getElementById('customer-address').textContent = customer.address;
         document.getElementById('discount-price').textContent = '-' + customer.discount_price.toLocaleString();
+        document.getElementById('packaging-price').textContent = customer.packaging_price.toLocaleString();
         document.getElementById('delivery-price').textContent = customer.courier_price.toLocaleString();
         document.getElementById('print-order-id').textContent = '#' + customer.id;
 
         document.getElementById('discount-box').style.display = customer.discount_price ? 'flex' : 'none';
         document.getElementById('delivery-box').style.display = customer.courier_price ? 'flex' : 'none';
+        document.getElementById('packaging-box').style.display = customer.packaging_price ? 'flex' : 'none';
 
         // Fill items
         const itemsBody = document.getElementById('items-table');
         itemsBody.innerHTML = ''; // clear previous rows
 
-        let total = customer.courier_price - customer.discount_price;
+        let total = customer.courier_price - customer.discount_price + customer.packaging_price;
         basket.forEach(item => {
             const row = `
                 <tr>
@@ -209,7 +211,7 @@
                         formatted: '',
                         init() {
                             this.formatted = this.realValue;
-
+                    
                             this.$watch('realValue', value => {
                                 this.formatted = value;
                             });
@@ -217,15 +219,15 @@
                         formatNumber(value) {
                             let raw = value.replace(/,/g, '');
                             if (isNaN(raw)) return '';
-
+                    
                             this.formatted = this.realValue;
-
+                    
                             this.$watch('realValue', value => {
                                 this.formatted = Number(value).toLocaleString();
                             });
-
+                    
                             this.realValue = raw;
-{{--                            courierPrice = raw;--}}
+                            {{--                            courierPrice = raw; --}}
                             this.formatted = Number(raw).toLocaleString();
                             $wire.courierPrice = raw;
                         }
@@ -254,15 +256,15 @@
                         formatNumber(value) {
                             let raw = value.replace(/,/g, '');
                             if (isNaN(raw)) return '';
-
+                    
                             this.formatted = this.realValue;
-
+                    
                             this.$watch('realValue', value => {
                                 this.formatted = Number(value).toLocaleString();
                             });
-
+                    
                             this.realValue = raw;
-{{--                            discountPrice = raw;--}}
+                            {{--                            discountPrice = raw; --}}
                             this.formatted = Number(raw).toLocaleString();
                             $wire.discountPrice = raw;
                         }
@@ -292,20 +294,21 @@
                         formatNumber(value) {
                             let raw = value.replace(/,/g, '');
                             if (isNaN(raw)) return '';
-
+                    
                             this.formatted = this.realValue;
-
+                    
                             this.$watch('realValue', value => {
                                 this.formatted = Number(value).toLocaleString();
                             });
-
+                    
                             this.realValue = raw;
-{{--                            addedPackagingPrice = this.realValue;--}}
+                            {{--                            addedPackagingPrice = this.realValue; --}}
                             this.formatted = Number(raw).toLocaleString();
                             $wire.addedPackagingPrice = raw;
                         }
                     }">
-                        <label for="mobile" class="block mb-2 text-sm font-medium text-gray-900">مبلغ بسته بندی مازاد</label>
+                        <label for="mobile" class="block mb-2 text-sm font-medium text-gray-900">مبلغ بسته بندی
+                            مازاد</label>
                         <input type="text" id="mobile" x-model="formatted"
                             @input="formatNumber($event.target.value)"
                             class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
@@ -570,25 +573,25 @@
             modalIsOpen: @entangle('showModal'),
             realValue: @entangle('amount'),
             formatted: '',
-
+        
             init() {
                 this.formatted = this.realValue;
-
+        
                 this.$watch('realValue', value => {
                     this.formatted = value;
                 });
             },
-
+        
             formatNumber(value) {
                 let raw = value.replace(/,/g, '');
                 if (isNaN(raw)) return '';
-
+        
                 this.formatted = this.realValue;
-
+        
                 this.$watch('realValue', value => {
                     this.formatted = Number(value).toLocaleString();
                 });
-
+        
                 this.realValue = raw;
                 this.formatted = Number(raw).toLocaleString();
                 $wire.amount = raw;
@@ -910,6 +913,11 @@
         <div id="delivery-box" class="total-box">
             <span>هزینه ارسال:</span>
             <span id="delivery-price">0</span>
+        </div>
+
+        <div id="packaging-box" class="total-box">
+            <span>هزینه بسته بندی:</span>
+            <span id="packaging-price">0</span>
         </div>
 
         <!-- FINAL TOTAL -->

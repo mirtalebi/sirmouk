@@ -186,6 +186,7 @@ class View extends Component
         $this->courierPrice = $this->invoice->courier_price;
         $this->discountPrice = $this->invoice->discount_price;
         $this->address_id = $this->invoice->address_id;
+        $this->addedPackagingPrice = $this->invoice->packaging_price - $this->invoice->getSumPackagingPrice();
 
         $this->snap = boolval($this->invoice->is_snap);
 //        dd($this->invoice, $this->snap);
@@ -307,6 +308,7 @@ class View extends Component
             'address' => $invoice->address?->address,
             'discount_price' => $invoice->discount_price,
             'courier_price' => $invoice->courier_price,
+            'packaging_price' => $invoice->packaging_price,
         ] ,basket: $invoice->products);
 
     }
