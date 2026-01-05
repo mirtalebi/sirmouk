@@ -102,7 +102,7 @@
             </div>
 
             <div class="flex justify-center my-6">
-                <button type="submit" class="py-3 px-5 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-green-500 text-slate-900 hover:bg-green-600 focus:outline-hidden cursor-pointer disabled:opacity-50 disabled:pointer-events-none">
+                <button type="submit" class="py-3 px-5 inline-flex items-center gap-x-2 text-sm font-bold rounded-lg border border-transparent bg-green-500 text-white hover:bg-green-600 focus:outline-hidden cursor-pointer disabled:opacity-50 disabled:pointer-events-none">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>

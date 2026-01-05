@@ -30,7 +30,7 @@ class Transaction extends Model
         try {
             DB::beginTransaction();
 //            Save new balance
-            $account = Account::findOrFail($account_id)->lockForUpdate()->first();
+            $account = Account::where('id',$account_id)->lockForUpdate()->first();
             $current_balance = $account->balance + $amount;
             $account->balance = $current_balance;
             $account->save();

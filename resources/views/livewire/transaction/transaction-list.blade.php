@@ -6,47 +6,114 @@
     class="border-2 rounded-2xl mx-2 py-4 items-center" style="[x-cloak] {display: none !important;}">
 
     @forelse($transactions as $transaction)
+{{--        <div--}}
+{{--            class="flex items-center">--}}
+
+{{--            <div class="w-full px-4 cursor-pointer transition border-b bg-slate-50 mb-1"--}}
+{{--                 x-data="{ show: false, iconShow: false}"--}}
+{{--                 @click="show = !show"--}}
+{{--            >--}}
+{{--                <div class="grid grid-cols-6">--}}
+{{--                    <div--}}
+{{--                        class="flex gap-2 items-center col-span-2">--}}
+{{--                        <div x-show="show" x-cloak>--}}
+{{--                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 font-bold">--}}
+{{--                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />--}}
+{{--                            </svg>--}}
+
+{{--                        </div>--}}
+{{--                        <div x-show="!show">--}}
+{{--                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 font-bold">--}}
+{{--                                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />--}}
+{{--                            </svg>--}}
+{{--                        </div>--}}
+
+{{--                        <h2 class="font-bold text-l">{{ $transaction->account->name }}</h2>--}}
+{{--                    </div>--}}
+{{--                    <div class="grid grid-cols-2 my-2 text-sm col-span-3">--}}
+{{--                        <div class="mx-4">مبلغ: <span class="font-bold {{ $transaction->type == 'credit' ? 'text-green-600' : 'text-red-600' }}">{{ number_format($transaction->amount) }}</span></div>--}}
+{{--                        --}}{{--                {{ dump($transaction->transaction_date) }}--}}
+{{--                        <div><span class="font-bold">--}}
+{{--                        {{ \Morilog\Jalali\Jalalian::fromCarbon($transaction->transaction_date)->format('Y/m/d') }}</span></div>--}}
+{{--                    </div>--}}
+{{--                    <div class="flex justify-center items-center">--}}
+{{--                        @if($transaction->type == 'credit')--}}
+{{--                            <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" class="size-6 text-green-600">--}}
+{{--                                <path fill="currentColor" d="M256 48a208 208 0 1 1 0 416a208 208 0 1 1 0-416m0 464a256 256 0 1 0 0-512a256 256 0 1 0 0 512M151.2 217.4c-4.6 4.2-7.2 10.1-7.2 16.4c0 12.3 10 22.3 22.3 22.3H208v96c0 17.7 14.3 32 32 32h32c17.7 0 32-14.3 32-32v-96h41.7c12.3 0 22.3-10 22.3-22.3c0-6.2-2.6-12.1-7.2-16.4l-91-84c-3.8-3.5-8.7-5.4-13.9-5.4s-10.1 1.9-13.9 5.4l-91 84z"/>--}}
+{{--                            </svg>--}}
+{{--                        @else--}}
+{{--                            <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" class="size-6 text-red-600">--}}
+{{--                                <path fill="currentColor" d="M256 464a208 208 0 1 1 0-416a208 208 0 1 1 0 416m0-464a256 256 0 1 0 0 512a256 256 0 1 0 0-512m120.9 294.6c4.5-4.2 7.1-10.1 7.1-16.3c0-12.3-10-22.3-22.3-22.3H304v-96c0-17.7-14.3-32-32-32h-32c-17.7 0-32 14.3-32 32v96h-57.7c-12.3 0-22.3 10-22.3 22.3c0 6.2 2.6 12.1 7.1 16.3l107.1 99.9c3.8 3.5 8.7 5.5 13.8 5.5s10.1-2 13.8-5.5z"/>--}}
+{{--                            </svg>--}}
+{{--                        @endif--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                <div--}}
+{{--                    x-show="show"--}}
+{{--                    x-cloak--}}
+{{--                    x-transition:enter="transition ease-out duration-300"--}}
+{{--                    x-transition:enter-start="opacity-0 scale-90"--}}
+{{--                    x-transition:enter-end="opacity-100 scale-100"--}}
+{{--                    x-transition:leave="transition ease-in duration-300"--}}
+{{--                    x-transition:leave-start="opacity-100 scale-100"--}}
+{{--                    x-transition:leave-end="opacity-0 scale-90"--}}
+
+{{--                >--}}
+{{--                    <div class="grid grid-cols-3 text-sm">--}}
+{{--                        <div>دسته بندی: <span class="font-bold">{{ $transaction->category->name }}</span></div>--}}
+{{--                        <div>موجودی: <span class="font-bold">{{ number_format($transaction->current_balance) }}</span></div>--}}
+{{--                        <div>کد رهگیری: <span class="font-bold">{{ $transaction->tracking_code }}</span></div>--}}
+{{--                    </div>--}}
+{{--                    <div class="flex justify-between">--}}
+{{--                        <div class="col-span-2">توضیحات: <span>{{ $transaction->description }}</span></div>--}}
+{{--                        <div class="{{ $transaction->invoice }}col-span-2">توضیحات: <span>{{ $transaction->description }}</span></div>--}}
+{{--                        <div class="ml-8">--}}
+{{--                            <button--}}
+{{--                                @click="--}}
+{{--                                    selectedTransaction.id = {{ $transaction->id }};--}}
+{{--                                    selectedTransaction.amount = '{{ number_format($transaction->amount) }}';--}}
+{{--                                    selectedTransaction.account = '{{ $transaction->account->name }}';--}}
+{{--                                    selectedTransaction.type = '{{ $transaction->type }}';--}}
+{{--                                    deleteModal = true;--}}
+{{--"--}}
+{{--                                type="button"--}}
+{{--                                class="flex text-red-500 font-bold text-sm hover:text-red-700 cursor-pointer hover:underline"--}}
+{{--                            >--}}
+{{--                                حذف تراکنش--}}
+{{--                            </button>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
         <div
             class="flex items-center">
 
-            <div class="w-full px-4 cursor-pointer transition border-b bg-slate-50 mb-1"
+            <div class="w-full px-4 py-1 cursor-pointer transition border-b mb-1"
                  x-data="{ show: false, iconShow: false}"
                  @click="show = !show"
             >
-                <div class="grid grid-cols-6">
+                <div class="flex justify-between items-center">
                     <div
-                        class="flex gap-2 items-center col-span-2">
-                        <div x-show="show" x-cloak>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 font-bold">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        class="flex gap-1 items-center col-span-2">
+                            @if($transaction->type == 'credit')
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" class="size-8 text-green-600">
+                                <path fill="currentColor" fill-rule="evenodd" d="M1.898 10.778A1 1 0 0 1 .483 9.363l3.333-3.332l.007-.007a1.457 1.457 0 0 1 2.039 0l.007.007L7.57 7.732L9.917 5.25l-1.04-1.04a.75.75 0 0 1 .53-1.28h3.653a.75.75 0 0 1 .75.75v3.652a.75.75 0 0 1-1.28.53l-1.198-1.198l-2.704 2.861l-.027.027a1.457 1.457 0 0 1-2.039 0l-.007-.007l-1.713-1.712z" clip-rule="evenodd"/>
                             </svg>
-
+                            @else
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" class="size-8 text-red-600">
+                                <path fill="currentColor" fill-rule="evenodd" d="M1.898 3.222A1 1 0 1 0 .483 4.637l3.333 3.332l.007.007a1.457 1.457 0 0 0 2.039 0l.007-.007L7.57 6.268L9.917 8.75l-1.04 1.04a.75.75 0 0 0 .53 1.28h3.653a.75.75 0 0 0 .75-.75V6.67a.75.75 0 0 0-1.28-.53l-1.198 1.197l-2.704-2.86l-.027-.028a1.457 1.457 0 0 0-2.04 0l-.006.007l-1.713 1.712z" clip-rule="evenodd"/>
+                            </svg>
+                            @endif
+                        <div class="grid">
+                            <h2 class="font-bold text-lg">{{ $transaction->account->name }}</h2>
+                            <span class="text-sm -mt-2">{{ $transaction->category->name }}</span>
                         </div>
-                        <div x-show="!show">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 font-bold">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                            </svg>
+                    </div>
+                    <div class="mx-4"><span class="font-bold {{ $transaction->type == 'credit' ? 'text-green-600' : 'text-red-600' }}">{{ number_format($transaction->amount) }}</span></div>
+                        <div>
+                            <span class="font-bold text-sm">{{ \Morilog\Jalali\Jalalian::fromCarbon($transaction->transaction_date)->format('%A, %d %B %y') }}</span>
                         </div>
-
-                        <h2 class="font-bold text-l">{{ $transaction->account->name }}</h2>
-                    </div>
-                    <div class="grid grid-cols-2 my-2 text-sm col-span-3">
-                        <div class="mx-4">مبلغ: <span class="font-bold {{ $transaction->type == 'credit' ? 'text-green-600' : 'text-red-600' }}">{{ number_format($transaction->amount) }}</span></div>
-                        {{--                {{ dump($transaction->transaction_date) }}--}}
-                        <div><span class="font-bold">
-                        {{ \Morilog\Jalali\Jalalian::fromCarbon($transaction->transaction_date)->format('Y/m/d') }}</span></div>
-                    </div>
-                    <div class="flex justify-center items-center">
-                        @if($transaction->type == 'credit')
-                            <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" class="size-6 text-green-600">
-                                <path fill="currentColor" d="M256 48a208 208 0 1 1 0 416a208 208 0 1 1 0-416m0 464a256 256 0 1 0 0-512a256 256 0 1 0 0 512M151.2 217.4c-4.6 4.2-7.2 10.1-7.2 16.4c0 12.3 10 22.3 22.3 22.3H208v96c0 17.7 14.3 32 32 32h32c17.7 0 32-14.3 32-32v-96h41.7c12.3 0 22.3-10 22.3-22.3c0-6.2-2.6-12.1-7.2-16.4l-91-84c-3.8-3.5-8.7-5.4-13.9-5.4s-10.1 1.9-13.9 5.4l-91 84z"/>
-                            </svg>
-                        @else
-                            <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" class="size-6 text-red-600">
-                                <path fill="currentColor" d="M256 464a208 208 0 1 1 0-416a208 208 0 1 1 0 416m0-464a256 256 0 1 0 0 512a256 256 0 1 0 0-512m120.9 294.6c4.5-4.2 7.1-10.1 7.1-16.3c0-12.3-10-22.3-22.3-22.3H304v-96c0-17.7-14.3-32-32-32h-32c-17.7 0-32 14.3-32 32v96h-57.7c-12.3 0-22.3 10-22.3 22.3c0 6.2 2.6 12.1 7.1 16.3l107.1 99.9c3.8 3.5 8.7 5.5 13.8 5.5s10.1-2 13.8-5.5z"/>
-                            </svg>
-                        @endif
-                    </div>
                 </div>
                 <div
                     x-show="show"
@@ -60,12 +127,15 @@
 
                 >
                     <div class="grid grid-cols-3 text-sm">
-                        <div>دسته بندی: <span class="font-bold">{{ $transaction->category->name }}</span></div>
                         <div>موجودی: <span class="font-bold">{{ number_format($transaction->current_balance) }}</span></div>
-                        <div>کد رهگیری: <span class="font-bold">{{ $transaction->tracking_code }}</span></div>
+                        @if(isset($transaction->invoice_id))
+                            <div>شماره فاکتور: <span class="font-bold">{{ $transaction->invoice_id }}</span></div>
+                        @else
+                            <div>کد رهگیری: <span class="font-bold">{{ $transaction->tracking_code }}</span></div>
+                        @endif
+                        <div>توضیحات: <span>{{ $transaction->description }}</span></div>
                     </div>
                     <div class="flex justify-between">
-                        <div class="col-span-2">توضیحات: <span>{{ $transaction->description }}</span></div>
                         <div class="ml-8">
                             <button
                                 @click="

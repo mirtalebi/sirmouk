@@ -62,10 +62,11 @@ class TransactionCreate extends Component
                 $this->transaction_date,
                 null,
                 $this->tracking_code);
+            $this->dispatch('toast', type: 'success', message: 'تراکنش ثبت شد');
             $this->dispatch('transaction-created');
             $this->reset();
         } catch (\Throwable $th) {
-            return redirect()->route('transactions.index')->with('fail', 'ثبت تراکنش با مشکل مواجه شد! دوباره تلاش کنید');
+            $this->dispatch('toast', type: 'failed', message: $th);
         }
 
 

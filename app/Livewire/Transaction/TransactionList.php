@@ -71,7 +71,7 @@ class TransactionList extends Component
             ->when($this->transaction_id && count($this->transaction_id) > 0,
                 fn($query) => $query->whereIn('id', $this->transaction_id)
             )
-            ->latest()
+            ->orderByDesc('transaction_date')
             ->paginate(15);
         return view('livewire.transaction.transaction-list', compact('transactions'));
     }
