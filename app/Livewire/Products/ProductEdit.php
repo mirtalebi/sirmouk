@@ -40,7 +40,7 @@ class ProductEdit extends Component
             'price' => 'required|numeric',
             'tax' => 'required',
             'category' => 'required|exists:product_categories,id',
-        ],[
+        ], [
             'required' => 'لطفا این فیلد را پر کنید!'
         ]);
         $update = $this->product->update([
@@ -54,7 +54,7 @@ class ProductEdit extends Component
 
         if ($update) {
             return redirect()->route('products')->with('success', 'محصول مورد نطر با موفقیت ویرایش شد');
-        }else{
+        } else {
             return redirect()->back()->with('fail', 'ویرایش محصول با مشکل مواجه شد! دوباره تلاش کنید');
         }
     }
