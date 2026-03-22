@@ -42,6 +42,9 @@
         let customer = $event.detail.customer;
         let basket = $event.detail.basket;
 
+        customer.discount_price = customer.discount_price ? Number(customer.discount_price) : 0;
+        customer.courier_price = customer.courier_price ? Number(customer.courier_price) : 0;
+        customer.packaging_price = customer.packaging_price ? Number(customer.packaging_price) : 0;
 
         document.getElementById('customer-name').textContent = customer.name;
         document.getElementById('customer-mobile').textContent = customer.mobile;
@@ -59,7 +62,7 @@
         const itemsBody = document.getElementById('items-table');
         itemsBody.innerHTML = ''; // clear previous rows
 
-        let total = customer.courier_price - customer.discount_price + customer.packaging_price;
+        let total = Number(customer.courier_price) - Number(customer.discount_price) + Number(customer.packaging_price);
         basket.forEach(item => {
             const row = `
                 <tr>
@@ -779,6 +782,20 @@
     <div id="to-print" style="display: none;">
 
         <style>
+            @font-face {
+                font-family: "Peyda";
+                /*a name to be used later*/
+                src: url("/assets/fonts/woff/PeydaWebFaNum-Regular.woff");
+                /*URL to font*/
+            }
+
+            @font-face {
+                font-family: "PeydaBold";
+                /*a name to be used later*/
+                src: url("/assets/fonts/woff/PeydaWebFaNum-Bold.woff");
+                /*URL to font*/
+            }
+
             #to-print {
                 width: 260px;
                 /* Perfect for 58mm printer */
