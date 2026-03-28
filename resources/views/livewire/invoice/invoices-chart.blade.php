@@ -1,6 +1,6 @@
 <div>
     <h2 class="text-3xl font-bold m-4">نمودار فروش محصول:</h2>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/assets/js/chart.js"></script>
     <canvas id="invoiceChart"></canvas>
     <script>
         const ctx = document.getElementById('invoiceChart').getContext('2d');
@@ -17,7 +17,9 @@
             },
             options: {
                 scales: {
-                    y: { beginAtZero: true }
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
         });

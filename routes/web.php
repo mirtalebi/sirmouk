@@ -16,7 +16,7 @@ use App\Livewire\Invoice\InvoiceCalc;
 use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', function () {
-    return redirect('/dashboard');
+    return view('welcome');
 })->name('home');
 // Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

@@ -104,7 +104,7 @@
 
 
     @push('scripts')
-        <script type="text/javascript" src="https://unpkg.com/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.js"></script>
+        <script type="text/javascript" src="/assets/js/jalalidatepicker.min.js"></script>
 
 
         <script>

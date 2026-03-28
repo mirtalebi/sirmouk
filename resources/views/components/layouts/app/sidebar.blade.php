@@ -126,7 +126,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
-    <script type="text/javascript" src="https://unpkg.com/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jalalidatepicker.min.js"></script>
     <script>
         jalaliDatepicker.startWatch();
     </script>
