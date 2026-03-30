@@ -14,6 +14,7 @@ use App\Livewire\Account\TransactionsList;
 use App\Livewire\Transaction\TransactionsFilter;
 use App\Livewire\Invoice\InvoiceCalc;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('welcome');
@@ -106,5 +107,29 @@ Route::get('/clear-cache', function () {
 
     return "All caches cleared successfully!";
 });
+
+Route::get('/cmp', function (Request $request) {
+    // Destination URL
+    $destination = 'https://sirmok.ir';
+
+    // Prepare log line
+    $timestamp = now()->toDateTimeString();
+    $ip        = $request->ip();
+    $campaign  = $request->query('utm', 'unknown');
+
+    $logLine = sprintf(
+        "[%s] IP: %s | Campaign: %s\n",
+        $timestamp,
+        $ip,
+        $campaign
+    );
+
+    // Write to a simple log file
+    file_put_contents(storage_path('campaigns/clicks'.$campaign.'.log'), $logLine, FILE_APPEND);
+
+    // Redirect to the real destination
+    return redirect($destination);
+});
+
 
 require __DIR__ . '/auth.php';
