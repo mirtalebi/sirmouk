@@ -91,7 +91,7 @@
         iframe.contentWindow.print();
     ">
 
-    <script src="https://cdn.jsdelivr.net/gh/mahmoud-eskandari/NumToPersian/dist/num2persian.min.js"></script>
+    <script src="/assets/js/num2persian.min.js"></script>
     <div class="relative flex-1 overflow-hidden rounded-xl border border-neutral-200 p-3 mt-5">
         <h3 class="text-xl font-bold">
             @if ($invoice)

@@ -9,7 +9,7 @@
         $wire.amount = raw;
     }
 }">
-    <script src="https://cdn.jsdelivr.net/gh/mahmoud-eskandari/NumToPersian/dist/num2persian.min.js"></script>
+    <script src="/assets/js/num2persian.min.js"></script>
     <form wire:submit="createTransaction">
         <div class="p-4">
             <div class="grid grid-cols-2">

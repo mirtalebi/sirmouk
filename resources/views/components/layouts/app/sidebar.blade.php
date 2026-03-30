@@ -3,7 +3,7 @@
 
 <head>
     @include('partials.head')
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <link href="/assets/css/toastr.min.css" rel="stylesheet" />
     <style>
         [x-cloak] {
             display: none !important;
@@ -120,10 +120,10 @@
 
 
     @fluxScripts
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
 
     <!-- Toastr JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="/assets/js/toastr.min.js"></script>
 
 
     <script type="text/javascript" src="/assets/js/jalalidatepicker.min.js"></script>

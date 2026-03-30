@@ -1,5 +1,5 @@
 <div>
-    <script src="https://cdn.jsdelivr.net/gh/mahmoud-eskandari/NumToPersian/dist/num2persian.min.js"></script>
+    <script src="/assets/js/num2persian.min.js"></script>
 
     {{--   name / description / price / tax / category_id   --}}
 
