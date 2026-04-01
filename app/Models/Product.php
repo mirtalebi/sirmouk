@@ -12,6 +12,8 @@ class Product extends Model
         'price',
         'category_id',
         'tax',
+        'materials',
+        'profit',
         'packaging_amount'
     ];
     public function invoices()

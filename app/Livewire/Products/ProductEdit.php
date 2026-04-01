@@ -16,6 +16,7 @@ class ProductEdit extends Component
     public $tax;
     public $product;
     public $packaging_amount;
+    public $materials = [];
 
     public function mount($id)
     {
@@ -26,6 +27,7 @@ class ProductEdit extends Component
         $this->category = $this->product->category_id;
         $this->tax = $this->product->tax;
         $this->packaging_amount = $this->product->packaging_amount;
+        $this->materials = json_decode($this->product->materials, true);
     }
 
     public function cancel()
@@ -43,12 +45,21 @@ class ProductEdit extends Component
         ], [
             'required' => 'لطفا این فیلد را پر کنید!'
         ]);
+
+        $materialsCost = 0;
+        for ($i = 0; $i < count($this->materials); $i++) {
+            $materialsCost += $this->materials[$i]['unit_price'] * $this->materials[$i]['quantity'];
+        }
+        $profit = $this->price - $materialsCost;
+
         $update = $this->product->update([
             'name' => $this->name,
             'description' => $this->description,
             'price' => $this->price,
             'tax' => $this->tax,
             'category_id' => $this->category,
+            'materials' => $this->materials,
+            'profit' => $profit,
             'packaging_amount' => $this->packaging_amount ? $this->packaging_amount : null,
         ]);
 
