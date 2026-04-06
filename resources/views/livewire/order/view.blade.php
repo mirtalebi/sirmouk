@@ -178,6 +178,10 @@
                                 {{ $message }}
                             </div>
                         @enderror
+                        <button type="button" wire:click="openSnapModal"
+                            class="mt-2 w-full px-4 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition">
+                            وارد کردن از لینک اسنپ
+                        </button>
                     </div>
 
                     <div wire:loading wire:target="findUser" class="flex justify-center items-center">
@@ -945,6 +949,64 @@
 
         <div class="footer">سپاس از خرید شما</div>
 
+    </div>
+
+
+    <!-- SnapFood Modal -->
+    <div x-cloak x-data="{ isOpen: @entangle('showSnapModal') }" x-show="isOpen" x-transition.opacity.duration.200ms
+        x-trap.inert.noscroll="isOpen" x-on:keydown.esc.window="$wire.call('closeSnapModal')"
+        x-on:click.self="$wire.call('closeSnapModal')"
+        class="fixed inset-0 z-30 flex items-end justify-center bg-black/20 p-4 backdrop-blur-md">
+        <div class="w-full max-w-md rounded-t-3xl bg-white p-6 shadow-lg">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold text-gray-900">وارد کردن از اسنپ‌فود</h2>
+                <button type="button" wire:click="closeSnapModal" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Error Message -->
+            @if ($snapModalError)
+                <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <p class="text-sm text-red-700">{{ $snapModalError }}</p>
+                </div>
+            @endif
+
+            <!-- URL Input -->
+            <div class="mb-4">
+                <label for="snap_url" class="block mb-2 text-sm font-medium text-gray-900">
+                    لینک سفارش اسنپ‌فود
+                </label>
+                <input type="text" id="snap_url" wire:model="snapFoodUrl" placeholder="https://snappfood.ir/..."
+                    class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                <p class="text-xs text-gray-500 mt-1">از صفحه پیگیری سفارش خود کپی کنید</p>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex gap-2">
+                <button type="button" wire:click="importFromSnapFood" wire:loading.attr="disabled"
+                    class="flex-1 px-4 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition disabled:bg-gray-400">
+                    <span wire:loading.remove>واردکردن</span>
+                    <span wire:loading class="flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"
+                            class="w-4 h-4 fill-white motion-safe:animate-spin inline-block mr-1">
+                            <path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
+                                opacity=".25" />
+                            <path
+                                d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z" />
+                        </svg>
+                        در حال بارگذاری...
+                    </span>
+                </button>
+                <button type="button" wire:click="closeSnapModal"
+                    class="px-4 py-2 bg-gray-200 text-gray-900 text-sm rounded-lg hover:bg-gray-300 transition">
+                    انصراف
+                </button>
+            </div>
+        </div>
     </div>
 
 

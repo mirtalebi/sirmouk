@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Order;
 
+use App\Common\SnapFoodUtils;
 use App\Livewire\Invoice\InvoicePayment;
 use App\Models\Account;
 use App\Models\Address;
@@ -57,6 +58,11 @@ class View extends Component
 
 //    -----------
     public $userModal = false;
+    
+    // SnapFood Import Modal
+    public $showSnapModal = false;
+    public $snapFoodUrl = '';
+    public $snapModalError = '';
 
 
     public function updateUserModal()
@@ -280,6 +286,86 @@ class View extends Component
             $this->j_date = Jalalian::now()->format('Y/m/d');
             $this->account = SiteSetting::getValue('INVOICE_PAYMENT_ACCOUNT_ID');
             $this->paid_amount = $this->invoicePayments->paid_amount;
+        }
+    }
+
+
+    public function openSnapModal()
+    {
+        $this->showSnapModal = true;
+        $this->snapFoodUrl = '';
+        $this->snapModalError = '';
+    }
+
+    public function closeSnapModal()
+    {
+        $this->showSnapModal = false;
+        $this->snapFoodUrl = '';
+        $this->snapModalError = '';
+    }
+
+    public function importFromSnapFood()
+    {
+        $this->snapModalError = '';
+        
+        if (empty($this->snapFoodUrl)) {
+            $this->snapModalError = 'لطفاً لینک اسنپ‌فود را وارد کنید';
+            return;
+        }
+
+        try {
+            $customerData = SnapFoodUtils::getSnappfoodCustomerData($this->snapFoodUrl);
+            
+            if (!$customerData) {
+                $this->snapModalError = 'خطا در بارگذاری داده‌های مشتری. لطفاً لینک را بررسی کنید';
+                return;
+            }
+
+            // Map returned data to form fields
+            $this->customerName = $customerData['fullName'] ?? '';
+            $this->customerMobile = $customerData['phoneNumber'] ?? '';
+            
+            // Find or create user
+            $user = User::where('mobile', $this->customerMobile)->first();
+            if (!$user) {
+                $user = User::create([
+                    'name' => $this->customerName,
+                    'mobile' => $this->customerMobile,
+                ]);
+            }
+
+            $this->user = $user;
+            $this->addresses = $user->addresses;
+
+            // Create address with latitude and longitude
+            if (!empty($customerData['address'])) {
+
+                $address = $user->addresses()->where('address', $customerData['address'])->first();
+                if (!$address) {
+                    $address = Address::create([
+                        'user_id' => $user->id,
+                        'address' => $customerData['address'],
+                        'latitude' => $customerData['latitude'] ?? null,
+                        'longitude' => $customerData['longitude'] ?? null,
+                    ]);
+                }
+                $address->latitude = $customerData['latitude'] ?? null;
+                $address->longitude = $customerData['longitude'] ?? null;
+                $address->save();
+                
+                
+                $this->address_id = $address->id;
+                $this->addresses = $user->addresses->fresh();
+            }
+
+            // Enable snap checkbox
+            $this->snap = true;
+
+            // Close modal and clear input
+            $this->closeSnapModal();
+            
+        } catch (\Exception $e) {
+            $this->snapModalError = 'خطای سرور: ' . $e->getMessage();
         }
     }
 
