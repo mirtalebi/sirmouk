@@ -31,5 +31,5 @@ Route::get('/reporter/invoice-data', function (Request $request) {
         $r['paid_amount'] = $invoice->transactions()->sum('amount');
         $result[] = $r;
     }
-    return response()->json($result);
+    return response()->json(['status' => 'success', 'data' => $result]);
 });

@@ -234,7 +234,7 @@
                             </ul>
                             <div class="box-price">
                                 <ul class="price">
-                                    <li class="accent">569 هزار تومان</li>
+                                    <li class="accent">619 هزار تومان</li>
                                 </ul>
                                 <a href="tel:09991921100" class="btn-add">+</a>
                             </div>
@@ -251,7 +251,7 @@
                             </ul>
                             <div class="box-price">
                                 <ul class="price">
-                                    <li class="accent">649 هزار تومان</li>
+                                    <li class="accent">719 هزار تومان</li>
                                 </ul>
                                 <a href="tel:09991921100" class="btn-add">+</a>
                             </div>
@@ -268,7 +268,7 @@
                             </ul>
                             <div class="box-price">
                                 <ul class="price">
-                                    <li class="accent">649 هزار تومان</li>
+                                    <li class="accent">700 هزار تومان</li>
                                 </ul>
                                 <a href="tel:09991921100" class="btn-add">+</a>
                             </div>
@@ -285,7 +285,7 @@
                             </ul>
                             <div class="box-price">
                                 <ul class="price">
-                                    <li class="accent">469 هزار تومان</li>
+                                    <li class="accent">519 هزار تومان</li>
                                 </ul>
                                 <a href="tel:09991921100" class="btn-add">+</a>
                             </div>
@@ -309,7 +309,7 @@
                             </ul>
                             <div class="box-price">
                                 <ul class="price">
-                                    <li class="accent">629 هزار تومان</li>
+                                    <li class="accent">699 هزار تومان</li>
                                 </ul>
                                 <a href="tel:09991921100" class="btn-add">+</a>
                             </div>
@@ -326,7 +326,7 @@
                             </ul>
                             <div class="box-price">
                                 <ul class="price">
-                                    <li class="accent">455 هزار تومان</li>
+                                    <li class="accent">495 هزار تومان</li>
                                 </ul>
                                 <a href="tel:09991921100" class="btn-add">+</a>
                             </div>
@@ -343,7 +343,7 @@
                             </ul>
                             <div class="box-price">
                                 <ul class="price">
-                                    <li class="accent">589 هزار تومان</li>
+                                    <li class="accent">649 هزار تومان</li>
                                 </ul>
                                 <a href="tel:09991921100" class="btn-add">+</a>
                             </div>
@@ -360,7 +360,7 @@
                             </ul>
                             <div class="box-price">
                                 <ul class="price">
-                                    <li class="accent">525 هزار تومان</li>
+                                    <li class="accent">569 هزار تومان</li>
                                 </ul>
                                 <a href="tel:09991921100" class="btn-add">+</a>
                             </div>
@@ -377,7 +377,7 @@
                             </ul>
                             <div class="box-price">
                                 <ul class="price">
-                                    <li class="accent">629 هزار تومان</li>
+                                    <li class="accent">689 هزار تومان</li>
                                 </ul>
                                 <a href="tel:09991921100" class="btn-add">+</a>
                             </div>
@@ -394,7 +394,7 @@
                             </ul>
                             <div class="box-price">
                                 <ul class="price">
-                                    <li class="accent">415 هزار تومان</li>
+                                    <li class="accent">469 هزار تومان</li>
                                 </ul>
                                 <a href="tel:09991921100" class="btn-add">+</a>
                             </div>
@@ -418,7 +418,7 @@
                             </ul>
                             <div class="box-price">
                                 <ul class="price">
-                                    <li class="accent">479 هزار تومان</li>
+                                    <li class="accent">519 هزار تومان</li>
                                 </ul>
                                 <a href="tel:09991921100" class="btn-add">+</a>
                             </div>
@@ -442,7 +442,7 @@
                             </ul>
                             <div class="box-price">
                                 <ul class="price">
-                                    <li class="accent">459 هزار تومان</li>
+                                    <li class="accent">499 هزار تومان</li>
                                 </ul>
                                 <a href="tel:09991921100" class="btn-add">+</a>
                             </div>
@@ -459,7 +459,7 @@
                             </ul>
                             <div class="box-price">
                                 <ul class="price">
-                                    <li class="accent">269 هزار تومان</li>
+                                    <li class="accent">299 هزار تومان</li>
                                 </ul>
                                 <a href="tel:09991921100" class="btn-add">+</a>
                             </div>
@@ -476,18 +476,18 @@
                             </ul>
                             <div class="box-price">
                                 <ul class="price">
-                                    <li class="accent">220 هزار تومان</li>
+                                    <li class="accent">250 هزار تومان</li>
                                 </ul>
                                 <a href="tel:09991921100" class="btn-add">+</a>
                             </div>
                         </div>
                     </li>
-                    <li class="tf-box-row mb-12">
+                    <li class="tf-box-row mb-12" style="opacity: 60%;">
                         <a href="#" class="img-box">
                             <!-- <img style="object-fit: contain;" src="./home_files/coffea-1.jpg" alt="img">  -->
                         </a>
                         <div class="content-box">
-                            <h4><a href="#">میگو لاپلو</a></h4>
+                            <h4><a href="#">میگو لاپلو</a> - ناموجود </h4>
                             <ul class="review">
                                 <li>
                                     <span
@@ -500,7 +500,7 @@
                             </ul>
                             <div class="box-price">
                                 <ul class="price">
-                                    <li class="accent">525 هزار تومان</li>
+                                    <li class="accent">595 هزار تومان</li>
                                 </ul>
                                 <a href="tel:09991921100" class="btn-add">+</a>
                             </div>
@@ -528,7 +528,7 @@
                             </ul>
                             <div class="box-price">
                                 <ul class="price">
-                                    <li class="accent">50 هزار تومان</li>
+                                    <li class="accent">70 هزار تومان</li>
                                 </ul>
                                 <a href="tel:09991921100" class="btn-add">+</a>
                             </div>
@@ -542,7 +542,7 @@
                             <h4><a href="#">ماست و خیار</a></h4>
                             <div class="box-price">
                                 <ul class="price">
-                                    <li class="accent">50 هزار تومان</li>
+                                    <li class="accent">60 هزار تومان</li>
                                 </ul>
                                 <a href="tel:09991921100" class="btn-add">+</a>
                             </div>
@@ -556,7 +556,7 @@
                             <h4><a href="#">بورانی اسفناج</a></h4>
                             <div class="box-price">
                                 <ul class="price">
-                                    <li class="accent">55 هزار تومان</li>
+                                    <li class="accent">65 هزار تومان</li>
                                 </ul>
                                 <a href="tel:09991921100" class="btn-add">+</a>
                             </div>
@@ -570,7 +570,7 @@
                             <h4><a href="#">انواع ترشی ها</a></h4>
                             <div class="box-price">
                                 <ul class="price">
-                                    <li class="accent">30 هزار تومان</li>
+                                    <li class="accent">40 هزار تومان</li>
                                 </ul>
                                 <a href="tel:09991921100" class="btn-add">+</a>
                             </div>

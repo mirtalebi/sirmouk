@@ -39,8 +39,8 @@
 
             <div class="text-center">
                 <h3 class="text-lg font-semibold">شماره کارت جهت پرداخت</h3>
-                <p dir="ltr" class="font-bold">6063 - 7310 - 4039 - 0230</p>
-                <p class="text-sm">سعید آشوری</p>
+                <p dir="ltr" class="font-bold">{{ \App\Models\SiteSetting::getValue('INVOICE_CARD_NUMBER') }}</p>
+                <p class="text-sm">{{ \App\Models\SiteSetting::getValue('INVOICE_CARD_OWNER') }}</p>
             </div>
         </div>
 
@@ -75,7 +75,7 @@
         <!-- Summary -->
         <div class="grid w-full">
             <div class="text-sm">
-                @if(!empty($invoice->address_id))
+                @if (!empty($invoice->address_id))
                     آدرس: <span class="font-bold">{{ $invoice->address->address }}</span>
                 @endif
             </div>
