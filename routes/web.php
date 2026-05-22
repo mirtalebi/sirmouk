@@ -3,18 +3,20 @@
 use App\Livewire\Products\ProductCreate;
 use App\Livewire\Transaction\TransactionCreate;
 use App\Livewire\Transaction\TransactionIndex;
-use App\Models\Invoice;
-use App\Models\Product;
-use Illuminate\Support\Facades\Route;
-use Livewire\Volt\Volt;
+use App\Livewire\Transaction\TransactionsFilter;
 use App\Livewire\Account\AccountIndex;
 use App\Livewire\Account\AccountCreate;
 use App\Livewire\Account\AccountEdit;
 use App\Livewire\Account\TransactionsList;
-use App\Livewire\Transaction\TransactionsFilter;
 use App\Livewire\Invoice\InvoiceCalc;
-use Illuminate\Support\Facades\Artisan;
+use App\Livewire\ShoppingList\ShoppingList;
+use App\Models\Invoice;
+use App\Models\Product;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
+use Livewire\Volt\Volt;
 
 Route::get('/', function () {
     return view('welcome');
@@ -66,6 +68,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::get('/products/sell', \App\Livewire\ProductSells::class)->name('products.sell');
+    Route::get('/shopping-list', ShoppingList::class)->name('shopping-list.index');
 });
 
 

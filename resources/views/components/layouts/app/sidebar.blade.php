@@ -90,6 +90,13 @@
                         </svg>
                         <span>کاربران</span>
                     </a>
+                    <a href="{{ route('shopping-list.index') }}"
+                        class="border-b hover:-translate-y-1 transition flex items-center rounded-radius gap-2 p-2 text-sm text-on-surface underline-offset-2 hover:bg-primary/5 hover:text-on-surface-strong focus-visible:underline focus:outline-hidden dark:text-on-surface-dark dark:hover:bg-primary-dark/5 dark:hover:text-on-surface-dark-strong {{ request()->routeIs('shopping-list.index') ? 'bg-primary/10 text-on-surface-strong font-bold' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-6">
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6h15l-1.5 9h-12zM6 6L4 3H2m4 3l1 9m10-9l-1 9M9 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+                        </svg>
+                        <span>لیست خرید</span>
+                    </a>
                 </div>
             </nav>
 
