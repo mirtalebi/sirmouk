@@ -7,6 +7,7 @@ use App\Models\Scopes\DescOrderScope;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder; 
 
 #[ScopedBy([DescOrderScope::class])]
 class Invoice extends Model
@@ -22,14 +23,6 @@ class Invoice extends Model
             'card' => 'array',
         ];
     }
-
-    //    protected static function booted()
-    //    {
-    //        static::created(function (Invoice $invoice) {
-    //            $invoice->setTotalPrice();
-    //        });
-    //
-    //    }
 
     public function user()
     {
@@ -56,6 +49,26 @@ class Invoice extends Model
         return $this->belongsToMany(Product::class, 'invoice_product', 'invoice_id', 'product_id')
             ->withPivot(['quantity', 'unit_price', 'discount_price', 'tax'])
             ->withTimestamps();
+    }
+
+    public function scopeSearch(Builder $query, ?string $term): Builder
+    {
+        // اگر عبارت جستجو خالی بود، کوری بدون تغییر برمی‌گردد
+        if (blank($term)) {
+            return $query;
+        }
+
+        return $query->where(function (Builder $subQuery) use ($term) {
+            $subQuery->where('id', 'like', "%{$term}%") // جستجو بر اساس شماره فاکتور
+                
+                ->orWhereHas('user', function (Builder $userQuery) use ($term) {
+                    $userQuery->where('name', 'like', "%{$term}%")
+                              ->orWhere('mobile', 'like', "%{$term}%");
+                })
+                
+                ->orWhere('snap_user_credentials->username', 'like', "%{$term}%")
+                ->orWhere('snap_user_credentials->mobile', 'like', "%{$term}%");
+        });
     }
 
     public function paidAmount(): Attribute

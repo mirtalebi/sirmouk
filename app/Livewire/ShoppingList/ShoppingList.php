@@ -49,14 +49,12 @@ class ShoppingList extends Component
     protected function getItem(int $id): ShoppingListItem
     {
         return ShoppingListItem::where('id', $id)
-            ->where('user_id', auth()->id())
             ->firstOrFail();
     }
 
     public function render()
     {
-        $items = ShoppingListItem::where('user_id', auth()->id())
-            ->when(!$this->showDone, fn ($query) => $query->where('done', false))
+        $items = ShoppingListItem::when(!$this->showDone, fn ($query) => $query->where('done', false))
             ->orderByDesc('created_at')
             ->get()
             ->groupBy('priority');

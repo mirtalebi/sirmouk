@@ -1,4 +1,4 @@
-<div x-data='{ tempBasket: {},
+﻿<div x-data='{ tempBasket: {},
     products: @json(\App\Models\Product::all()),
     getProduct(id) { return this.products.find((item) => item.id == id) },
     addToBasket(id) { this.tempBasket[id] = this.tempBasket[id] ? this.tempBasket[id] + 1 : 1; },
@@ -41,7 +41,6 @@
     @print-invoice-client.window="
         let customer = $event.detail.customer;
         let basket = $event.detail.basket;
-        console.log(customer);
 
         customer.discount_price = customer.discount_price ? Number(customer.discount_price) : 0;
         customer.courier_price = customer.courier_price ? Number(customer.courier_price) : 0;
@@ -52,21 +51,18 @@
         document.getElementById('customer-address').textContent = customer.address;
         document.getElementById('discount-price').textContent = '-' + customer.discount_price.toLocaleString();
         document.getElementById('packaging-price').textContent = customer.packaging_price.toLocaleString();
-        document.getElementById('tax-price').textContent = customer.tax_price.toLocaleString();
         document.getElementById('delivery-price').textContent = customer.courier_price.toLocaleString();
         document.getElementById('print-order-id').textContent = '#' + customer.id;
-        document.getElementById('print-order-date').textContent = 'ساعت ' + customer.time;
 
         document.getElementById('discount-box').style.display = customer.discount_price ? 'flex' : 'none';
         document.getElementById('delivery-box').style.display = customer.courier_price ? 'flex' : 'none';
         document.getElementById('packaging-box').style.display = customer.packaging_price ? 'flex' : 'none';
-        document.getElementById('tax-box').style.display = customer.tax_price ? 'flex' : 'none';
 
         // Fill items
         const itemsBody = document.getElementById('items-table');
         itemsBody.innerHTML = ''; // clear previous rows
 
-        let total = Number(customer.courier_price) - Number(customer.discount_price) + Number(customer.packaging_price) + Number(customer.tax_price);
+        let total = Number(customer.courier_price) - Number(customer.discount_price) + Number(customer.packaging_price);
         basket.forEach(item => {
             const row = `
                 <tr>
@@ -99,9 +95,9 @@
     <div class="relative flex-1 overflow-hidden rounded-xl border border-neutral-200 p-3 mt-5">
         <h3 class="text-xl font-bold">
             @if ($invoice)
-                ویرایش فاکتور #{{ $invoice->id }}
+                ┘ê█î╪▒╪º█î╪┤ ┘ü╪º┌⌐╪¬┘ê╪▒ #{{ $invoice->id }}
             @else
-                ثبت فاکتور جدید
+                ╪½╪¿╪¬ ┘ü╪º┌⌐╪¬┘ê╪▒ ╪¼╪»█î╪»
             @endif
         </h3>
 
@@ -113,10 +109,10 @@
                     <table class="w-full text-right text-sm text-neutral-600">
                         <thead class="border-b border-neutral-300 bg-neutral-50 text-sm text-neutral-900 ">
                             <tr>
-                                <th scope="col" class="p-4">سرویس</th>
-                                <th scope="col" class="p-1">تعداد</th>
-                                <th scope="col" class="p-1">قیمت واحد</th>
-                                <th scope="col" class="p-4">قیمت کل</th>
+                                <th scope="col" class="p-4">╪│╪▒┘ê█î╪│</th>
+                                <th scope="col" class="p-1">╪¬╪╣╪»╪º╪»</th>
+                                <th scope="col" class="p-1">┘é█î┘à╪¬ ┘ê╪º╪¡╪»</th>
+                                <th scope="col" class="p-4">┘é█î┘à╪¬ ┌⌐┘ä</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-neutral-300 dark:divide-neutral-700">
@@ -145,9 +141,9 @@
                                 <td class="p-4">
                                 </td>
                                 <td class="p-1"></td>
-                                <td class="p-1 font-bold">مبلغ بسته بندی</td>
+                                <td class="p-1 font-bold">┘à╪¿┘ä╪║ ╪¿╪│╪¬┘ç ╪¿┘å╪»█î</td>
                                 <td class="p-4 font-bold text-black text-lg">
-                                    <span x-text="getSumPackaging()"></span> <span class="text-xs">تومان</span>
+                                    <span x-text="getSumPackaging()"></span> <span class="text-xs">╪¬┘ê┘à╪º┘å</span>
                                 </td>
                             </tr>
 
@@ -155,9 +151,9 @@
                                 <td class="p-4">
                                 </td>
                                 <td class="p-1"></td>
-                                <td class="p-1 font-bold">مبلغ کل</td>
+                                <td class="p-1 font-bold">┘à╪¿┘ä╪║ ┌⌐┘ä</td>
                                 <td class="p-4 font-bold text-black text-lg">
-                                    <span x-text="getSumTempBasket()"></span> <span class="text-xs">تومان</span>
+                                    <span x-text="getSumTempBasket()"></span> <span class="text-xs">╪¬┘ê┘à╪º┘å</span>
                                 </td>
                             </tr>
 
@@ -167,11 +163,11 @@
 
                 <div class="grid grid-cols-2 gap-2">
                     <div class="mb-3">
-                        <label for="mobile" class="block mb-2 text-sm font-medium text-gray-900">شماره
-                            تلفن</label>
+                        <label for="mobile" class="block mb-2 text-sm font-medium text-gray-900">╪┤┘à╪º╪▒┘ç
+                            ╪¬┘ä┘ü┘å</label>
                         <input type="text" id="mobile" wire:model="customerMobile"
                             class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                            placeholder="شماره تلفن با صفر" required x-data
+                            placeholder="╪┤┘à╪º╪▒┘ç ╪¬┘ä┘ü┘å ╪¿╪º ╪╡┘ü╪▒" required x-data
                             x-on:input="
                                    if ($el.value.length === 11) {
                                        $wire.call('findUser', $el.value)
@@ -184,7 +180,7 @@
                         @enderror
                         <button type="button" wire:click="openSnapModal"
                             class="mt-2 w-full px-4 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition">
-                            وارد کردن از لینک اسنپ
+                            ┘ê╪º╪▒╪» ┌⌐╪▒╪»┘å ╪º╪▓ ┘ä█î┘å┌⌐ ╪º╪│┘å┘╛
                         </button>
                     </div>
 
@@ -199,16 +195,16 @@
                     </div>
                     <div class="mb-3" wire:loading.remove wire:target="findUser">
                         <div class="flex justify-between">
-                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900">نام مشتری
+                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900">┘å╪º┘à ┘à╪┤╪¬╪▒█î
                             </label>
                             @if (isset($user))
                                 <button type="button" wire:click="updateUserModal"
-                                    class="text-blue-400 text-sm cursor-pointer">مشاهده</button>
+                                    class="text-blue-400 text-sm cursor-pointer">┘à╪┤╪º┘ç╪»┘ç</button>
                             @endif
                         </div>
                         <input type="text" id="name" wire:model="customerName"
                             class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                            placeholder="نام و نام خانوادگی ..." required />
+                            placeholder="┘å╪º┘à ┘ê ┘å╪º┘à ╪«╪º┘å┘ê╪º╪»┌»█î ..." required />
                         @error('customerName')
                             <div class="text-sm text-red-500">
                                 {{ $message }}
@@ -243,11 +239,11 @@
                             $wire.courierPrice = raw;
                         }
                     }">
-                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900">هزینه پیک</label>
+                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900">┘ç╪▓█î┘å┘ç ┘╛█î┌⌐</label>
                         <input type="text" id="name" x-model="formatted"
                             @input="formatNumber($event.target.value)"
                             class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                            placeholder="به تومان" required />
+                            placeholder="╪¿┘ç ╪¬┘ê┘à╪º┘å" required />
                         @error('courierPrice')
                             <div class="text-sm text-red-500">
                                 {{ $message }}
@@ -280,11 +276,11 @@
                             $wire.discountPrice = raw;
                         }
                     }">
-                        <label for="mobile" class="block mb-2 text-sm font-medium text-gray-900">تخفیف</label>
+                        <label for="mobile" class="block mb-2 text-sm font-medium text-gray-900">╪¬╪«┘ü█î┘ü</label>
                         <input type="text" id="mobile" x-model="formatted"
                             @input="formatNumber($event.target.value)"
                             class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                            placeholder="به تومان" required />
+                            placeholder="╪¿┘ç ╪¬┘ê┘à╪º┘å" required />
                         @error('discountPrice')
                             <div class="text-sm text-red-500">
                                 {{ $message }}
@@ -318,12 +314,12 @@
                             $wire.addedPackagingPrice = raw;
                         }
                     }">
-                        <label for="mobile" class="block mb-2 text-sm font-medium text-gray-900">مبلغ بسته بندی
-                            مازاد</label>
+                        <label for="mobile" class="block mb-2 text-sm font-medium text-gray-900">┘à╪¿┘ä╪║ ╪¿╪│╪¬┘ç ╪¿┘å╪»█î
+                            ┘à╪º╪▓╪º╪»</label>
                         <input type="text" id="mobile" x-model="formatted"
                             @input="formatNumber($event.target.value)"
                             class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                            placeholder="به تومان" required />
+                            placeholder="╪¿┘ç ╪¬┘ê┘à╪º┘å" required />
                         @error('addedPackagingPrice')
                             <div class="text-sm text-red-500">
                                 {{ $message }}
@@ -336,7 +332,7 @@
                         class="flex items-end col-span-2 gap-2 w-full justify-center">
                         @if (empty($add_address))
                             <div class="relative flex w-full flex-col gap-1 text-neutral-600 dark:text-neutral-300">
-                                <label for="os" class="w-fit pl-0.5 text-sm">آدرس</label>
+                                <label for="os" class="w-fit pl-0.5 text-sm">╪ó╪»╪▒╪│</label>
                                 <div class="flex items-center gap-2">
                                     <button wire:show="address_id" x-transition.duration.100ms
                                         wire:transition.scale.origin.right wire:click="address_id = null"
@@ -360,7 +356,7 @@
                                     </select>
                                     <button wire:click="addAddressInput()" type="button"
                                         class="whitespace-nowrap rounded-full bg-green-600 border border-green-600 px-4 py-2 text-xs tracking-wide text-white transition hover:opacity-75 text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 active:opacity-100 active:outline-offset-0 disabled:opacity-75 disabled:cursor-not-allowed">
-                                        آدرس جدید
+                                        ╪ó╪»╪▒╪│ ╪¼╪»█î╪»
                                     </button>
                                 </div>
                             </div>
@@ -369,7 +365,7 @@
                             <div class="relative flex w-full gap-2 text-neutral-600 dark:text-neutral-300">
                                 <input type="text" wire:model="address_label"
                                     class="w-full rounded-sm border border-neutral-300 bg-neutral-50 py-2 pl-10 pr-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:cursor-not-allowed disabled:opacity-75 dark:border-neutral-700 dark:bg-neutral-900/50 dark:focus-visible:outline-white"
-                                    name="search" placeholder="آدرس جدید را وارد کنید!" aria-label="search" />
+                                    name="search" placeholder="╪ó╪»╪▒╪│ ╪¼╪»█î╪» ╪▒╪º ┘ê╪º╪▒╪» ┌⌐┘å█î╪»!" aria-label="search" />
                             </div>
                         @empty
                         @endforelse
@@ -393,22 +389,22 @@
                     @if ($invoice)
                         <button type="button" wire:click="cancelEditingInvoice"
                             class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-2">
-                            لغو ویرایش فاکتور
+                            ┘ä╪║┘ê ┘ê█î╪▒╪º█î╪┤ ┘ü╪º┌⌐╪¬┘ê╪▒
                         </button>
                     @endif
                     <button type="button" wire:click="saveInvoice(tempBasket)"
                         class="text-white mt-4 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                         @if ($invoice)
-                            ویرایش فاکتور #{{ $invoice->id }}
+                            ┘ê█î╪▒╪º█î╪┤ ┘ü╪º┌⌐╪¬┘ê╪▒ #{{ $invoice->id }}
                         @else
-                            ثبت فاکتور جدید
+                            ╪½╪¿╪¬ ┘ü╪º┌⌐╪¬┘ê╪▒ ╪¼╪»█î╪»
                         @endif
                     </button>
                     <div class="flex gap-2 items-center rounded-sm dark:border-gray-700 border p-2 text-green-700">
                         <input wire:model="snap" id="snap" type="checkbox" value=""
                             name="bordered-checkbox"
                             class="w-6 h-6 text-green-700 bg-green-700 border-gray-300 rounded-sm">
-                        <label for="snap" class="font-bold">اسنپ</label>
+                        <label for="snap" class="font-bold">╪º╪│┘å┘╛</label>
                         <label for="snap">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" class="size-8 text-green-700">
@@ -484,115 +480,60 @@
     </div>
 
     <div class="relative flex-1 overflow-hidden rounded-xl border border-neutral-200 p-3 mt-2">
-
-        <div class="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div class="relative w-full sm:max-w-xs">
-                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-neutral-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-5 h-5">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.603 10.601z" />
-                    </svg>
-                </div>
-                <input type="text" wire:model.live.debounce.300ms="search"
-                    placeholder="جستجوی شماره فاکتور، نام یا تلفن..."
-                    class="w-full rounded-xl border border-neutral-300 bg-white py-2 pr-10 pl-8 text-sm text-neutral-900 placeholder-neutral-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" />
-                @if ($search)
-                    <button type="button" wire:click="$set('search', '')"
-                        class="absolute inset-y-0 left-0 flex items-center pl-3 text-neutral-400 hover:text-neutral-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                @endif
-            </div>
-
-        </div>
-
         <div class="overflow-x-auto">
             <table class="w-full text-right text-sm text-neutral-600">
-                <thead class="border-b border-neutral-300 bg-neutral-50 text-sm text-neutral-900">
+                <thead class="border-b border-neutral-300 bg-neutral-50 text-sm text-neutral-900 ">
                     <tr>
-                        <th scope="col" class="p-4">شماره فاکتور</th>
-                        <th scope="col" class="p-4">نام مشتری</th>
-                        <th scope="col" class="p-4">شماره تلفن</th>
-                        <th scope="col" class="p-4">تاریخ ثبت</th>
-                        <th scope="col" class="p-4">مبلغ کل</th>
-                        <th scope="col" class="p-4">عملیات</th>
+                        <th scope="col" class="p-4">╪┤┘à╪º╪▒┘ç ┘ü╪º┌⌐╪¬┘ê╪▒</th>
+                        <th scope="col" class="p-4">┘å╪º┘à ┘à╪┤╪¬╪▒█î</th>
+                        <th scope="col" class="p-4">╪┤┘à╪º╪▒┘ç ╪¬┘ä┘ü┘å</th>
+                        <th scope="col" class="p-4">╪¬╪º╪▒█î╪« ╪½╪¿╪¬</th>
+                        <th scope="col" class="p-4">┘à╪¿┘ä╪║ ┌⌐┘ä</th>
+                        <th scope="col" class="p-4">╪╣┘à┘ä█î╪º╪¬</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-neutral-300 dark:divide-neutral-700">
-                    @forelse ($invoices as $invoice)
-                        <tr wire:key="invoice-{{ $invoice->id }}" class="hover:bg-neutral-50 transition-colors">
+                    @foreach ($invoices as $invoice)
+                        <tr wire:key="{{ $invoice->id }}">
                             <td class="p-4">{{ $invoice->id }}</td>
                             <td class="p-4">
-                                {{ $invoice->user->name ?? ($invoice->snap_user_credentials['username'] ?? '') }}
+                                {{ $invoice->user->name ?? (json_decode($invoice->snap_user_credentials, true)['username'] ?? '') }}
                             </td>
-                            <td class="p-4 text-right">
-                                {{ $invoice->user->mobile ?? ($invoice->snap_user_credentials['mobile'] ?? '') }}
+                            <td class="p-4 text-start">
+                                {{ $invoice->user->mobile ?? (json_decode($invoice->snap_user_credentials, true)['mobile'] ?? '') }}
                             </td>
                             <td class="p-4">{{ $invoice->getCreatedAtDate() }}</td>
                             <td class="p-4 font-bold text-black">
-                                {{ number_format($invoice->total_price) }} تومان
+                                {{ number_format($invoice->total_price) }} ╪¬┘ê┘à╪º┘å
                             </td>
-                            <td class="p-4">
-                                <div class="flex items-center gap-2">
+                            <td>
+                                <div class="flex items-center gap-4">
                                     <a href="{{ route('invoice.view', ['invoiceId' => $invoice->id, 'secretKey' => $invoice->url_secret]) }}"
-                                        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 bg-white text-blue-600 shadow-sm transition hover:border-blue-300 hover:bg-blue-50"
-                                        aria-label="فاکتور">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
-                                            <path fill="currentColor"
-                                                d="M21 8V7l-3-3H6L3 7v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8zm-2 0H5l1-3h12l1 3zM9 13h6v2H9v-2zm0-4h6v2H9V9z" />
-                                        </svg>
-                                        <span class="sr-only">فاکتور</span>
-                                    </a>
+                                        class="text-blue-600 hover:underline mx-2">┘à╪┤╪º┘ç╪»┘ç</a>
+                                    <button class="text-blue-600 hover:underline mx-2"
+                                        wire:click="printInvoice({{ $invoice->id }})">
 
-                                    <button type="button" wire:click="printInvoice({{ $invoice->id }})"
-                                        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 bg-white text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50"
-                                        aria-label="پرینت فیش">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
-                                            <path fill="currentColor"
-                                                d="M19 8h-1V3H6v5H5c-1.1 0-2 .9-2 2v7h4v4h10v-4h4v-7c0-1.1-.9-2-2-2zm-9-4h6v4H10V4zm9 15h-3v3H8v-3H5v-5h14v5zm-5-8H8V9h6v2z" />
-                                        </svg>
-                                        <span class="sr-only">پرینت فیش</span>
-                                    </button>
-
-                                    <button type="button" wire:click="showPreview({{ $invoice->id }})"
-                                        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 bg-white text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50"
-                                        aria-label="مشاهده فاکتور">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
-                                            <path fill="currentColor"
-                                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6h2V7zm0 8h-2v2h2v-2z" />
-                                        </svg>
-                                        <span class="sr-only">مشاهده فاکتور</span>
-                                    </button>
-
-                                    @if ($invoice->created_at->isToday() || Auth::user()->hasRole('admin'))
+                                        ┘╛╪▒█î┘å╪¬
+                                        ┘ü█î╪┤</button>
+                                    @if ($invoice->created_at->isToday())
                                         <button type="button" wire:click="editInvoice({{ $invoice->id }})"
-                                            class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-yellow-300 bg-yellow-50 text-yellow-700 shadow-sm transition hover:border-yellow-400 hover:bg-yellow-100"
-                                            aria-label="ویرایش">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                class="h-5 w-5">
-                                                <path fill="currentColor"
-                                                    d="M3 17.25V21h3.75l10.98-10.98l-3.75-3.75L3 17.25m16.71-11.04c.39-.39.39-1.02 0-1.41l-2.5-2.5a.9959.9959 0 0 0-1.41 0l-1.83 1.83l3.75 3.75l1.99-1.67z" />
-                                            </svg>
-                                            <span class="sr-only">ویرایش</span>
-                                        </button>
+                                            class="text-yellow-700 hover:underline ml-2 mx-2">┘ê█î╪▒╪º█î╪┤</button>
                                     @endif
-
                                     @if ($invoice->is_snap)
-                                        <span
-                                            class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-2 text-sm font-semibold text-emerald-800">
-                                            <span
-                                                class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-white">!</span>
-                                            اسنپ
-                                        </span>
+                                        <div class="p-4 text-green-700 flex items-center justify-center font-bold">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"
+                                                viewBox="0 0 48 48" class="size-6 ml-2">
+                                                <path fill="currentColor" fill-rule="evenodd"
+                                                    d="M31.452 10.695a78 78 0 0 0-.2-3.78c-.229-2.894-2.526-5.01-5.358-5.172c-2.2-.125-5.45-.243-9.894-.243s-7.695.118-9.894.243C3.274 1.905.976 4.021.748 6.916C.613 8.626.5 10.964.5 14v11q0 .093.012.185q-.012.72-.012 1.451c0 3.528.211 6.33.444 8.343c.296 2.573 2.201 4.459 4.574 4.977a8 8 0 0 1 15.982.536a413 413 0 0 0 5 0a8 8 0 0 1 15.978-.593c2.4-.647 4.227-2.69 4.47-5.288c.247-2.634.507-6.47.547-11.195c.008-1.028-.2-2.094-.716-3.072c-1.02-1.934-3.483-6.03-7.297-8.546c-1.027-.677-2.191-.94-3.272-.975c-1.49-.05-3.092-.092-4.758-.128m-3.956 3.365C26.812 15.217 25.503 16 24 16c-2.21 0-4-1.691-4-3.778C20 14.31 18.21 16 16 16s-4-1.691-4-3.778C12 14.31 10.21 16 8 16c-1.503 0-2.812-.783-3.496-1.94q-.004.456-.004.94v7.002c0 .83.669 1.498 1.497 1.498h20.006c.828 0 1.497-.669 1.497-1.498V15q0-.484-.004-.94m14.733 7.157c-1.269-1.999-3.18-4.442-5.607-5.878a2.6 2.6 0 0 0-1.33-.339H34a2 2 0 0 0-2 2v5.83c0 .955.676 1.772 1.624 1.888c1.522.187 3.968.387 6.695.219c1.906-.118 2.933-2.107 1.91-3.72M19 40.5a5.5 5.5 0 1 1-11 0a5.5 5.5 0 0 1 11 0M34.5 46a5.5 5.5 0 1 0 0-11a5.5 5.5 0 0 0 0 11"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            ╪º╪│┘å┘╛
+                                        </div>
                                     @else
                                         @if ($invoice->paid_amount == 0)
-                                            <button type="button" wire:click="showPayment({{ $invoice->id }})"
+                                            <button type="button" wire:click="showPayment({{ $invoice }})"
                                                 class="whitespace-nowrap rounded-2xl bg-green-600 px-4 py-2 text-sm font-medium tracking-wide text-white transition hover:opacity-75 text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 active:opacity-100 active:outline-offset-0 disabled:opacity-75 disabled:cursor-not-allowed dark:bg-green-500 dark:border-green-500 dark:text-white dark:focus-visible:outline-green-500 flex items-center gap-2">
-                                                پرداخت
+                                                ┘╛╪▒╪»╪º╪«╪¬
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                                     class="size-4">
                                                     <path fill="currentColor"
@@ -600,9 +541,9 @@
                                                 </svg>
                                             </button>
                                         @elseif($invoice->total_price > $invoice->paid_amount)
-                                            <button type="button" wire:click="showPayment({{ $invoice->id }})"
-                                                class="whitespace-nowrap rounded-2xl bg-orange-600 px-4 py-2 text-sm font-medium tracking-wide text-white transition hover:opacity-75 text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500 active:opacity-100 active:outline-offset-0 disabled:opacity-75 disabled:cursor-not-allowed dark:bg-orange-500 dark:border-orange-500 dark:text-white dark:focus-visible:outline-orange-500 flex items-center gap-2">
-                                                پرداخت ناقص
+                                            <button type="button" wire:click="showPayment({{ $invoice }})"
+                                                class="whitespace-nowrap rounded-2xl bg-orange-600 px-4 py-2 text-sm font-medium tracking-wide text-white transition hover:opacity-75 text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 active:opacity-100 active:outline-offset-0 disabled:opacity-75 disabled:cursor-not-allowed dark:bg-green-500 dark:border-green-500 dark:text-white dark:focus-visible:outline-green-500 flex items-center gap-2">
+                                                ┘╛╪▒╪»╪º╪«╪¬
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                                     class="size-4">
                                                     <path fill="currentColor"
@@ -610,10 +551,10 @@
                                                 </svg>
                                             </button>
                                         @else
-                                            <button type="button" wire:click="showPayment({{ $invoice->id }})"
-                                                class="whitespace-nowrap rounded-2xl bg-green-800 px-4 py-2 text-sm font-medium tracking-wide text-white transition hover:opacity-75 text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 active:opacity-100 active:outline-offset-0 disabled:opacity-75 disabled:cursor-not-allowed dark:bg-green-700 dark:border-green-700 dark:text-white dark:focus-visible:outline-green-500 flex items-center gap-2">
-                                                پرداخت شده
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                            <button type="button" wire:click="showPayment({{ $invoice }})"
+                                                class="whitespace-nowrap rounded-2xl bg-green-800 px-4 py-2 text-sm font-medium tracking-wide text-white transition hover:opacity-75 text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 active:opacity-100 active:outline-offset-0 disabled:opacity-75 disabled:cursor-not-allowed dark:bg-green-500 dark:border-green-500 dark:text-white dark:focus-visible:outline-green-500 flex items-center gap-2">
+                                                ┘╛╪▒╪»╪º╪«╪¬ ╪┤╪»┘ç
+                                                <svg xmlns="http://www.w3.org/2000/svg"viewBox="0 0 24 24"
                                                     class="size-4">
                                                     <path fill="currentColor"
                                                         d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z" />
@@ -621,19 +562,13 @@
                                             </button>
                                         @endif
                                     @endif
+
                                 </div>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="p-8 text-center text-neutral-400">
-                                هیچ فاکتوری با این مشخصات پیدا نشد.
-                            </td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
-
             <div class="flex justify-center mt-5">
                 {{ $invoices->links() }}
             </div>
@@ -676,10 +611,10 @@
                 <!-- Modal Dialog -->
                 <div class="bg-slate-100 w-10/12 p-4 rounded-xl">
                     <div class="flex px-3 mt-5">
-                        <h3 class="text-xl grow font-bold">پرداختی ها </h3>
+                        <h3 class="text-xl grow font-bold">┘╛╪▒╪»╪º╪«╪¬█î ┘ç╪º </h3>
                         <button type="button" wire:click="addPayment"
                             class="text-white bg-green-700 hover:bg-green-800 rounded-lg text-sm px-5 py-2.5 text-center {{ $invoice_price <= 0 ? 'hidden' : '' }}">
-                            افزودن</button>
+                            ╪º┘ü╪▓┘ê╪»┘å</button>
                         <span>
                         </span>
                     </div>
@@ -688,9 +623,9 @@
                             <thead
                                 class="border-b border-neutral-300 bg-neutral-50 text-sm text-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white">
                                 <tr>
-                                    <th scope="col" class="p-4">حساب</th>
-                                    <th scope="col" class="p-4">تاریخ</th>
-                                    <th scope="col" class="p-4">مبلغ</th>
+                                    <th scope="col" class="p-4">╪¡╪│╪º╪¿</th>
+                                    <th scope="col" class="p-4">╪¬╪º╪▒█î╪«</th>
+                                    <th scope="col" class="p-4">┘à╪¿┘ä╪║</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-neutral-300 dark:divide-neutral-700">
@@ -709,23 +644,23 @@
                                         </td>
                                         <td class="p-4">
                                             <input type="text" data-jdp class=" border-2 rounded p-2"
-                                                placeholder="تاریخ شمسی" wire:model="j_date" />
+                                                placeholder="╪¬╪º╪▒█î╪« ╪┤┘à╪│█î" wire:model="j_date" />
                                         </td>
                                         <td class="p-4">
                                             <input type="text" id="mobile" x-model="formatted"
                                                 @input="formatNumber($event.target.value)"
                                                 class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                                                placeholder="مبلغ به تومان" />
+                                                placeholder="┘à╪¿┘ä╪║ ╪¿┘ç ╪¬┘ê┘à╪º┘å" />
                                             <input type="text" id="mobile" x-model="realValue" class="hidden"
-                                                placeholder="مبلغ به تومان" />
-                                            <p x-text="num2persian(formatted) + ' تومان'" class="mt-1"></p>
+                                                placeholder="┘à╪¿┘ä╪║ ╪¿┘ç ╪¬┘ê┘à╪º┘å" />
+                                            <p x-text="num2persian(formatted) + ' ╪¬┘ê┘à╪º┘å'" class="mt-1"></p>
                                         </td>
                                         <td class="p-4">
                                             <div class="flex gap-4">
                                                 <div class="inline-flex">
                                                     <button type="button" wire:click="savePayment"
                                                         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                                                        ثبت
+                                                        ╪½╪¿╪¬
                                                     </button>
                                                 </div>
                                             </div>
@@ -771,7 +706,7 @@
                                         <td class="p-4">
                                             <input
                                                 class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                                                placeholder="مبلغ به تومان"
+                                                placeholder="┘à╪¿┘ä╪║ ╪¿┘ç ╪¬┘ê┘à╪º┘å"
                                                 value="{{ number_format($transaction->amount) }}" required disabled />
                                         </td>
 
@@ -780,14 +715,14 @@
                                 @endforeach
 
                                 <tr>
-                                    <td class="p-4 font-bold">جمع پرداختی</td>
+                                    <td class="p-4 font-bold">╪¼┘à╪╣ ┘╛╪▒╪»╪º╪«╪¬█î</td>
                                     <td class="p-4"></td>
                                     <td class="p-4 font-bold text-black text-lg">
-                                        <span class="text-xs">{{ number_format($paid_amount) }} تومان</span>
+                                        <span class="text-xs">{{ number_format($paid_amount) }} ╪¬┘ê┘à╪º┘å</span>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="p-4 font-bold">مبلغ مانده</td>
+                                    <td class="p-4 font-bold">┘à╪¿┘ä╪║ ┘à╪º┘å╪»┘ç</td>
                                     <td class="p-4"></td>
                                     <td class="p-4 font-bold text-black text-lg">
                                         <span class="text-xs">{{ number_format($invoice_price) }}</span>
@@ -800,124 +735,26 @@
             </div>
         </div>
     @endif
-
-    @if ($showPreviewModal)
-        <div x-data="{ modalIsOpen: @entangle('showPreviewModal') }">
+    @if ($userModal)
+        <div x-data="{ modalIsOpen: @entangle('userModal') }">
             <div x-cloak x-show="modalIsOpen" x-transition.opacity.duration.200ms x-trap.inert.noscroll="modalIsOpen"
-                x-on:keydown.esc.window="$wire.call('closePreview')" x-on:click.self="$wire.call('closePreview')"
-                class="fixed inset-0 z-40 flex items-end justify-center bg-black/20 p-4 pb-8 backdrop-blur-md sm:items-center lg:p-8"
-                role="dialog" aria-modal="true" aria-labelledby="previewModalTitle">
-                <div class="w-full max-w-3xl overflow-hidden rounded-3xl bg-white shadow-xl">
-                    <div class="flex items-center justify-between border-b px-6 py-4">
-                        <div>
-                            <h3 id="previewModalTitle" class="text-lg font-bold text-slate-900">پیش‌نمایش سفارش
-                                #{{ $previewInvoice?->id ?? '' }}</h3>
-                            <p class="text-sm text-slate-500">جزئیات سفارش و هزینه‌ها</p>
-                        </div>
-                        <button type="button" wire:click="closePreview"
-                            class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-slate-700 transition hover:bg-slate-100">
-                            <span class="sr-only">بستن</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
-                                <path fill="currentColor"
-                                    d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 1 0 5.7 7.11L10.59 12l-4.9 4.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.9a1 1 0 0 0 1.41-1.41L13.41 12l4.9-4.89a1 1 0 0 0 0-1.4z" />
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="space-y-6 px-6 py-5">
-                        <div class="grid gap-4 sm:grid-cols-2">
-                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                                <h4 class="text-sm font-semibold text-slate-700">نام مشتری</h4>
-                                <p class="mt-2 text-sm text-slate-900">
-                                    {{ $previewInvoice?->user?->name ?? data_get(json_decode($previewInvoice?->snap_user_credentials, true), 'username', '') }}
-                                </p>
-                            </div>
-                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                                <h4 class="text-sm font-semibold text-slate-700">موبایل</h4>
-                                <p class="mt-2 text-sm text-slate-900">
-                                    {{ $previewInvoice?->user?->mobile ?? data_get(json_decode($previewInvoice?->snap_user_credentials, true), 'mobile', '') }}
-                                </p>
-                            </div>
-                            <div class="sm:col-span-2 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                                <h4 class="text-sm font-semibold text-slate-700">آدرس</h4>
-                                <p class="mt-2 text-sm text-slate-900">
-                                    {{ $previewInvoice?->address?->address ?? '-' }}</p>
-                            </div>
-                        </div>
-                        <div class="rounded-3xl border border-slate-200 p-4">
-                            <div class="mb-4 flex items-center justify-between text-sm font-semibold text-slate-700">
-                                <span>اقلام خرید</span>
-                                <span
-                                    class="text-slate-500">{{ number_format($previewInvoice?->products->sum(fn($item) => $item->pivot?->quantity * $item->pivot?->unit_price)) }}
-                                    تومان</span>
-                            </div>
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full text-right text-sm text-slate-600">
-                                    <thead class="border-b border-slate-200 text-slate-900">
-                                        <tr>
-                                            <th class="py-3 pr-3 text-start">نام کالا</th>
-                                            <th class="py-3 px-3">تعداد</th>
-                                            <th class="py-3 px-3 text-start">جمع</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="divide-y divide-slate-200">
-                                        @foreach ($previewInvoice?->products ?? [] as $product)
-                                            <tr>
-                                                <td class="py-3 pr-3 text-start text-sm text-slate-900">
-                                                    {{ $product->name }}</td>
-                                                <td class="py-3 px-3 text-sm">{{ $product->pivot?->quantity ?? 0 }}
-                                                </td>
-                                                <td class="py-3 px-3 text-sm text-slate-900">
-                                                    {{ number_format(($product->pivot?->quantity ?? 0) * ($product->pivot?->unit_price ?? 0)) }}
-                                                    تومان</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="grid gap-3 sm:grid-cols-2">
-                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                                <div class="flex items-center justify-between text-sm text-slate-700">
-                                    <span>هزینه بسته‌بندی</span>
-                                    <span
-                                        class="font-semibold text-slate-900">{{ number_format($previewInvoice?->packaging_price ?? 0) }}
-                                        تومان</span>
-                                </div>
-                            </div>
-                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                                <div class="flex items-center justify-between text-sm text-slate-700">
-                                    <span>هزینه ارسال</span>
-                                    <span
-                                        class="font-semibold text-slate-900">{{ number_format($previewInvoice?->courier_price ?? 0) }}
-                                        تومان</span>
-                                </div>
-                            </div>
-                            <div class="sm:col-span-2 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                                <div class="flex items-center justify-between text-sm text-slate-700">
-                                    <span>تخفیف</span>
-                                    <span
-                                        class="font-semibold text-slate-900">-{{ number_format($previewInvoice?->discount_price ?? 0) }}
-                                        تومان</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="rounded-3xl border border-slate-200 bg-slate-100 p-4">
-                            <div class="flex items-center justify-between text-base font-semibold text-slate-900">
-                                <span>جمع نهایی</span>
-                                <span>{{ number_format(optional($previewInvoice)->total_price ?? 0) }} تومان</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex justify-end gap-3 border-t px-6 py-4">
-                        <button type="button" wire:click="closePreview"
-                            class="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
-                            بستن
-                        </button>
+                x-on:keydown.esc.window="modalIsOpen = false" x-on:click.self="modalIsOpen = false"
+                class="fixed inset-0 z-30 flex items-end justify-center bg-black/20 p-4 pb-8 backdrop-blur-md sm:items-center lg:p-8 rounded-lg"
+                role="dialog" aria-modal="true" aria-labelledby="defaultModalTitle">
+                <!-- Modal Dialog -->
+                <div x-show="modalIsOpen"
+                    x-transition:enter="transition ease-out duration-200 delay-100 motion-reduce:transition-opacity"
+                    x-transition:enter-start="opacity-0 scale-50" x-transition:enter-end="opacity-100 scale-100"
+                    class="flex w-5xl flex-col gap-4 overflow-hidden rounded-2xl border border-neutral-300 bg-white text-neutral-600">
+                    <!-- Dialog Body -->
+                    <div class="px-4 py-8 max-h-[80vh] overflow-y-auto">
+                        <livewire:users.user-show :id="$user->id" :limit="5" />
                     </div>
                 </div>
             </div>
         </div>
     @endif
+
 
     {{--   page loading when opens user's profile   --}}
     <div wire:loading wire:target="updateUserModal" x-data="{ modalIsOpen: @entangle('userModal') }">
@@ -1053,9 +890,7 @@
 
             <!-- LEFT: Date + Order ID -->
             <div class="header-left">
-                <div>شماره سفارش<br><strong id="print-order-id"></strong><br>
-                    <span id="print-order-date"></span>
-                </div>
+                <div>╪┤┘à╪º╪▒┘ç ╪│┘ü╪º╪▒╪┤<br><strong id="print-order-id"></strong></div>
             </div>
 
             <!-- RIGHT: LOGO -->
@@ -1066,22 +901,22 @@
         </div>
 
         <!-- ORDER DETAILS -->
-        <div class="section-title">مشخصات مشتری</div>
+        <div class="section-title">┘à╪┤╪«╪╡╪º╪¬ ┘à╪┤╪¬╪▒█î</div>
         <div class="info">
-            نام مشتری: <strong id="customer-name"></strong><br>
-            موبایل: <strong id="customer-mobile"></strong><br>
+            ┘å╪º┘à ┘à╪┤╪¬╪▒█î: <strong id="customer-name"></strong><br>
+            ┘à┘ê╪¿╪º█î┘ä: <strong id="customer-mobile"></strong><br>
             <small id="customer-address"></small>
         </div>
 
         <!-- ITEMS -->
-        <div class="section-title">اقلام خرید</div>
+        <div class="section-title">╪º┘é┘ä╪º┘à ╪«╪▒█î╪»</div>
         <div class="print-table">
             <table>
                 <thead>
                     <tr>
-                        <th>نام کالا</th>
-                        <th>تعداد</th>
-                        <th style="text-align: left;">قیمت (تومان)</th>
+                        <th>┘å╪º┘à ┌⌐╪º┘ä╪º</th>
+                        <th>╪¬╪╣╪»╪º╪»</th>
+                        <th style="text-align: left;">┘é█î┘à╪¬ (╪¬┘ê┘à╪º┘å)</th>
                     </tr>
                 </thead>
                 <tbody id="items-table">
@@ -1091,33 +926,28 @@
 
         <!-- DISCOUNT -->
         <div id="discount-box" class="total-box">
-            <span>تخفیف:</span>
+            <span>╪¬╪«┘ü█î┘ü:</span>
             <span id="discount-price">0</span>
         </div>
 
         <!-- DELIVERY -->
         <div id="delivery-box" class="total-box">
-            <span>هزینه ارسال:</span>
+            <span>┘ç╪▓█î┘å┘ç ╪º╪▒╪│╪º┘ä:</span>
             <span id="delivery-price">0</span>
         </div>
 
         <div id="packaging-box" class="total-box">
-            <span>هزینه بسته بندی:</span>
+            <span>┘ç╪▓█î┘å┘ç ╪¿╪│╪¬┘ç ╪¿┘å╪»█î:</span>
             <span id="packaging-price">0</span>
-        </div>
-
-        <div id="tax-box" class="total-box">
-            <span>مالیات بر ارزش افزوده:</span>
-            <span id="tax-price">0</span>
         </div>
 
         <!-- FINAL TOTAL -->
         <div class="total-box" style="border-top: 2px solid #000; margin-top: 6px;">
-            <span>جمع نهایی:</span>
+            <span>╪¼┘à╪╣ ┘å┘ç╪º█î█î:</span>
             <span id="final-total">0</span>
         </div>
 
-        <div class="footer">سپاس از خرید شما<br>منو دیجیتال: sirmouk.ir</div>
+        <div class="footer">╪│┘╛╪º╪│ ╪º╪▓ ╪«╪▒█î╪» ╪┤┘à╪º</div>
 
     </div>
 
@@ -1129,7 +959,7 @@
         class="fixed inset-0 z-30 flex items-end justify-center bg-black/20 p-4 backdrop-blur-md">
         <div class="w-full max-w-md rounded-t-3xl bg-white p-6 shadow-lg">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-semibold text-gray-900">وارد کردن از اسنپ‌فود</h2>
+                <h2 class="text-lg font-semibold text-gray-900">┘ê╪º╪▒╪» ┌⌐╪▒╪»┘å ╪º╪▓ ╪º╪│┘å┘╛ΓÇî┘ü┘ê╪»</h2>
                 <button type="button" wire:click="closeSnapModal" class="text-gray-500 hover:text-gray-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1148,18 +978,18 @@
             <!-- URL Input -->
             <div class="mb-4">
                 <label for="snap_url" class="block mb-2 text-sm font-medium text-gray-900">
-                    لینک سفارش اسنپ‌فود
+                    ┘ä█î┘å┌⌐ ╪│┘ü╪º╪▒╪┤ ╪º╪│┘å┘╛ΓÇî┘ü┘ê╪»
                 </label>
                 <input type="text" id="snap_url" wire:model="snapFoodUrl" placeholder="https://snappfood.ir/..."
                     class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
-                <p class="text-xs text-gray-500 mt-1">از صفحه پیگیری سفارش خود کپی کنید</p>
+                <p class="text-xs text-gray-500 mt-1">╪º╪▓ ╪╡┘ü╪¡┘ç ┘╛█î┌»█î╪▒█î ╪│┘ü╪º╪▒╪┤ ╪«┘ê╪» ┌⌐┘╛█î ┌⌐┘å█î╪»</p>
             </div>
 
             <!-- Submit Button -->
             <div class="flex gap-2">
                 <button type="button" wire:click="importFromSnapFood" wire:loading.attr="disabled"
                     class="flex-1 px-4 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition disabled:bg-gray-400">
-                    <span wire:loading.remove>واردکردن</span>
+                    <span wire:loading.remove>┘ê╪º╪▒╪»┌⌐╪▒╪»┘å</span>
                     <span wire:loading class="flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"
                             class="w-4 h-4 fill-white motion-safe:animate-spin inline-block mr-1">
@@ -1168,12 +998,12 @@
                             <path
                                 d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z" />
                         </svg>
-                        در حال بارگذاری...
+                        ╪»╪▒ ╪¡╪º┘ä ╪¿╪º╪▒┌»╪░╪º╪▒█î...
                     </span>
                 </button>
                 <button type="button" wire:click="closeSnapModal"
                     class="px-4 py-2 bg-gray-200 text-gray-900 text-sm rounded-lg hover:bg-gray-300 transition">
-                    انصراف
+                    ╪º┘å╪╡╪▒╪º┘ü
                 </button>
             </div>
         </div>

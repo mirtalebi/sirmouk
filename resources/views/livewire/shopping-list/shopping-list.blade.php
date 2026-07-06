@@ -45,7 +45,7 @@
 
         <div class="flex items-center gap-3">
             <label class="inline-flex items-center gap-2 text-sm text-gray-700">
-                <input type="checkbox" wire:model="showDone"
+                <input type="checkbox" wire:model.live="showDone"
                     class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
                 نمایش موارد انجام شده
             </label>

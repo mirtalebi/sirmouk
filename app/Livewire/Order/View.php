@@ -64,6 +64,12 @@ class View extends Component
     public $snapFoodUrl = '';
     public $snapModalError = '';
 
+    // Preview Modal
+    public $showPreviewModal = false;
+    public $previewInvoice;
+
+    public $search = '';
+
 
     public function updateUserModal()
     {
@@ -379,8 +385,9 @@ class View extends Component
 
     public function render()
     {
+        $invoice = Invoice::search($this->search)->simplePaginate(10);
         return view('livewire.order.view', [
-            'invoices' => Invoice::simplePaginate(10),
+            'invoices' => $invoice,
             'categories' => ProductCategory::all(),
         ]);
     }
@@ -395,7 +402,21 @@ class View extends Component
             'discount_price' => $invoice->discount_price,
             'courier_price' => $invoice->courier_price,
             'packaging_price' => $invoice->packaging_price,
+            'tax_price' => $invoice->calcTaxPrice(),
+            'time' => $invoice->created_at->format('H:i'),
         ] ,basket: $invoice->products);
 
+    }
+
+    public function showPreview($id)
+    {
+        $this->previewInvoice = Invoice::find($id);
+        $this->showPreviewModal = true;
+    }
+
+    public function closePreview()
+    {
+        $this->showPreviewModal = false;
+        $this->previewInvoice = null;
     }
 }
