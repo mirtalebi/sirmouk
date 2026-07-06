@@ -87,4 +87,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(ShoppingListItem::class);
     }
+
+    public function getAccountingBalanceAttribute(): int
+    {
+        $debitSum = JournalEntryItem::where('user_id', $this->id)->sum('debit');
+        $creditSum = JournalEntryItem::where('user_id', $this->id)->sum('credit');
+
+        return $debitSum - $creditSum; 
+    }
 }

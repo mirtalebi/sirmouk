@@ -9,17 +9,22 @@
             <form wire:submit="update">
                 <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                     <div>
-                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">نام محصول</label>
-                        <input type="text" wire:model="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="نام محصول را وارد کنید" required="">
+                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">نام
+                            محصول</label>
+                        <input type="text" wire:model="name"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                            placeholder="نام محصول را وارد کنید" required="">
                         @error('name')
-                        <div class="text-sm text-red-500">
-                            {{ $message }}
-                        </div>
+                            <div class="text-sm text-red-500">
+                                {{ $message }}
+                            </div>
                         @enderror
                     </div>
                     <div>
-                        <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">دسته بندی</label>
-                        <select id="category" wire:model="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                        <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">دسته
+                            بندی</label>
+                        <select id="category" wire:model="category"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                             <option selected></option>
                             @forelse($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -28,89 +33,91 @@
 
                         </select>
                         @error('category')
-                        <div class="text-sm text-red-500">
-                            {{ $message }}
-                        </div>
+                            <div class="text-sm text-red-500">
+                                {{ $message }}
+                            </div>
                         @enderror
                     </div>
-                    <div class="w-full"
-                         x-data="{
-                            realValue: '',
-                            formatted: $wire.price,
-
-                            formatNumber(value) {
-                                let raw = value.replace(/,/g, '');
-                                if (isNaN(raw)) return '';
-
-                                this.formatted = this.realValue;
-
-                                this.realValue = raw;
-                                this.formatted = Number(raw).toLocaleString();
-                                $wire.price = raw;
-                            }
-
-                        }"
-                    >
-                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">مبلغ</label>
-                        <input
-                            type="text"
-                            x-model="formatted"
-                            @input="formatNumber($event.target.value)"
-                            name="price" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="مبلغ محصول را وارد کنید" required="">
+                    <div class="w-full" x-data="{
+                        realValue: '',
+                        formatted: $wire.price,
+                    
+                        formatNumber(value) {
+                            let raw = value.replace(/,/g, '');
+                            if (isNaN(raw)) return '';
+                    
+                            this.formatted = this.realValue;
+                    
+                            this.realValue = raw;
+                            this.formatted = Number(raw).toLocaleString();
+                            $wire.price = raw;
+                        }
+                    
+                    }">
+                        <label for="price"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">مبلغ</label>
+                        <input type="text" x-model="formatted" @input="formatNumber($event.target.value)"
+                            name="price" id="price"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                            placeholder="مبلغ محصول را وارد کنید" required="">
                         <p x-text="num2persian(formatted) + ' تومان'" class="text-xs text-green-700 font-bold mt-1"></p>
                         @error('price')
-                        <div class="text-sm text-red-500">
-                            {{ $message }}
-                        </div>
+                            <div class="text-sm text-red-500">
+                                {{ $message }}
+                            </div>
                         @enderror
                     </div>
                     <div class="w-full">
-                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">مالیات</label>
-                        <input type="number" wire:model="tax" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="درصد مالیات را وارد کنید" required="">
+                        <label for="price"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">مالیات</label>
+                        <input type="number" wire:model="tax"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                            placeholder="درصد مالیات را وارد کنید" required="">
                         @error('tax')
-                        <div class="text-sm text-red-500">
-                            {{ $message }}
-                        </div>
+                            <div class="text-sm text-red-500">
+                                {{ $message }}
+                            </div>
                         @enderror
                     </div>
-                    <div class="w-full"
-                         x-data="{
-                            realValue: '',
-                            formatted: $wire.packaging_amount,
-
-                            formatNumber(value) {
-                                let raw = value.replace(/,/g, '');
-                                if (isNaN(raw)) return '';
-
-                                this.formatted = this.realValue;
-
-                                this.realValue = raw;
-                                this.formatted = Number(raw).toLocaleString();
-                                $wire.packaging_amount = raw;
-                            }
-
-                        }"
-                    >
-                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">مبلغ بسته بندی</label>
-                        <input
-                            type="text"
-                            x-model="formatted"
-                            @input="formatNumber($event.target.value)"
-                            name="price" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="مبلغ محصول را وارد کنید" required="">
+                    <div class="w-full" x-data="{
+                        realValue: '',
+                        formatted: $wire.packaging_amount,
+                    
+                        formatNumber(value) {
+                            let raw = value.replace(/,/g, '');
+                            if (isNaN(raw)) return '';
+                    
+                            this.formatted = this.realValue;
+                    
+                            this.realValue = raw;
+                            this.formatted = Number(raw).toLocaleString();
+                            $wire.packaging_amount = raw;
+                        }
+                    
+                    }">
+                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">مبلغ
+                            بسته بندی</label>
+                        <input type="text" x-model="formatted" @input="formatNumber($event.target.value)"
+                            name="price" id="price"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                            placeholder="مبلغ محصول را وارد کنید" required="">
                         <p x-text="num2persian(formatted) + ' تومان'" class="text-xs text-green-700 font-bold mt-1"></p>
                         @error('price')
-                        <div class="text-sm text-red-500">
-                            {{ $message }}
-                        </div>
+                            <div class="text-sm text-red-500">
+                                {{ $message }}
+                            </div>
                         @enderror
                     </div>
                     <div class="sm:col-span-2">
-                        <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">توضحیات</label>
-                        <textarea wire:model="description" rows="8" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="توضیحات محصول را وارد کنید"></textarea>
+                        <label for="description"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">توضحیات</label>
+                        <textarea wire:model="description" rows="8"
+                            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                            placeholder="توضیحات محصول را وارد کنید"></textarea>
                         @error('description')
-                        <div class="text-sm text-red-500">
-                            {{ $message }}
-                        </div>
+                            <div class="text-sm text-red-500">
+                                {{ $message }}
+                            </div>
                         @enderror
                     </div>
                 </div>
@@ -120,48 +127,66 @@
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">مواد اولیه</label>
                     <div x-data="{ materials: $wire.entangle('materials') }" class="space-y-3">
                         <template x-for="(material, index) in materials" :key="index">
-                            <div class="flex gap-2 items-end">
-                                <div class="flex-1">
-                                    <input type="text" x-model="materials[index].name" placeholder="نام مواد" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <div class="grid grid-cols-12 gap-2 items-end">
+                                <div class="col-span-5">
+                                    <select x-model="materials[index].item_id"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <option value="">انتخاب آیتم دستور پخت</option>
+                                        @foreach($recipeItems as $item)
+                                            <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                                <div class="flex-1">
-                                    <input type="number" step="0.01" x-model="materials[index].quantity" placeholder="مقدار" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <div class="col-span-4">
+                                    <input type="number" step="0.0001" x-model="materials[index].quantity"
+                                        placeholder="مقدار"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 </div>
-                                <div class="flex-1">
-                                    <input type="number" x-model.number="materials[index].unit_price" placeholder="قیمت واحد" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <div class="col-span-3">
+                                    <button type="button" @click="materials.splice(index, 1)"
+                                        class="w-full px-3 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700">حذف</button>
                                 </div>
-                                <button type="button" @click="materials.splice(index, 1)" class="px-3 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700">حذف</button>
                             </div>
                         </template>
-                        <button type="button" @click="materials.push({name: '', quantity: 0, unit_price: 0})" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">افزودن مواد اولیه</button>
+                        <button type="button" @click="materials.push({ item_id: '', quantity: 1 })"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">افزودن مواد
+                            اولیه</button>
                     </div>
                     @error('materials')
-                    <div class="text-sm text-red-500 mt-2">
-                        {{ $message }}
-                    </div>
+                        <div class="text-sm text-red-500 mt-2">
+                            {{ $message }}
+                        </div>
                     @enderror
 
-                    <div x-data="{ 
+                    <div x-data="{
                         materials: $wire.entangle('materials'),
+                        recipeItems: {{ json_encode($recipeItems) }},
                         get constructionCost() {
-                            return this.materials.reduce((sum, m) => sum + (m.quantity * m.unit_price), 0);
+                            return this.materials.reduce((sum, m) => {
+                                const item = this.recipeItems.find(i => i.id == m.item_id);
+                                const quantity = parseFloat(m.quantity) || 0;
+                                return sum + (item ? item.cost * quantity : 0);
+                            }, 0);
                         },
                         get profit() {
-                            return ($wire.price || 0) - this.constructionCost;
+                            return (parseFloat($wire.price) || 0) - this.constructionCost;
                         }
                     }" class="mt-4 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
                         <div class="grid grid-cols-3 gap-4 text-sm">
                             <div>
                                 <p class="text-gray-600 dark:text-gray-400">هزینه ساخت</p>
-                                <p x-text="Number(constructionCost).toLocaleString() + ' تومان'" class="font-bold text-gray-900 dark:text-white"></p>
+                                <p x-text="Number(constructionCost).toLocaleString() + ' تومان'"
+                                    class="font-bold text-gray-900 dark:text-white"></p>
                             </div>
                             <div>
                                 <p class="text-gray-600 dark:text-gray-400">قیمت فروش</p>
-                                <p x-text="Number($wire.price || 0).toLocaleString() + ' تومان'" class="font-bold text-gray-900 dark:text-white"></p>
+                                <p x-text="Number($wire.price || 0).toLocaleString() + ' تومان'"
+                                    class="font-bold text-gray-900 dark:text-white"></p>
                             </div>
                             <div>
                                 <p class="text-gray-600 dark:text-gray-400">سود</p>
-                                <p x-text="Number(profit).toLocaleString() + ' تومان'" :class="profit >= 0 ? 'text-green-600' : 'text-red-600'" class="font-bold"></p>
+                                <p x-text="Number(profit).toLocaleString() + ' تومان'"
+                                    :class="profit >= 0 ? 'text-green-600' : 'text-red-600'" class="font-bold"></p>
                             </div>
                         </div>
                     </div>
@@ -169,14 +194,16 @@
 
 
                 <div class="flex gap-2">
-                    <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 transition">
+                    <button type="submit"
+                        class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 transition">
                         ویرایش محصول
                     </button>
-                    <button type="button" wire:click="cancel()" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 transition">
+                    <button type="button" wire:click="cancel()"
+                        class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 transition">
                         لفو ویرایش
                     </button>
                 </div>
             </form>
         </div>
-    </section></div>
-
+    </section>
+</div>

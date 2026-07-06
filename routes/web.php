@@ -8,7 +8,11 @@ use App\Livewire\Account\AccountIndex;
 use App\Livewire\Account\AccountCreate;
 use App\Livewire\Account\AccountEdit;
 use App\Livewire\Account\TransactionsList;
+use App\Livewire\JournalEntry\JournalEntryCreate;
+use App\Livewire\JournalEntry\JournalEntryIndex;
+use App\Livewire\JournalEntry\JournalEntryShow;
 use App\Livewire\Invoice\InvoiceCalc;
+use App\Livewire\RecipeCard\Index as RecipeCardIndex;
 use App\Livewire\ShoppingList\ShoppingList;
 use App\Models\Invoice;
 use App\Models\Product;
@@ -17,6 +21,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+use App\Models\Account;
+use App\Models\JournalEntry;
+use App\Models\JournalEntryItem;
+use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
     return view('welcome');
@@ -31,6 +39,44 @@ Route::get('/invoice/{invoiceId}/{secretKey?}', function ($invoiceId, $secretKey
     return view('components.layouts.invoice', compact('invoice'));
 })->name('invoice.view');
 
+Route::get('/invoices/aggregate/{invoiceIds}/', function ($invoiceIds) {
+    // 1. Convert comma-separated string to an array of IDs
+    $idsArray = explode(',', $invoiceIds);
+
+    // 2. Fetch all matching invoices
+    $invoices = Invoice::with('products')->whereIn('id', $idsArray)->get();
+
+    // 4. Merge duplicate products and sum quantities
+    $mergedProducts = collect();
+    
+    foreach ($invoices as $invoice) {
+        foreach ($invoice->products as $product) {
+            $productId = $product->id;
+
+            if ($mergedProducts->has($productId)) {
+                // If product already exists in list, just add to the quantity
+                $mergedProducts[$productId]->pivot->quantity += $product->pivot->quantity;
+            } else {
+                // Clone the product object so we don't accidentally mutate Eloquent cache
+                $mergedProducts[$productId] = clone $product;
+            }
+        }
+    }
+
+    // 5. Calculate Consolidated Totals
+    $totals = [
+        'ids'             => $invoices->pluck('id')->toArray(),
+        'dates'           => $invoices->map(fn($i) => $i->getCreatedAtDate())->unique()->toArray(),
+        'packaging_price' => $invoices->sum('packaging_price'),
+        'discount_price'  => $invoices->sum('discount_price'),
+        'courier_price'   => $invoices->sum('courier_price'),
+        'tax_price'       => $invoices->sum(fn($i) => $i->calcTaxPrice()),
+        'total_price'     => $invoices->sum('total_price'),
+    ];
+
+    return view('components.layouts.invoice-aggregate', compact('mergedProducts', 'totals'));
+})->name('invoice.aggregate');
+
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -42,6 +88,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/accounts/{id}/edit', AccountEdit::class)->name('accounts.edit');
     Route::get('/account/{id}/transactions/', TransactionsList::class)->name('account.transactions.list');
 
+//    Journal Entry Routes
+    Route::get('/journal-entries', JournalEntryIndex::class)->name('journal-entries.index');
+    Route::get('/journal-entries/create', JournalEntryCreate::class)->name('journal-entries.create');
+    Route::get('/journal-entries/{id}', JournalEntryShow::class)->name('journal-entries.show');
 
 //    Transactions Routes
     Route::get('/transactions', TransactionIndex::class)->name('transactions.index');
@@ -56,6 +106,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/edit/{id}', \App\Livewire\Products\ProductEdit::class)->name('products.edit');
         Route::get('create', ProductCreate::class)->name('products.create');
     });
+
+    Route::get('/recipe-card', RecipeCardIndex::class)->name('recipe-card.index');
 
     //        Product Categories
     Route::get('categories', \App\Livewire\Catgories\Categories::class)->name('categories');
@@ -101,14 +153,8 @@ Route::get('convert', function () {
     return 'DONE';
 });
 
-Route::get('/clear-cache', function () {
-    Artisan::call('cache:clear');
-    Artisan::call('config:clear');
-    Artisan::call('view:clear');
-    Artisan::call('route:clear');
-    sleep(3);
-
-    return "All caches cleared successfully!";
+Route::get('/dev', function () {
+    
 });
 
 Route::get('/cmp', function (Request $request) {

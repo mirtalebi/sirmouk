@@ -4,6 +4,7 @@ namespace App\Livewire\Products;
 
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\RecipeItem;
 use Livewire\Component;
 
 class ProductEdit extends Component
@@ -27,13 +28,21 @@ class ProductEdit extends Component
         $this->category = $this->product->category_id;
         $this->tax = $this->product->tax;
         $this->packaging_amount = $this->product->packaging_amount;
-        $this->materials = json_decode($this->product->materials, true);
+
+        $decodedMaterials = $this->product->materials;
+        $this->materials = is_array($decodedMaterials) ? array_map(function ($material) {
+            return [
+                'item_id' => $material['item_id'] ?? null,
+                'quantity' => $material['quantity'] ?? 0,
+            ];
+        }, $decodedMaterials) : [];
     }
 
     public function cancel()
     {
         return redirect()->route('products');
     }
+
     public function update()
     {
         $this->validate([
@@ -42,14 +51,23 @@ class ProductEdit extends Component
             'price' => 'required|numeric',
             'tax' => 'required',
             'category' => 'required|exists:product_categories,id',
+            'materials' => 'array',
+            'materials.*.item_id' => 'required|exists:recipe_items,id',
+            'materials.*.quantity' => 'required|numeric|min:0.01',
         ], [
             'required' => 'لطفا این فیلد را پر کنید!'
         ]);
 
         $materialsCost = 0;
-        for ($i = 0; $i < count($this->materials); $i++) {
-            $materialsCost += $this->materials[$i]['unit_price'] * $this->materials[$i]['quantity'];
+        foreach ($this->materials as $material) {
+            $item = RecipeItem::find($material['item_id'] ?? null);
+            if (! $item) {
+                continue;
+            }
+            $quantity = (float) ($material['quantity'] ?? 0);
+            $materialsCost += $item->calculateValue() * $quantity;
         }
+
         $profit = $this->price - $materialsCost;
 
         $update = $this->product->update([
@@ -65,14 +83,26 @@ class ProductEdit extends Component
 
         if ($update) {
             return redirect()->route('products')->with('success', 'محصول مورد نطر با موفقیت ویرایش شد');
-        } else {
-            return redirect()->back()->with('fail', 'ویرایش محصول با مشکل مواجه شد! دوباره تلاش کنید');
         }
+
+        return redirect()->back()->with('fail', 'ویرایش محصول با مشکل مواجه شد! دوباره تلاش کنید');
+    }
+
+    private function getRecipeItemsForForm()
+    {
+        return RecipeItem::orderBy('name')->get()->map(function (RecipeItem $item) {
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+                'cost' => $item->calculateValue(),
+            ];
+        });
     }
 
     public function render()
     {
         $categories = ProductCategory::all();
-        return view('livewire.products.product-edit', compact('categories'));
+        $recipeItems = $this->getRecipeItemsForForm();
+        return view('livewire.products.product-edit', compact('categories', 'recipeItems'));
     }
 }
