@@ -140,6 +140,8 @@ class View extends Component
             'min' => 'این فیلد باید شامل 11 کارکتر باشد',
             'max' => 'این فیلد باید شامل 11 کارکتر باشد'
         ]);
+        
+        $user = null;
         if (!empty($this->customerMobile)){
             $user = User::getUserByMobile($this->customerMobile);
             $user->name = $this->customerName;
@@ -162,7 +164,9 @@ class View extends Component
             $invoice->packaging_price = (int)$this->packaging_price ?? 0;
             $invoice->url_secret = bin2hex(random_bytes(4));
             $invoice->is_snap = $this->snap ?? false;
-            if ($this->snap){ $invoice->snap_user_credentials = json_encode(['username' => $this->customerName, 'mobile' => $this->customerMobile ?? null]); }
+            if (!$user){ 
+                $invoice->snap_user_credentials = json_encode(['username' => $this->customerName, 'mobile' => $this->customerMobile ?? null]); 
+            }
             $invoice->address_id = empty($this->address_id) ? null : $this->address_id;
             $invoice->save();
             $invoice->setProdcuts($tempBasket);
