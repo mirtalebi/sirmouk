@@ -21,6 +21,7 @@ class Invoice extends Model
     {
         return [
             'card' => 'array',
+            'snap_user_credentials' => 'array',
         ];
     }
 

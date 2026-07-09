@@ -527,10 +527,10 @@
                         <tr wire:key="invoice-{{ $invoice->id }}" class="hover:bg-neutral-50 transition-colors">
                             <td class="p-4">{{ $invoice->id }}</td>
                             <td class="p-4">
-                                {{ $invoice->user->name ?? ($invoice->snap_user_credentials['username'] ?? '') }}
+                                {{ $invoice->user?->name ?? ($invoice->snap_user_credentials['username'] ?? '') }}
                             </td>
                             <td class="p-4 text-right">
-                                {{ $invoice->user->mobile ?? ($invoice->snap_user_credentials['mobile'] ?? '') }}
+                                {{ $invoice->user?->mobile ?? ($invoice->snap_user_credentials['mobile'] ?? '') }}
                             </td>
                             <td class="p-4">{{ $invoice->getCreatedAtDate() }}</td>
                             <td class="p-4 font-bold text-black">

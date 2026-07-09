@@ -140,6 +140,8 @@ class View extends Component
             'min' => 'این فیلد باید شامل 11 کارکتر باشد',
             'max' => 'این فیلد باید شامل 11 کارکتر باشد'
         ]);
+
+        $user = null;
         if (!empty($this->customerMobile)){
             $user = User::getUserByMobile($this->customerMobile);
             $user->name = $this->customerName;
@@ -162,12 +164,16 @@ class View extends Component
             $invoice->packaging_price = (int)$this->packaging_price ?? 0;
             $invoice->url_secret = bin2hex(random_bytes(4));
             $invoice->is_snap = $this->snap ?? false;
-            if ($this->snap){ $invoice->snap_user_credentials = json_encode(['username' => $this->customerName, 'mobile' => $this->customerMobile ?? null]); }
+            
+            if (!$user){ 
+                $invoice->snap_user_credentials = json_encode(['username' => $this->customerName, 'mobile' => $this->customerMobile ?? null]); 
+            }
             $invoice->address_id = empty($this->address_id) ? null : $this->address_id;
             $invoice->save();
             $invoice->setProdcuts($tempBasket);
             $invoice->setTotalPrice();
 //            dd('courier_price:' . $invoice->courier_price, 'discount_price:' . $invoice->discount_price, 'packaging_price:' . $invoice->packaging_price, 'total_price:' . $invoice->total_price);
+            dd($invoice);
             $invoice->save();
             DB::commit();
         }catch (\Exception $exception){
@@ -201,16 +207,14 @@ class View extends Component
         $this->addedPackagingPrice = $this->invoice->packaging_price - $this->invoice->getSumPackagingPrice();
 
         $this->snap = boolval($this->invoice->is_snap);
-//        dd($this->invoice, $this->snap);
-        if ($this->invoice->is_snap) {
-            $snapCred = json_decode($this->invoice->snap_user_credentials, true);
-            $this->customerMobile = $snapCred['mobile'];
-            $this->customerName = $snapCred['username'];
-        } else if ($this->invoice->user) {
+        if (!$this->invoice->user) {
+            $this->customerMobile = $this->invoice->snap_user_credentials['mobile'];
+            $this->customerName = $this->invoice->snap_user_credentials['username'];
+        } else {
             $this->customerMobile = $this->invoice->user->mobile;
             $this->customerName = $this->invoice->user->name;
+            $this->findUser();
         }
-        $this->findUser();
     }
 
     public function cancelEditingInvoice()
