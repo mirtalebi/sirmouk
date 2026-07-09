@@ -828,13 +828,13 @@
                             <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                                 <h4 class="text-sm font-semibold text-slate-700">نام مشتری</h4>
                                 <p class="mt-2 text-sm text-slate-900">
-                                    {{ $previewInvoice?->user?->name ?? data_get(json_decode($previewInvoice?->snap_user_credentials, true), 'username', '') }}
+                                    {{ $previewInvoice?->user?->name ?? $previewInvoice?->snap_user_credentials['username'] }}
                                 </p>
                             </div>
                             <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                                 <h4 class="text-sm font-semibold text-slate-700">موبایل</h4>
                                 <p class="mt-2 text-sm text-slate-900">
-                                    {{ $previewInvoice?->user?->mobile ?? data_get(json_decode($previewInvoice?->snap_user_credentials, true), 'mobile', '') }}
+                                    {{ $previewInvoice?->user?->mobile ?? $previewInvoice?->snap_user_credentials['mobile'] }}
                                 </p>
                             </div>
                             <div class="sm:col-span-2 rounded-2xl border border-slate-200 bg-slate-50 p-4">

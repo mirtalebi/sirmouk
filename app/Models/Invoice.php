@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder; 
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 
 #[ScopedBy([DescOrderScope::class])]
 class Invoice extends Model
@@ -20,8 +21,8 @@ class Invoice extends Model
     protected function casts(): array
     {
         return [
+            'snap_user_credentials' => AsArrayObject::class,
             'card' => 'array',
-            'snap_user_credentials' => 'array',
         ];
     }
 
@@ -143,9 +144,8 @@ class Invoice extends Model
         $this->total_price = $this->calcFinalPrice();
     }
 
-    // public function getCustomerNameMobile() {
-    //     return [
-    //         'mobile' => $invoice->is_snap ?
-    //     ];
-    // }
+    public function getUserName()
+    {
+        return $this->user?->name ?? ($this->snap_user_credentials['username'] ?? '');
+    }
 }

@@ -133,7 +133,7 @@ class View extends Component
         $this->total_price += (int) $this->addedPackagingPrice;
         $this->packaging_price += (int) $this->addedPackagingPrice;
         $this->validate([
-            'customerName' => 'required|string|max:255',
+            'customerName' => 'string|max:255',
             'customerMobile' => 'string|max:11|min:11',
         ],[
             'required' => 'این فیلد اجباری است',
@@ -168,7 +168,7 @@ class View extends Component
             $invoice->is_snap = $this->snap ?? false;
             
             if (!$user){ 
-                $invoice->snap_user_credentials = json_encode(['username' => $this->customerName, 'mobile' => $this->customerMobile ?? null]); 
+                $invoice->snap_user_credentials = ['username' => $this->customerName, 'mobile' => $this->customerMobile ?? null]; 
             }
             $invoice->address_id = empty($this->address_id) ? null : $this->address_id;
             $invoice->save();
@@ -176,6 +176,7 @@ class View extends Component
             $invoice->setTotalPrice();
 //            dd('courier_price:' . $invoice->courier_price, 'discount_price:' . $invoice->discount_price, 'packaging_price:' . $invoice->packaging_price, 'total_price:' . $invoice->total_price);
             $invoice->save();
+            // dd($invoice);
             DB::commit();
         }catch (\Exception $exception){
             DB::rollBack();
@@ -401,8 +402,8 @@ class View extends Component
         $invoice = Invoice::findOrFail($id);
         $this->dispatch('print-invoice-client', customer: [
             'id' => $invoice->id,
-            'name' => $invoice->user?->name ?? json_decode($invoice->snap_user_credentials, true)['username'],
-            'mobile' => $invoice->user?->mobile ?? json_decode($invoice->snap_user_credentials, true)['mobile'],
+            'name' => $invoice->user?->name ?? $invoice->snap_user_credentials['username'],
+            'mobile' => $invoice->user?->mobile ?? $invoice->snap_user_credentials['mobile'],
             'address' => $invoice->address?->address,
             'discount_price' => $invoice->discount_price,
             'courier_price' => $invoice->courier_price,
