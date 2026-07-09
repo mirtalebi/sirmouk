@@ -140,6 +140,8 @@ class View extends Component
             'min' => 'این فیلد باید شامل 11 کارکتر باشد',
             'max' => 'این فیلد باید شامل 11 کارکتر باشد'
         ]);
+        
+        $user = null;
 
         $user = null;
         if (!empty($this->customerMobile)){
@@ -173,7 +175,6 @@ class View extends Component
             $invoice->setProdcuts($tempBasket);
             $invoice->setTotalPrice();
 //            dd('courier_price:' . $invoice->courier_price, 'discount_price:' . $invoice->discount_price, 'packaging_price:' . $invoice->packaging_price, 'total_price:' . $invoice->total_price);
-            dd($invoice);
             $invoice->save();
             DB::commit();
         }catch (\Exception $exception){
