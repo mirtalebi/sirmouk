@@ -140,6 +140,8 @@ class View extends Component
             'min' => 'این فیلد باید شامل 11 کارکتر باشد',
             'max' => 'این فیلد باید شامل 11 کارکتر باشد'
         ]);
+        
+        $user = null;
 
         $user = null;
         if (!empty($this->customerMobile)){
